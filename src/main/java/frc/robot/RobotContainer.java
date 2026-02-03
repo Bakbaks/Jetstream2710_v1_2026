@@ -131,7 +131,7 @@ public class RobotContainer {
 
     //drive commands
     //set default command for drive
-    drivetrain.setDefaultCommand(new Drive(drivetrain, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX()));
+    //drivetrain.setDefaultCommand(new Drive(drivetrain, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX()));
     
     drivetrain.setDefaultCommand(
             drivetrain.applyRequest(() -> drive
@@ -139,6 +139,11 @@ public class RobotContainer {
                 .withVelocityY(-MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed)
                 .withRotationalRate(-MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate))
     );
+    drivePovDOWN.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+    //driveRightTrigger.whileTrue(shoot());
+
+
     //aux commands
       // make branch
     
