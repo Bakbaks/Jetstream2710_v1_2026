@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start To G4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Store"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

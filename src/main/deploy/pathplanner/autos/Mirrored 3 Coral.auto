@@ -1,0 +1,130 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start to E4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "E to Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Set Store"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Intake to C4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C To Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Set Store"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Set Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Intake to D4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score L4"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "D to Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Set Store"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

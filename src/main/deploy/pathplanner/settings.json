@@ -1,0 +1,39 @@
+{
+  "robotWidth": 0.864,
+  "robotLength": 0.8636,
+  "holonomicMode": true,
+  "pathFolders": [
+    "1 Coral",
+    "3 Coral Auto",
+    "Mirrored 3 Coral",
+    "2 Algae"
+  ],
+  "autoFolders": [],
+  "defaultMaxVel": 4.4,
+  "defaultMaxAccel": 4.0,
+  "defaultMaxAngVel": 540.0,
+  "defaultMaxAngAccel": 720.0,
+  "defaultNominalVoltage": 12.0,
+  "robotMass": 63.6,
+  "robotMOI": 3.854,
+  "robotTrackwidth": 0.546,
+  "driveWheelRadius": 0.0318,
+  "driveGearing": 4.714285714285714,
+  "maxDriveSpeed": 4.909,
+  "driveMotorType": "krakenX60FOC",
+  "driveCurrentLimit": 80.0,
+  "wheelCOF": 2.0,
+  "flModuleX": 0.286,
+  "flModuleY": 0.286,
+  "frModuleX": 0.286,
+  "frModuleY": -0.286,
+  "blModuleX": -0.286,
+  "blModuleY": 0.286,
+  "brModuleX": -0.286,
+  "brModuleY": -0.286,
+  "bumperOffsetX": 0.0,
+  "bumperOffsetY": 0.0,
+  "robotFeatures": [
+    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":-0.19,\"y\":-0.22},\"end\":{\"x\":0.21,\"y\":-0.22},\"strokeWidth\":0.02}}"
+  ]
+}
