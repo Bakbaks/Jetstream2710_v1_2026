@@ -6,7 +6,7 @@ import frc.robot.subsystems.ExampleSubsystem.ExampleSubsystem;
 import frc.robot.subsystems.shooter.Rollers;
 
 /** An example command that uses an example subsystem. */
-public class Shooter extends Command {
+public class PopNAwe extends Command {
   @SuppressWarnings("PMD.UnusedPrivateField")
   private final Rollers m_rollers;
 
@@ -15,7 +15,7 @@ public class Shooter extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public Shooter(Rollers rollers) {
+  public PopNAwe(Rollers rollers) {
     m_rollers = rollers;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_rollers);
@@ -30,13 +30,13 @@ public class Shooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    m_rollers.setRPM(6000);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    m_rollers.stop();
   }
 
   // Returns true when the command should end.

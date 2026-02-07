@@ -50,6 +50,8 @@ import frc.robot.commands.alignment.GlobalSetPose;
 import frc.robot.commands.alignment.DriveAutoLock;
 import frc.robot.commands.ExampleCommand;
 
+import frc.robot.commands.shoot.PopNAwe;
+
 
 
 import frc.robot.Constants.OperatorConstants;
@@ -141,7 +143,7 @@ public class RobotContainer {
     );
     drivePovDOWN.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    //driveRightTrigger.whileTrue(shoot());
+    driveRightTrigger.whileTrue(new PopNAwe(rollers));
 
 
     //aux commands
