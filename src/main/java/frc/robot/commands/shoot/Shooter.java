@@ -8,17 +8,17 @@ import frc.robot.subsystems.shooter.Rollers;
 /** An example command that uses an example subsystem. */
 public class Shooter extends Command {
   @SuppressWarnings("PMD.UnusedPrivateField")
-  private final ExampleSubsystem m_subsystem;
+  private final Rollers m_rollers;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public Shooter(ExampleSubsystem subsystem) {
-    m_subsystem = subsystem;
+  public Shooter(Rollers rollers) {
+    m_rollers = rollers;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(m_rollers);
   }
 
   // Called when the command is initially scheduled.
