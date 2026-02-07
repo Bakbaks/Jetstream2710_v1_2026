@@ -33,7 +33,7 @@ public class Rollers extends SubsystemBase {
 
   private static final AngularVelocity kVelocityTolerance = RPM.of(100);
 
-    private final TalonFX leftMotor, middleMotor, rightMotor;
+    private final TalonFX FrontLeftMotor,BackLeftMotor; //FrontRightMotor, BackRightMotor
     private final List<TalonFX> motors;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
@@ -42,14 +42,12 @@ public class Rollers extends SubsystemBase {
 
   /** Creates a new subsystem. */
   public Rollers() {
-    leftMotor = new TalonFX(Ports.kShooterLeft, Ports.kRoboRioCANBus);
-    middleMotor = new TalonFX(Ports.kShooterMiddle, Ports.kRoboRioCANBus);
-    rightMotor = new TalonFX(Ports.kShooterRight, Ports.kRoboRioCANBus);
-    motors = List.of(leftMotor, middleMotor, rightMotor);
+    FrontLeftMotor = new TalonFX(Ports.kFrontLeftShooter, Ports.kRoboRioCANBus);
+    BackLeftMotor = new TalonFX(Ports.kBackLeftShooter, Ports.kRoboRioCANBus);
+    motors = List.of(FrontLeftMotor, BackLeftMotor);
 
-    configureMotor(leftMotor, InvertedValue.CounterClockwise_Positive);
-    configureMotor(middleMotor, InvertedValue.Clockwise_Positive);
-    configureMotor(rightMotor, InvertedValue.Clockwise_Positive);
+    configureMotor(FrontLeftMotor, InvertedValue.Clockwise_Positive);
+    configureMotor(BackLeftMotor, InvertedValue.Clockwise_Positive);
   
   }
 
@@ -130,9 +128,8 @@ public class Rollers extends SubsystemBase {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        initSendable(builder, leftMotor, "Left");
-        initSendable(builder, middleMotor, "Middle");
-        initSendable(builder, rightMotor, "Right");
+        initSendable(builder, FrontLeftMotor, "FrontLeft");
+        initSendable(builder, BackLeftMotor, "BackLeft");
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         builder.addDoubleProperty("Dashboard RPM", () -> dashboardTargetRPM, value -> dashboardTargetRPM = value);
         builder.addDoubleProperty("Target RPM", () -> velocityRequest.getVelocityMeasure().in(RPM), null);

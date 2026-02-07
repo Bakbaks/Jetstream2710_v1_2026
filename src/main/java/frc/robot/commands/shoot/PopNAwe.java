@@ -30,7 +30,7 @@ public class PopNAwe extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_rollers.setRPM(6000);
+    m_rollers.setRPM(40);
   }
 
   // Called once the command ends or is interrupted.
