@@ -2,12 +2,7 @@
   "robotWidth": 0.864,
   "robotLength": 0.8636,
   "holonomicMode": true,
-  "pathFolders": [
-    "1 Coral",
-    "3 Coral Auto",
-    "Mirrored 3 Coral",
-    "2 Algae"
-  ],
+  "pathFolders": [],
   "autoFolders": [],
   "defaultMaxVel": 4.4,
   "defaultMaxAccel": 4.0,

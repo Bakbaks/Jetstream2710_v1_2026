@@ -42,6 +42,15 @@ import frc.robot.subsystems.drivetrain.TunerConstants;
 import frc.robot.subsystems.vision.Vision;
 
 import frc.robot.subsystems.shooter.Rollers;
+
+//Auto
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathConstraints;
+
+
 //robotcommands
 import frc.robot.commands.Autos;
 import frc.robot.commands.Drive;
@@ -56,6 +65,7 @@ import frc.robot.commands.shoot.PopNAwe;
 
 import frc.robot.Constants.OperatorConstants;
 import java.util.Optional;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -112,10 +122,38 @@ public class RobotContainer {
 
   private final Rollers rollers = new Rollers();
 
+  //Autos
+  PathConstraints lims = new PathConstraints(
+    3.0,                     // max m/s
+    1.0,                     // max m/s^2
+    Math.toRadians(540.0),   // max rad/s
+    Math.toRadians(720.0)    // max rad/s^2
+  );
+  private final SendableChooser<Command> autoChooser;
+
+  Command UnloadPreload = new SequentialCommandGroup(
+    new ParallelCommandGroup(
+      new PopNAwe(rollers)
+      ).withTimeout(2)
+  );
+  
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    //AutoCommands
+
+    
+    
+    NamedCommands.registerCommand("UnloadPrelaod", UnloadPreload);
+
+    autoChooser = AutoBuilder.buildAutoChooser("Taxi");
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+        
+      
+    
   }
 
   /**
@@ -148,6 +186,8 @@ public class RobotContainer {
 
     //aux commands
       // make branch
+
+    
     
   }
 
@@ -158,6 +198,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return autoChooser.getSelected();
   }
 }
