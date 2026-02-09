@@ -18,7 +18,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathConstraints;
 
-
 //math
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -42,6 +41,7 @@ import frc.robot.subsystems.drivetrain.TunerConstants;
 import frc.robot.subsystems.vision.Vision;
 
 import frc.robot.subsystems.shooter.Rollers;
+import frc.robot.subsystems.hopper.Conveyer;
 
 //Auto
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -57,6 +57,7 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.alignment.TagSetPose;
 import frc.robot.commands.alignment.GlobalSetPose;
 import frc.robot.commands.alignment.DriveAutoLock;
+import frc.robot.commands.alignment.RotateToTag;
 import frc.robot.commands.ExampleCommand;
 
 import frc.robot.commands.shoot.PopNAwe;
@@ -121,6 +122,7 @@ public class RobotContainer {
   private final Pose2d goalpose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
 
   private final Rollers rollers = new Rollers();
+  private final Conveyer conveyer = new Conveyer();
 
   //Autos
   PathConstraints lims = new PathConstraints(
@@ -181,8 +183,16 @@ public class RobotContainer {
     );
     drivePovDOWN.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    driveRightTrigger.whileTrue(new PopNAwe(rollers));
-
+    // Shoot + rotate to face center goal tag while allowing translation
+    driveRightTrigger.whileTrue(new ParallelCommandGroup(
+      new PopNAwe(rollers),
+      new RotateToTag(drivetrain, 10,  // CHANGE TO BASED ON AUTO SELECTED LATER
+        () -> -MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed,
+        () -> -MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed
+      ),
+      // Run conveyor when shooter is up to speed
+      conveyer.dashboardRunWhenReady(rollers)
+    ));
 
     //aux commands
       // make branch
