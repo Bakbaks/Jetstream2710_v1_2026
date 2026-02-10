@@ -32,7 +32,7 @@ public final class Constants {
     }
 
     public static class Vision {
-      public static final String kCameraName = "right";
+      public static final String kCameraName = "dave";
       // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
       //https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
       public static final Transform3d kRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));

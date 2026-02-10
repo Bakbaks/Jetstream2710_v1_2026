@@ -33,7 +33,7 @@ public class Rollers extends SubsystemBase {
 
   private static final AngularVelocity kVelocityTolerance = RPM.of(100);
 
-    private final TalonFX FrontLeftMotor,BackLeftMotor; //FrontRightMotor, BackRightMotor
+    private final TalonFX FrontLeftMotor, BackLeftMotor, FrontRightMotor, BackRightMotor;
     private final List<TalonFX> motors;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
@@ -44,10 +44,15 @@ public class Rollers extends SubsystemBase {
   public Rollers() {
     FrontLeftMotor = new TalonFX(Ports.kFrontLeftShooter, Ports.kRoboRioCANBus);
     BackLeftMotor = new TalonFX(Ports.kBackLeftShooter, Ports.kRoboRioCANBus);
-    motors = List.of(FrontLeftMotor, BackLeftMotor);
+    FrontRightMotor = new TalonFX(Ports.kFrontRightShooter, Ports.kRoboRioCANBus);
+    BackRightMotor = new TalonFX(Ports.kBackRightShooter, Ports.kRoboRioCANBus);
+    motors = List.of(FrontLeftMotor, BackLeftMotor, FrontRightMotor, BackRightMotor);
 
     configureMotor(FrontLeftMotor, InvertedValue.Clockwise_Positive);
     configureMotor(BackLeftMotor, InvertedValue.Clockwise_Positive);
+
+    configureMotor(FrontRightMotor, InvertedValue.Clockwise_Positive);
+    configureMotor(BackRightMotor, InvertedValue.Clockwise_Positive);
   
   }
 
