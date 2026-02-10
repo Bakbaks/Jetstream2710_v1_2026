@@ -186,10 +186,10 @@ public class RobotContainer {
     // Shoot + rotate to face center goal tag while allowing translation
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
       new PopNAwe(rollers),
-      new RotateToTag(drivetrain, 10,  // CHANGE TO BASED ON AUTO SELECTED LATER
+      new RotateToTag(drivetrain, vision, 10,  // CHANGE TO BASED ON AUTO SELECTED LATER
         () -> -MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed,
         () -> -MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed
-      ),
+      ).withTimeout(5.0),  // Timeout after 5 seconds to prevent hanging
       // Run conveyor when shooter is up to speed
       conveyer.dashboardRunWhenReady(rollers)
     ));
