@@ -4,10 +4,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import java.util.Optional;
@@ -16,6 +17,7 @@ import java.util.function.DoubleSupplier;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.Vision;
 import static frc.robot.Constants.Vision.*;
+import frc.robot.Constants;
 
 public class RotateToTag extends Command {
     private final CommandSwerveDrivetrain drivetrain;
@@ -24,8 +26,7 @@ public class RotateToTag extends Command {
     private final DoubleSupplier velocityX;
     private final DoubleSupplier velocityY;
     private final ProfiledPIDController rotationController;
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    private final SwerveRequest.ApplyRobotSpeeds applyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
     
     // Allowed center goal tags
     private static final int[] ALLOWED_TAG_IDS = {10, 26};
@@ -34,7 +35,9 @@ public class RotateToTag extends Command {
     private static final double kPTheta = 2.0;
     private static final double kMaxAngularRate = 4.5; // rad/s
     private static final double kMaxAngularAccel = 6.0; // rad/s²
-    private static final double kRotationToleranceRadians = Math.toRadians(2);
+    private static final double kRotationToleranceRadians = Math.toRadians(5); // Increased from 2° to allow rotation
+    private int loopsAtGoal = 0;
+    private static final int LOOPS_AT_GOAL_THRESHOLD = 10; // Must be at goal for 10 cycles
 
     public RotateToTag(CommandSwerveDrivetrain drivetrain, Vision vision, int tagID, DoubleSupplier velocityX, DoubleSupplier velocityY) {
         // Validate tag ID
@@ -55,7 +58,8 @@ public class RotateToTag extends Command {
         this.rotationController.enableContinuousInput(-Math.PI, Math.PI);
         this.rotationController.setTolerance(kRotationToleranceRadians);
         
-        addRequirements(drivetrain, vision);
+        addRequirements(drivetrain);
+        // TODO: addRequirements(vision); - temporarily disabled to test if vision requirement blocks command
     }
 
     private static boolean isAllowedTag(int tagID) {
@@ -80,18 +84,42 @@ public class RotateToTag extends Command {
         Pose2d robotPose = drivetrain.getState().Pose;
         Pose2d tagPose2d = tagPose.get().toPose2d();
         
-        // Calculate angle to face the tag
-        double targetAngle = Math.atan2(
+        // Calculate angle to face the tag from robot center
+        double angleToTag = Math.atan2(
             tagPose2d.getY() - robotPose.getY(),
             tagPose2d.getX() - robotPose.getX()
         );
         
+        // Get camera yaw offset from 3D transform (Z rotation)
+        // This accounts for if camera is mounted on back (-180°), side (±90°), etc.
+        double cameraYawOffset = Constants.Vision.kRobotToCam.getRotation().getZ();
+        
+        // TEMPORARY: If camera offset is 0, assume camera is facing backward and add 180°
+        if (Math.abs(cameraYawOffset) < 0.01) {
+            System.out.println("[RotateToTag] Camera offset was 0, assuming backward-facing camera, adding 180°");
+            cameraYawOffset = Math.PI;
+        }
+        
+        // Target angle is the direction to the tag plus camera offset
+        double targetAngle = angleToTag + cameraYawOffset;
+        
+        // Normalize angle to [-π, π]
+        while (targetAngle > Math.PI) targetAngle -= 2 * Math.PI;
+        while (targetAngle < -Math.PI) targetAngle += 2 * Math.PI;
+        
         System.out.println("[RotateToTag] Robot at: (" + robotPose.getX() + ", " + robotPose.getY() + ")");
         System.out.println("[RotateToTag] Tag " + tagID + " at: (" + tagPose2d.getX() + ", " + tagPose2d.getY() + ")");
-        System.out.println("[RotateToTag] Target angle: " + Math.toDegrees(targetAngle) + "°");
+        System.out.println("[RotateToTag] Angle to tag: " + Math.toDegrees(angleToTag) + "°");
+        System.out.println("[RotateToTag] Camera yaw offset: " + Math.toDegrees(cameraYawOffset) + "°");
+        System.out.println("[RotateToTag] Final target angle: " + Math.toDegrees(targetAngle) + "°");
         
         rotationController.setGoal(targetAngle);
+        loopsAtGoal = 0; // Reset counter
         SmartDashboard.putString("RotateToTag/Status", "Initialized - targeting tag " + tagID);
+        System.out.println("[RotateToTag] Goal set to: " + Math.toDegrees(targetAngle) + "°");
+        System.out.println("[RotateToTag] PID Kp=" + rotationController.getP() + ", Kd=" + rotationController.getD());
+        System.out.println("[RotateToTag] Waiting for rotation...");
+        System.out.println("[RotateToTag] Keep holding right trigger to see robot rotate");
     }
 
     @Override
@@ -103,28 +131,47 @@ public class RotateToTag extends Command {
         SmartDashboard.putNumber("RotateToTag/TargetAngle", Math.toDegrees(rotationController.getGoal().position));
         SmartDashboard.putNumber("RotateToTag/RotationOutput", rotationOutput);
         SmartDashboard.putBoolean("RotateToTag/AtGoal", rotationController.atGoal());
+        SmartDashboard.putNumber("RotateToTag/ErrorDegrees", Math.toDegrees(rotationController.getPositionError()));
         
-        drivetrain.applyRequest(() -> drive
-            .withVelocityX(velocityX.getAsDouble())
-            .withVelocityY(velocityY.getAsDouble())
-            .withRotationalRate(rotationOutput)
+        // Debug: Print frequently to see what's happening
+        System.out.printf("[RotateToTag EXEC] Angle: %.1f° Target: %.1f° Error: %.1f° Output: %.4f%n",
+            Math.toDegrees(currentAngle),
+            Math.toDegrees(rotationController.getGoal().position),
+            Math.toDegrees(rotationController.getPositionError()),
+            rotationOutput);
+        
+        // Use ApplyRobotSpeeds like the working example code
+        drivetrain.setOperatorPerspectiveForward(Rotation2d.kZero);
+        drivetrain.setControl(applyRobotSpeeds
+            .withSpeeds(new ChassisSpeeds(
+                velocityX.getAsDouble(),
+                velocityY.getAsDouble(),
+                rotationOutput
+            ))
         );
     }
 
     @Override
     public boolean isFinished() {
-        return rotationController.atGoal();
+        boolean atGoal = rotationController.atGoal();
+        
+        if (atGoal) {
+            loopsAtGoal++;
+            if (loopsAtGoal >= LOOPS_AT_GOAL_THRESHOLD) {
+                System.out.println("[RotateToTag] At goal after " + loopsAtGoal + " cycles");
+                return true;
+            }
+        } else {
+            loopsAtGoal = 0; // Reset if we leave goal
+        }
+        
+        return false;
     }
 
     @Override
     public void end(boolean interrupted) {
         System.out.println("[RotateToTag] Command ended - Interrupted: " + interrupted);
         SmartDashboard.putString("RotateToTag/Status", interrupted ? "Interrupted" : "Completed");
-        
-        drivetrain.applyRequest(() -> drive
-            .withVelocityX(0)
-            .withVelocityY(0)
-            .withRotationalRate(0)
-        );
+        drivetrain.stop();
     }
 }
