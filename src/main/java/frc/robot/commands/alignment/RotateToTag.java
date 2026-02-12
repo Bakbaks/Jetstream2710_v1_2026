@@ -26,8 +26,12 @@ public class RotateToTag extends Command {
     private final DoubleSupplier velocityX;
     private final DoubleSupplier velocityY;
     private final ProfiledPIDController rotationController;
-    private final SwerveRequest.ApplyRobotSpeeds applyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
+    private final SwerveRequest.ApplyFieldSpeeds applyFieldSpeeds = new SwerveRequest.ApplyFieldSpeeds();
     
+    //private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+       // .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
+
     // Allowed center goal tags
     private static final int[] ALLOWED_TAG_IDS = {10, 26};
     
@@ -142,7 +146,7 @@ public class RotateToTag extends Command {
         
         // Use ApplyRobotSpeeds like the working example code
         drivetrain.setOperatorPerspectiveForward(Rotation2d.kZero);
-        drivetrain.setControl(applyRobotSpeeds
+        drivetrain.setControl(applyFieldSpeeds
             .withSpeeds(new ChassisSpeeds(
                 velocityX.getAsDouble(),
                 velocityY.getAsDouble(),
