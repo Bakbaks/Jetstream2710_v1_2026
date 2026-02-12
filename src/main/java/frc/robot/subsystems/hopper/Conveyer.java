@@ -69,7 +69,9 @@ public class Conveyer extends SubsystemBase {
 			} else {
 				stop();
 			}
-		}, this).withName("Conveyer::runWhenShooterReady");
+		}, this)
+				.finallyDo(interrupted -> stop())
+				.withName("Conveyer::runWhenShooterReady");
 	}
 
 	/** Dashboard helper: run using dashboard-configured percents while shooter up to speed. */
