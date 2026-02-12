@@ -10,8 +10,8 @@ public final class Ports {
     // Talon FX IDs
     public static final int kIntakePivot = 10;
     public static final int kIntakeRollers = 11;
-    public static final int kFloor = 12;
-    public static final int kFeeder = 13;
+    public static final int kFloor = 5;
+    public static final int kFeeder = 51;
     public static final int kHanger = 18;
 
     

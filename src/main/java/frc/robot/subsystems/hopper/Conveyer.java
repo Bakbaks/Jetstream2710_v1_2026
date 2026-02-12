@@ -28,13 +28,13 @@ public class Conveyer extends SubsystemBase {
 
 	// Dashboard-configurable percent outputs
 	private double dashboardFloorPercent = 0.5;
-	private double dashboardFeederPercent = 0.5;
+	private double dashboardFeederPercent = 1;
 
 	public Conveyer() {
 		floorMotor = new TalonFX(Ports.kFloor, Ports.kRoboRioCANBus);
 		feederMotor = new TalonFX(Ports.kFeeder, Ports.kRoboRioCANBus);
 
-		configureMotor(floorMotor, InvertedValue.CounterClockwise_Positive);
+		configureMotor(floorMotor, InvertedValue.Clockwise_Positive);
 		configureMotor(feederMotor, InvertedValue.CounterClockwise_Positive);
 	}
 

@@ -31,7 +31,7 @@ import frc.robot.Ports;
 
 public class Rollers extends SubsystemBase {
 
-  private static final AngularVelocity kVelocityTolerance = RPM.of(100);
+  private static final AngularVelocity kVelocityTolerance = RPM.of( 200);
 
     private final TalonFX FrontLeftMotor, BackLeftMotor, FrontRightMotor, BackRightMotor;
     private final List<TalonFX> motors;
@@ -51,8 +51,8 @@ public class Rollers extends SubsystemBase {
     configureMotor(FrontLeftMotor, InvertedValue.Clockwise_Positive);
     configureMotor(BackLeftMotor, InvertedValue.Clockwise_Positive);
 
-    configureMotor(FrontRightMotor, InvertedValue.Clockwise_Positive);
-    configureMotor(BackRightMotor, InvertedValue.Clockwise_Positive);
+    configureMotor(FrontRightMotor, InvertedValue.CounterClockwise_Positive);
+    configureMotor(BackRightMotor, InvertedValue.CounterClockwise_Positive);
   
   }
 

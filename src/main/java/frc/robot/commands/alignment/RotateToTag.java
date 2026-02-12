@@ -94,27 +94,16 @@ public class RotateToTag extends Command {
             tagPose2d.getX() - robotPose.getX()
         );
         
-        // Get camera yaw offset from 3D transform (Z rotation)
-        // This accounts for if camera is mounted on back (-180°), side (±90°), etc.
-        double cameraYawOffset = Constants.Vision.kRobotToCam.getRotation().getZ();
-        
-        // TEMPORARY: If camera offset is 0, assume camera is facing backward and add 180°
-        if (Math.abs(cameraYawOffset) < 0.01) {
-            System.out.println("[RotateToTag] Camera offset was 0, assuming backward-facing camera, adding 180°");
-            cameraYawOffset = Math.PI;
-        }
-        
         // Target angle is the direction to the tag plus camera offset
-        double targetAngle = angleToTag + cameraYawOffset;
+        double targetAngle = angleToTag;
         
         // Normalize angle to [-π, π]
         while (targetAngle > Math.PI) targetAngle -= 2 * Math.PI;
         while (targetAngle < -Math.PI) targetAngle += 2 * Math.PI;
         
-        System.out.println("[RotateToTag] Robot at: (" + robotPose.getX() + ", " + robotPose.getY() + ")");
+        System.out.println("[RotateToTag] Robot at: (" + robotPose.getX() + ", " + robotPose.getY() + ")" + "rotation : " + robotPose.getRotation());
         System.out.println("[RotateToTag] Tag " + tagID + " at: (" + tagPose2d.getX() + ", " + tagPose2d.getY() + ")");
         System.out.println("[RotateToTag] Angle to tag: " + Math.toDegrees(angleToTag) + "°");
-        System.out.println("[RotateToTag] Camera yaw offset: " + Math.toDegrees(cameraYawOffset) + "°");
         System.out.println("[RotateToTag] Final target angle: " + Math.toDegrees(targetAngle) + "°");
         
         rotationController.setGoal(targetAngle);
