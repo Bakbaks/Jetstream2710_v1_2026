@@ -88,14 +88,16 @@ public class RotateToTag extends Command {
         Pose2d robotPose = drivetrain.getState().Pose;
         Pose2d tagPose2d = tagPose.get().toPose2d();
         
-        // Calculate angle to face the tag from robot center
+        // Calculate angle to face the tag from robot center (field frame)
         double angleToTag = Math.atan2(
             tagPose2d.getY() - robotPose.getY(),
             tagPose2d.getX() - robotPose.getX()
         );
         
-        // Target angle is the direction to the tag plus camera offset
-        double targetAngle = angleToTag;
+        // Camera yaw from robot-to-camera transform (Z = yaw in radians).
+        // Forward camera = 0; backward = Math.PI. Set in Constants.Vision.kRobotToCam.
+        double cameraYawOffset = Constants.Vision.kRobotToCam.getRotation().getZ();
+        double targetAngle = angleToTag + cameraYawOffset;
         
         // Normalize angle to [-π, π]
         while (targetAngle > Math.PI) targetAngle -= 2 * Math.PI;
@@ -104,6 +106,7 @@ public class RotateToTag extends Command {
         System.out.println("[RotateToTag] Robot at: (" + robotPose.getX() + ", " + robotPose.getY() + ")" + "rotation : " + robotPose.getRotation());
         System.out.println("[RotateToTag] Tag " + tagID + " at: (" + tagPose2d.getX() + ", " + tagPose2d.getY() + ")");
         System.out.println("[RotateToTag] Angle to tag: " + Math.toDegrees(angleToTag) + "°");
+        System.out.println("[RotateToTag] Camera yaw offset: " + Math.toDegrees(cameraYawOffset) + "°");
         System.out.println("[RotateToTag] Final target angle: " + Math.toDegrees(targetAngle) + "°");
         
         rotationController.setGoal(targetAngle);
