@@ -20,7 +20,7 @@ public class Feedfuel extends Command {
     m_hopper = hopper;
     m_shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_hopper, m_shooter);
+    addRequirements(m_hopper);
   }
 
 
