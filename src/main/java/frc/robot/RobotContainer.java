@@ -62,7 +62,6 @@ import frc.robot.commands.alignment.BasicRotate;
 import frc.robot.commands.ExampleCommand;
 
 import frc.robot.commands.shoot.Shoot;
-import frc.robot.commands.feed.Feedfuel;
 
 
 
@@ -137,7 +136,7 @@ public class RobotContainer {
 
   Command UnloadPreload = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new Shoot(rollers)
+      new Shoot(rollers, hopper)
       ).withTimeout(2)
   );
   
@@ -197,10 +196,8 @@ public class RobotContainer {
     // ));
 
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      new Shoot(rollers),
-      new BasicRotate(drivetrain, vision, m_driverController, MaxSpeed, MaxAngularRate).withTimeout(5.0),  // Timeout after 5 seconds to prevent hanging
-      // Run conveyor when shooter is up to speed
-      new Feedfuel(hopper, rollers)
+      new Shoot(rollers, hopper),
+      new BasicRotate(drivetrain, vision, m_driverController, MaxSpeed, MaxAngularRate).withTimeout(5.0)  // Timeout after 5 seconds to prevent hanging
     ));
     //aux commands
       // make branch
