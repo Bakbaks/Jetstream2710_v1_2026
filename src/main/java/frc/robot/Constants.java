@@ -1,22 +1,18 @@
 package frc.robot;
 
 
+import static edu.wpi.first.units.Units.RPM;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
-import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -31,7 +27,7 @@ public final class Constants {
 
     }
 
-    public static class Vision {
+    public static class VisionConstants {
       public static final String kCameraName = "dave";
       // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
       //https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
@@ -47,7 +43,56 @@ public final class Constants {
       public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
     }
 
+    public static class RollersConstants {
+      public static final double kRollersPercent = 0.8;
+      public static final int kRollersCurrentLimit = 95;
+      
+      public static final double kRollersRPMDouble = 4000;
+      public static final AngularVelocity kRollersRPM = RPM.of(4000);
+      public static final double KRollersP = 0.5;
+      public static final double KRollersI = 2;
+      public static final double KRollersD = 0;
+
+      public static final double RollersGearRatio = 1;
+
+      public static final double kRollersMinOutput = -1;
+      public static final double kRollersMaxOutput = 1;
+    }
+
+    public static class ClimberConstants {
+      public static final double kClimberPercent = 0.8;
+      public static final int kClimberCurrentLimit = 90;
+      
+      public static final double kClimberMinOutput = -1;
+      public static final double kClimberMaxOutput = 1;
+    }
+
+    public static class HopperConstants {
+      public static final double kFloorPercent = 0.5;
+      public static final double kFeederPercent = 1;
+      public static final int kFloorCurrentLimit = 80;
+      public static final int kFeederCurrentLimit = 40;
+      
+      public static final double kFloorRPM = 2000;
+      public static final double KFloorP = 0.05;
+      public static final double KFloorI = 0;
+      public static final double KFloorD = 0;
+      public static final double FloorGearRatio = 1;
+      public static final double kFloorMinOutput = -1;
+      public static final double kFloorMaxOutput = 1;
+
+      public static final double kFeederRPM = 4000;
+      public static final double KFeederP = 0.05;
+      public static final double KFeederI = 0;
+      public static final double KFeederD = 0;
+      public static final double FeederGearRatio = 1;
+      public static final double kFeederMinOutput = -1;
+      public static final double kFeederMaxOutput = 1;
+    }
+
     public static class KrakenX60 {
       public static final AngularVelocity kFreeSpeed = RPM.of(6000);
     }
+
+    
   }

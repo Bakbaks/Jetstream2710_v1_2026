@@ -39,9 +39,8 @@ import frc.robot.subsystems.ExampleSubsystem.ExampleSubsystem;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.TunerConstants;
 import frc.robot.subsystems.vision.Vision;
-
-import frc.robot.subsystems.shooter.Rollers;
-import frc.robot.subsystems.hopper.Conveyer;
+import frc.robot.subsystems.hopper.Hopper;
+import frc.robot.subsystems.rollers.Rollers;
 
 //Auto
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -60,7 +59,8 @@ import frc.robot.commands.alignment.DriveAutoLock;
 import frc.robot.commands.alignment.RotateToTag;
 import frc.robot.commands.ExampleCommand;
 
-import frc.robot.commands.shoot.PopNAwe;
+import frc.robot.commands.shoot.Shoot;
+import frc.robot.commands.feed.Feedfuel;
 
 
 
@@ -122,9 +122,9 @@ public class RobotContainer {
   private final Pose2d goalpose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
 
   private final Rollers rollers = new Rollers();
-  private final Conveyer conveyer = new Conveyer();
+  private final Hopper hopper = new Hopper();
 
-  //Autos
+  //Autos ------------------------------------------------------------------------------------------------------------
   PathConstraints lims = new PathConstraints(
     3.0,                     // max m/s
     1.0,                     // max m/s^2
@@ -132,13 +132,12 @@ public class RobotContainer {
     Math.toRadians(720.0)    // max rad/s^2
   );
   private final SendableChooser<Command> autoChooser;
-
   Command UnloadPreload = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new PopNAwe(rollers)
+      new Shoot(rollers)
       ).withTimeout(2)
   );
-  
+  //------------------------------------------------------------------------------------------------------------------
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -185,13 +184,13 @@ public class RobotContainer {
 
     // Shoot + rotate to face center goal tag while allowing translation
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      new PopNAwe(rollers),
+      new Shoot(rollers),
       new RotateToTag(drivetrain, vision, 10,  // CHANGE TO BASED ON AUTO SELECTED LATER
         () -> -MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed,
         () -> -MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed
       ).withTimeout(5.0),  // Timeout after 5 seconds to prevent hanging
       // Run conveyor when shooter is up to speed
-      conveyer.dashboardRunWhenReady(rollers)
+      new Feedfuel(hopper, rollers)
     ));
 
     //aux commands

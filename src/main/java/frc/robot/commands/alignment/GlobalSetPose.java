@@ -21,7 +21,7 @@ import java.util.Optional;
 
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.TunerConstants;
-import static frc.robot.Constants.Vision.*;
+import static frc.robot.Constants.VisionConstants.*;
 
 
 /** An example command that uses an example subsystem. */

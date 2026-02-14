@@ -1,4 +1,4 @@
-package frc.robot.subsystems.shooter;
+package frc.robot.subsystems.rollers;
 
 
 import static edu.wpi.first.units.Units.Amps;
@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.RollersConstants;
 import frc.robot.Constants.KrakenX60;
 import frc.robot.Ports;
 
@@ -38,7 +39,7 @@ public class Rollers extends SubsystemBase {
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
-    private double dashboardTargetRPM = 0.0;
+    private double dashboardTargetRPM = RollersConstants.kRollersRPMDouble;
 
   /** Creates a new subsystem. */
   public Rollers() {
@@ -76,9 +77,9 @@ public class Rollers extends SubsystemBase {
         )
         .withSlot0(
             new Slot0Configs()
-                .withKP(0.5)
-                .withKI(2)
-                .withKD(0)
+                .withKP(RollersConstants.KRollersP)
+                .withKI(RollersConstants.KRollersI)
+                .withKD(RollersConstants.KRollersD)
                 .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
         );
     
@@ -135,6 +136,8 @@ public class Rollers extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         initSendable(builder, FrontLeftMotor, "FrontLeft");
         initSendable(builder, BackLeftMotor, "BackLeft");
+        initSendable(builder, FrontRightMotor, "FrontRight");
+        initSendable(builder, BackRightMotor, "BackRight");
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         builder.addDoubleProperty("Dashboard RPM", () -> dashboardTargetRPM, value -> dashboardTargetRPM = value);
         builder.addDoubleProperty("Target RPM", () -> velocityRequest.getVelocityMeasure().in(RPM), null);
