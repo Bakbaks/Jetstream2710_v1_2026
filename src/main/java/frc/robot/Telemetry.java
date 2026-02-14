@@ -155,7 +155,10 @@ public class Telemetry {
         SmartDashboard.putBoolean("Flywheel Up to Speed", rollers.isVelocityWithinTolerance());
         SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
-        SmartDashboard.putNumber("X Velocity", rollers.getFlywheelRPM()); // Flywheel velocity for gauge widget
+        SmartDashboard.putNumber("Flywheel Velocity", rollers.getFlywheelRPM());
+        SmartDashboard.putNumber("Robot Pose X", state.Pose.getX());
+        SmartDashboard.putNumber("Robot Pose Y", state.Pose.getY());
+        SmartDashboard.putNumber("Robot Pose Rotation", state.Pose.getRotation().getRadians());
         SmartDashboard.putNumberArray(
                 "Swerve Positions Radians",
                 new double[] {

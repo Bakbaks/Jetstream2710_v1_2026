@@ -118,12 +118,11 @@ public class Rollers extends SubsystemBase {
         return defer(() -> spinUpCommand(dashboardTargetRPM)); 
     }
 
-    /** Returns average flywheel velocity in RPM across all motors. */
+    /** Returns average flywheel velocity in RPM (average of left and right sides). */
     public double getFlywheelRPM() {
-        return motors.stream()
-                .mapToDouble(m -> m.getVelocity().getValue().in(RPM))
-                .average()
-                .orElse(0.0);
+        double leftRPM = (FrontLeftMotor.getVelocity().getValue().in(RPM) + BackLeftMotor.getVelocity().getValue().in(RPM)) / 2.0;
+        double rightRPM = (FrontRightMotor.getVelocity().getValue().in(RPM) + BackRightMotor.getVelocity().getValue().in(RPM)) / 2.0;
+        return (leftRPM + rightRPM) / 2.0;
     }
 
     public boolean isVelocityWithinTolerance() {
