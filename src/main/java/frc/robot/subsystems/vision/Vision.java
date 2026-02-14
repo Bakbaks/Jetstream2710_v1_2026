@@ -44,7 +44,8 @@ import java.util.List;
  import org.photonvision.simulation.PhotonCameraSim;
  import org.photonvision.simulation.SimCameraProperties;
  import org.photonvision.simulation.VisionSystemSim;
- import org.photonvision.targeting.PhotonTrackedTarget;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
  
  public class Vision extends SubsystemBase {
      private final PhotonCamera camera;
@@ -74,10 +75,10 @@ import java.util.List;
      public void periodic() {
          Optional<EstimatedRobotPose> visionEst = Optional.empty();
          for (var change : camera.getAllUnreadResults()) {
-             //visionEst = photonEstimator.update(change);
-             //updateEstimationStdDevs(visionEst, change.getTargets());
+             visionEst = photonEstimator.update(change);
+             updateEstimationStdDevs(visionEst, change.getTargets());
  
-            /* 
+            
              visionEst.ifPresent(
                      est -> {
                          // Change our trust in the measurement based on the tags we can see
@@ -86,7 +87,7 @@ import java.util.List;
                          estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                      });
 
-                     */
+                     
          }
      }
  
@@ -137,6 +138,10 @@ import java.util.List;
                  curStdDevs = estStdDevs;
              }
          }
+     }
+
+     public List<PhotonPipelineResult> getResults(){
+        return camera.getAllUnreadResults();
      }
  
      /**
