@@ -25,8 +25,9 @@
  package frc.robot.subsystems.vision;
 
  import static frc.robot.Constants.Vision.*;
- 
+
  import edu.wpi.first.math.Matrix;
+ import org.photonvision.PhotonUtils;
  import edu.wpi.first.math.VecBuilder;
  import edu.wpi.first.math.geometry.Pose2d;
  import edu.wpi.first.math.geometry.Rotation2d;
@@ -60,6 +61,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
      /** Cached yaw of alignment tag from last processed frame. */
      private volatile Double lastTag10Yaw = null;
+     /** Cached distance to alignment tag (meters) from PhotonVision range estimation. */
+     private volatile Double lastTag10RangeMeters = null;
  
      // Simulation
      private PhotonCameraSim cameraSim;
@@ -86,11 +89,17 @@ import org.photonvision.targeting.PhotonTrackedTarget;
              visionEst = photonEstimator.update(change);
              updateEstimationStdDevs(visionEst, change.getTargets());
 
-             // Cache alignment tag yaw for aimed-at-tag telemetry
+             // Cache alignment tag yaw and distance for telemetry / flywheel interpolation
              lastTag10Yaw = null;
+             lastTag10RangeMeters = null;
              for (var target : change.getTargets()) {
                  if (target.getFiducialId() == kAlignmentTagId) {
                      lastTag10Yaw = target.getYaw();
+                     lastTag10RangeMeters = PhotonUtils.calculateDistanceToTargetMeters(
+                             kCameraHeightMeters,
+                             kTag10HeightMeters,
+                             kCameraPitchRadians,
+                             java.lang.Math.toRadians(target.getPitch()));
                      break;
                  }
              }
@@ -171,6 +180,11 @@ import org.photonvision.targeting.PhotonTrackedTarget;
      /** Returns true if the alignment tag is visible and robot yaw is within tolerance. */
      public boolean isAimedAtTag() {
          return lastTag10Yaw != null && Math.abs(lastTag10Yaw) < kAimedToleranceDegrees;
+     }
+
+     /** Returns distance to tag 10 in meters from PhotonVision range estimation, or empty if not visible. */
+     public Optional<Double> getDistanceToTag10() {
+         return lastTag10RangeMeters != null ? Optional.of(lastTag10RangeMeters) : Optional.empty();
      }
 
      // ----- Simulation

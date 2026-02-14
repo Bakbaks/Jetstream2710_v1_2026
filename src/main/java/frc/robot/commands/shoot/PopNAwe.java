@@ -1,25 +1,24 @@
 package frc.robot.commands.shoot;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.shooter.Rollers;
+import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.FlywheelInterpolation;
 
-/** Shoots notes with flywheel speed interpolated from distance to target tag. */
+/** Shoots notes with flywheel speed interpolated from PhotonVision distance to tag 10. */
 public class PopNAwe extends Command {
   private final Rollers m_rollers;
-  private final CommandSwerveDrivetrain m_drivetrain;
+  private final Vision m_vision;
 
   /**
    * Creates a PopNAwe command.
    *
    * @param rollers Shooter subsystem
-   * @param drivetrain Drivetrain for robot pose (used for distance-based RPM)
+   * @param vision Vision for PhotonVision distance to tag 10
    */
-  public PopNAwe(Rollers rollers, CommandSwerveDrivetrain drivetrain) {
+  public PopNAwe(Rollers rollers, Vision vision) {
     m_rollers = rollers;
-    m_drivetrain = drivetrain;
+    m_vision = vision;
     addRequirements(m_rollers);
   }
 
@@ -28,8 +27,7 @@ public class PopNAwe extends Command {
 
   @Override
   public void execute() {
-    Pose2d robotPose = m_drivetrain.getState().Pose;
-    double rpm = FlywheelInterpolation.getRPMForPose(robotPose);
+    double rpm = FlywheelInterpolation.getRPMForDistance(m_vision.getDistanceToTag10());
     m_rollers.setRPM(rpm);
   }
 

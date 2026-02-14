@@ -2,12 +2,9 @@ package frc.robot.util;
 
 import java.util.Optional;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.Constants.Vision;
-
 /**
  * Linear interpolation of flywheel RPM based on distance to target tag.
+ * Distance is from PhotonVision range estimation (tag 10).
  * Tune kMinDistance, kMaxDistance, kMinRPM, kMaxRPM for your robot.
  */
 public final class FlywheelInterpolation {
@@ -20,34 +17,15 @@ public final class FlywheelInterpolation {
     public static final double kMinRPM = 800;
     /** RPM at maximum distance. */
     public static final double kMaxRPM = 1200;
-    /** Default RPM when distance cannot be computed. */
+    /** Default RPM when distance cannot be computed (tag not visible). */
     public static final double kDefaultRPM = 1000;
-
-    /** Tag ID to target for shooter (matches BasicRotate alignment tag). */
-    public static final int kTargetTagId = 10;
 
     private FlywheelInterpolation() {}
 
     /**
-     * Computes distance from robot pose to the target tag in meters.
-     *
-     * @param robotPose Current robot pose
-     * @return Optional containing distance in meters, or empty if tag not in layout
-     */
-    public static Optional<Double> getDistanceToTag(Pose2d robotPose) {
-        var tagPose = Vision.kTagLayout.getTagPose(kTargetTagId);
-        if (tagPose.isEmpty()) {
-            return Optional.empty();
-        }
-        Translation2d tagTranslation = tagPose.get().toPose2d().getTranslation();
-        double distance = robotPose.getTranslation().getDistance(tagTranslation);
-        return Optional.of(distance);
-    }
-
-    /**
      * Linearly interpolates flywheel RPM from distance to target tag.
      *
-     * @param distanceMeters Distance to tag in meters
+     * @param distanceMeters Distance to tag in meters (from PhotonVision)
      * @return RPM to use for shooter
      */
     public static double interpolateRPM(double distanceMeters) {
@@ -57,13 +35,13 @@ public final class FlywheelInterpolation {
     }
 
     /**
-     * Gets interpolated RPM based on robot pose. Uses default RPM if distance cannot be computed.
+     * Gets interpolated RPM from PhotonVision distance. Uses default RPM if tag not visible.
      *
-     * @param robotPose Current robot pose
+     * @param distanceMeters Optional distance from Vision.getDistanceToTag10()
      * @return RPM to use for shooter
      */
-    public static double getRPMForPose(Pose2d robotPose) {
-        return getDistanceToTag(robotPose)
+    public static double getRPMForDistance(Optional<Double> distanceMeters) {
+        return distanceMeters
                 .map(FlywheelInterpolation::interpolateRPM)
                 .orElse(kDefaultRPM);
     }

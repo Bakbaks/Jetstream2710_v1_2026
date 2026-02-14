@@ -135,7 +135,7 @@ public class RobotContainer {
 
   Command UnloadPreload = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new PopNAwe(rollers, drivetrain)
+      new PopNAwe(rollers, vision)
       ).withTimeout(2)
   );
   
@@ -195,7 +195,7 @@ public class RobotContainer {
     // ));
 
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      new PopNAwe(rollers, drivetrain),
+      new PopNAwe(rollers, vision),
       new BasicRotate(drivetrain, vision, m_driverController, MaxSpeed, MaxAngularRate).withTimeout(5.0),  // Timeout after 5 seconds to prevent hanging
       // Run conveyor when shooter is up to speed
       conveyer.dashboardRunWhenReady(rollers)

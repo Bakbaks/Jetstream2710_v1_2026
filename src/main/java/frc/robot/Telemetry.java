@@ -157,12 +157,13 @@ public class Telemetry {
         SmartDashboard.putBoolean("Shooter Being Fed",
                 rollers.isVelocityWithinTolerance() && conveyer.isFeeding());
         SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
-        SmartDashboard.putNumber("Match Time (FMS)", DriverStation.getMatchTime());
+        double matchTime = DriverStation.getMatchTime();
+        SmartDashboard.putNumber("Match Time (FMS)", Double.isFinite(matchTime) ? matchTime : -1.0);
         SmartDashboard.putNumber("Flywheel Velocity", rollers.getFlywheelRPM());
         SmartDashboard.putNumber("Requested Flywheel Velocity", rollers.getRequestedRPM());
-        var distanceToTag = FlywheelInterpolation.getDistanceToTag(state.Pose);
-        SmartDashboard.putNumber("Distance to Tag", distanceToTag.orElse(-1.0));
-        SmartDashboard.putNumber("Target Flywheel RPM", FlywheelInterpolation.getRPMForPose(state.Pose));
+        var distanceToTag = vision.getDistanceToTag10();
+        SmartDashboard.putNumber("Distance to Tag", distanceToTag.orElse(-1.0)); // PhotonVision range, used for flywheel interpolation
+        SmartDashboard.putNumber("Target Flywheel RPM", FlywheelInterpolation.getRPMForDistance(distanceToTag));
         SmartDashboard.putNumber("Robot Pose X", state.Pose.getX());
         SmartDashboard.putNumber("Robot Pose Y", state.Pose.getY());
         SmartDashboard.putNumber("Robot Pose Rotation", state.Pose.getRotation().getRadians());

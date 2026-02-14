@@ -33,6 +33,14 @@ public final class Constants {
 
     public static class Vision {
       public static final String kCameraName = "dave";
+
+      /** Camera height above ground (meters). */
+      public static final double kCameraHeightMeters = 1.0;
+      /** AprilTag 10 center height above ground (meters). 44.25 in = 1.12395 m. */
+      public static final double kTag10HeightMeters = Units.inchesToMeters(44.25);
+      /** Camera pitch from horizontal in radians. 15 deg up from vertical = 75 deg from horizontal. */
+      public static final double kCameraPitchRadians = Units.degreesToRadians(75);
+
       // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
       //https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
       // Rotation3d(roll, pitch, yaw) in radians. Use (0,0,0) for forward camera, (0,0,Math.PI) for backward.
