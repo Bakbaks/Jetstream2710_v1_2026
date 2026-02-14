@@ -24,21 +24,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 
+import frc.robot.subsystems.hopper.Conveyer;
 import frc.robot.subsystems.shooter.Rollers;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.util.FlywheelInterpolation;
 
 public class Telemetry {
     private final double MaxSpeed;
     private final Vision vision;
     private final Rollers rollers;
+    private final Conveyer conveyer;
 
     /** Holder for latest state so SwerveDrive Sendable can read it. */
     private volatile SwerveDriveState m_lastState = null;
 
-    public Telemetry(double maxSpeed, Vision vision, Rollers rollers) {
+    public Telemetry(double maxSpeed, Vision vision, Rollers rollers, Conveyer conveyer) {
         MaxSpeed = maxSpeed;
         this.vision = vision;
         this.rollers = rollers;
+        this.conveyer = conveyer;
         SignalLogger.start();
         SmartDashboard.putData("Swerve Drive", createSwerveDriveSendable());
         SmartDashboard.putData("Field", field2d);
@@ -150,9 +154,15 @@ public class Telemetry {
         /* Elastic dashboard telemetry */
         SmartDashboard.putBoolean("Aimed At Tag", vision.isAimedAtTag());
         SmartDashboard.putBoolean("Flywheel Up to Speed", rollers.isVelocityWithinTolerance());
+        SmartDashboard.putBoolean("Shooter Being Fed",
+                rollers.isVelocityWithinTolerance() && conveyer.isFeeding());
         SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
-        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+        SmartDashboard.putNumber("Match Time (FMS)", DriverStation.getMatchTime());
         SmartDashboard.putNumber("Flywheel Velocity", rollers.getFlywheelRPM());
+        SmartDashboard.putNumber("Requested Flywheel Velocity", rollers.getRequestedRPM());
+        var distanceToTag = FlywheelInterpolation.getDistanceToTag(state.Pose);
+        SmartDashboard.putNumber("Distance to Tag", distanceToTag.orElse(-1.0));
+        SmartDashboard.putNumber("Target Flywheel RPM", FlywheelInterpolation.getRPMForPose(state.Pose));
         SmartDashboard.putNumber("Robot Pose X", state.Pose.getX());
         SmartDashboard.putNumber("Robot Pose Y", state.Pose.getY());
         SmartDashboard.putNumber("Robot Pose Rotation", state.Pose.getRotation().getRadians());

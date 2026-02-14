@@ -30,6 +30,9 @@ public class Conveyer extends SubsystemBase {
 	private double dashboardFloorPercent = 0.5;
 	private double dashboardFeederPercent = 1;
 
+	/** True when conveyor motors are actively feeding (nonzero output). */
+	private volatile boolean m_isFeeding = false;
+
 	public Conveyer() {
 		floorMotor = new TalonFX(Ports.kFloor, Ports.kRoboRioCANBus);
 		feederMotor = new TalonFX(Ports.kFeeder, Ports.kRoboRioCANBus);
@@ -49,13 +52,20 @@ public class Conveyer extends SubsystemBase {
 
 	/** Set percent outputs for both motors (range -1.0 .. 1.0). */
 	public void setPercentOutputs(double floorPercent, double feederPercent) {
+		m_isFeeding = floorPercent != 0.0 || feederPercent != 0.0;
 		floorMotor.setControl(voltageRequest.withOutput(Volts.of(floorPercent * 12.0)));
 		feederMotor.setControl(voltageRequest.withOutput(Volts.of(feederPercent * 12.0)));
 	}
 
 	/** Stop both motors. */
 	public void stop() {
+		m_isFeeding = false;
 		setPercentOutputs(0.0, 0.0);
+	}
+
+	/** Returns true when conveyor is actively feeding (motors spinning). */
+	public boolean isFeeding() {
+		return m_isFeeding;
 	}
 
 	/**

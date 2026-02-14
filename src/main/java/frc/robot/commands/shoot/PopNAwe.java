@@ -1,36 +1,36 @@
 package frc.robot.commands.shoot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ExampleSubsystem.ExampleSubsystem;
-
+import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.shooter.Rollers;
+import frc.robot.util.FlywheelInterpolation;
 
-/** An example command that uses an example subsystem. */
+/** Shoots notes with flywheel speed interpolated from distance to target tag. */
 public class PopNAwe extends Command {
-  @SuppressWarnings("PMD.UnusedPrivateField")
   private final Rollers m_rollers;
+  private final CommandSwerveDrivetrain m_drivetrain;
 
   /**
-   * Creates a new ExampleCommand.
+   * Creates a PopNAwe command.
    *
-   * @param subsystem The subsystem used by this command.
+   * @param rollers Shooter subsystem
+   * @param drivetrain Drivetrain for robot pose (used for distance-based RPM)
    */
-  public PopNAwe(Rollers rollers) {
+  public PopNAwe(Rollers rollers, CommandSwerveDrivetrain drivetrain) {
     m_rollers = rollers;
-    // Use addRequirements() here to declare subsystem dependencies.
+    m_drivetrain = drivetrain;
     addRequirements(m_rollers);
   }
 
-  // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() {}
 
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_rollers.setRPM(1000);
+    Pose2d robotPose = m_drivetrain.getState().Pose;
+    double rpm = FlywheelInterpolation.getRPMForPose(robotPose);
+    m_rollers.setRPM(rpm);
   }
 
   // Called once the command ends or is interrupted.
@@ -39,7 +39,6 @@ public class PopNAwe extends Command {
     m_rollers.stop();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

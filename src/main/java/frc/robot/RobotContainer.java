@@ -122,7 +122,7 @@ public class RobotContainer {
 
   private final Rollers rollers = new Rollers();
   private final Conveyer conveyer = new Conveyer();
-  private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, rollers);
+  private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, rollers, conveyer);
 
   //Autos
   PathConstraints lims = new PathConstraints(
@@ -135,7 +135,7 @@ public class RobotContainer {
 
   Command UnloadPreload = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new PopNAwe(rollers)
+      new PopNAwe(rollers, drivetrain)
       ).withTimeout(2)
   );
   
@@ -195,7 +195,7 @@ public class RobotContainer {
     // ));
 
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      new PopNAwe(rollers),
+      new PopNAwe(rollers, drivetrain),
       new BasicRotate(drivetrain, vision, m_driverController, MaxSpeed, MaxAngularRate).withTimeout(5.0),  // Timeout after 5 seconds to prevent hanging
       // Run conveyor when shooter is up to speed
       conveyer.dashboardRunWhenReady(rollers)

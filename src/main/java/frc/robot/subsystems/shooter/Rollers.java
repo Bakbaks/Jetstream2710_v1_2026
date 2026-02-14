@@ -118,6 +118,11 @@ public class Rollers extends SubsystemBase {
         return defer(() -> spinUpCommand(dashboardTargetRPM)); 
     }
 
+    /** Returns the commanded/requested flywheel velocity in RPM. */
+    public double getRequestedRPM() {
+        return velocityRequest.getVelocityMeasure().in(RPM);
+    }
+
     /** Returns average flywheel velocity in RPM (average of left and right sides). */
     public double getFlywheelRPM() {
         double leftRPM = (FrontLeftMotor.getVelocity().getValue().in(RPM) + BackLeftMotor.getVelocity().getValue().in(RPM)) / 2.0;
