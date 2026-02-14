@@ -31,7 +31,9 @@ import frc.robot.Ports;
 
 public class Rollers extends SubsystemBase {
 
-  private static final AngularVelocity kVelocityTolerance = RPM.of( 200);
+  private static final AngularVelocity kVelocityTolerance = RPM.of(200);
+  /** Minimum target RPM to consider shooter "ready" - avoids false positive when target is 0. */
+  private static final double kMinTargetRPM = 100;
 
     private final TalonFX FrontLeftMotor, BackLeftMotor, FrontRightMotor, BackRightMotor;
     private final List<TalonFX> motors;
@@ -117,6 +119,10 @@ public class Rollers extends SubsystemBase {
     }
 
     public boolean isVelocityWithinTolerance() {
+        final double targetRPM = velocityRequest.getVelocityMeasure().in(RPM);
+        if (targetRPM < kMinTargetRPM) {
+            return false;
+        }
         return motors.stream().allMatch(motor -> {
             final boolean isInVelocityMode = motor.getAppliedControl().equals(velocityRequest);
             final AngularVelocity currentVelocity = motor.getVelocity().getValue();
