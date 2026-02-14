@@ -58,6 +58,7 @@ import frc.robot.commands.alignment.TagSetPose;
 import frc.robot.commands.alignment.GlobalSetPose;
 import frc.robot.commands.alignment.DriveAutoLock;
 import frc.robot.commands.alignment.RotateToTag;
+import frc.robot.commands.alignment.BasicRotate;
 import frc.robot.commands.ExampleCommand;
 
 import frc.robot.commands.shoot.PopNAwe;
@@ -184,16 +185,22 @@ public class RobotContainer {
     drivePovDOWN.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     // Shoot + rotate to face center goal tag while allowing translation
+    // driveRightTrigger.whileTrue(new ParallelCommandGroup(
+    //   new PopNAwe(rollers),
+    //   new RotateToTag(drivetrain, vision, 10,  // CHANGE TO BASED ON AUTO SELECTED LATER
+    //     () -> -MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed,
+    //     () -> -MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed
+    //   ).withTimeout(5.0),  // Timeout after 5 seconds to prevent hanging
+    //   // Run conveyor when shooter is up to speed
+    //   conveyer.dashboardRunWhenReady(rollers)
+    // ));
+
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
       new PopNAwe(rollers),
-      new RotateToTag(drivetrain, vision, 10,  // CHANGE TO BASED ON AUTO SELECTED LATER
-        () -> -MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed,
-        () -> -MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed
-      ).withTimeout(5.0),  // Timeout after 5 seconds to prevent hanging
+      new BasicRotate(drivetrain, vision, m_driverController, MaxSpeed, MaxAngularRate).withTimeout(5.0),  // Timeout after 5 seconds to prevent hanging
       // Run conveyor when shooter is up to speed
       conveyer.dashboardRunWhenReady(rollers)
     ));
-
     //aux commands
       // make branch
 
