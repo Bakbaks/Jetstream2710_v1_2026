@@ -48,10 +48,18 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
  
  public class Vision extends SubsystemBase {
+     /** Tag ID used for shooter alignment (matches BasicRotate). */
+     private static final int kAlignmentTagId = 10;
+     /** Yaw tolerance (degrees) to consider robot aimed at tag. */
+     private static final double kAimedToleranceDegrees = 3.0;
+
      private final PhotonCamera camera;
      private final PhotonPoseEstimator photonEstimator;
      private Matrix<N3, N1> curStdDevs;
      private final EstimateConsumer estConsumer;
+
+     /** Cached yaw of alignment tag from last processed frame. */
+     private volatile Double lastTag10Yaw = null;
  
      // Simulation
      private PhotonCameraSim cameraSim;
@@ -77,17 +85,23 @@ import org.photonvision.targeting.PhotonTrackedTarget;
          for (var change : camera.getAllUnreadResults()) {
              visionEst = photonEstimator.update(change);
              updateEstimationStdDevs(visionEst, change.getTargets());
- 
-            
+
+             // Cache alignment tag yaw for aimed-at-tag telemetry
+             lastTag10Yaw = null;
+             for (var target : change.getTargets()) {
+                 if (target.getFiducialId() == kAlignmentTagId) {
+                     lastTag10Yaw = target.getYaw();
+                     break;
+                 }
+             }
+
              visionEst.ifPresent(
                      est -> {
                          // Change our trust in the measurement based on the tags we can see
                          var estStdDevs = getEstimationStdDevs();
- 
+
                          estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                      });
-
-                     
          }
      }
  
@@ -153,7 +167,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
      public Matrix<N3, N1> getEstimationStdDevs() {
          return curStdDevs;
      }
- 
+
+     /** Returns true if the alignment tag is visible and robot yaw is within tolerance. */
+     public boolean isAimedAtTag() {
+         return lastTag10Yaw != null && Math.abs(lastTag10Yaw) < kAimedToleranceDegrees;
+     }
+
      // ----- Simulation
  
      public void simulationPeriodic(Pose2d robotSimPose) {

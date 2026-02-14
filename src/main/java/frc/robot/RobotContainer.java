@@ -90,8 +90,6 @@ public class RobotContainer {
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   
 
-  //private final Telemetry logger = new Telemetry(MaxSpeed);
-
   public final Vision vision = new Vision(drivetrain::addVisionMeasurement);
 
 
@@ -124,6 +122,7 @@ public class RobotContainer {
 
   private final Rollers rollers = new Rollers();
   private final Conveyer conveyer = new Conveyer();
+  private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, rollers);
 
   //Autos
   PathConstraints lims = new PathConstraints(
@@ -206,6 +205,11 @@ public class RobotContainer {
 
     
     
+  }
+
+  /** Updates SmartDashboard telemetry. Call from robotPeriodic. */
+  public void updateTelemetry() {
+    telemetry.telemeterize(drivetrain.getState());
   }
 
   /**

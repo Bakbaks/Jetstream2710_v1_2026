@@ -7,6 +7,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
@@ -14,18 +17,49 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 
+import frc.robot.subsystems.shooter.Rollers;
+import frc.robot.subsystems.vision.Vision;
+
 public class Telemetry {
     private final double MaxSpeed;
+    private final Vision vision;
+    private final Rollers rollers;
 
-    public Telemetry(double maxSpeed) {
-        MaxSpeed = maxSpeed;//Meters per second
+    /** Holder for latest state so SwerveDrive Sendable can read it. */
+    private volatile SwerveDriveState m_lastState = null;
+
+    public Telemetry(double maxSpeed, Vision vision, Rollers rollers) {
+        MaxSpeed = maxSpeed;
+        this.vision = vision;
+        this.rollers = rollers;
         SignalLogger.start();
+        SmartDashboard.putData("Swerve Drive", createSwerveDriveSendable());
+    }
+
+    private Sendable createSwerveDriveSendable() {
+        return new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("SwerveDrive");
+                builder.addDoubleProperty("Front Left Angle", () -> m_lastState != null ? m_lastState.ModuleStates[0].angle.getRadians() : 0, null);
+                builder.addDoubleProperty("Front Left Velocity", () -> m_lastState != null ? m_lastState.ModuleStates[0].speedMetersPerSecond : 0, null);
+                builder.addDoubleProperty("Front Right Angle", () -> m_lastState != null ? m_lastState.ModuleStates[1].angle.getRadians() : 0, null);
+                builder.addDoubleProperty("Front Right Velocity", () -> m_lastState != null ? m_lastState.ModuleStates[1].speedMetersPerSecond : 0, null);
+                builder.addDoubleProperty("Back Left Angle", () -> m_lastState != null ? m_lastState.ModuleStates[2].angle.getRadians() : 0, null);
+                builder.addDoubleProperty("Back Left Velocity", () -> m_lastState != null ? m_lastState.ModuleStates[2].speedMetersPerSecond : 0, null);
+                builder.addDoubleProperty("Back Right Angle", () -> m_lastState != null ? m_lastState.ModuleStates[3].angle.getRadians() : 0, null);
+                builder.addDoubleProperty("Back Right Velocity", () -> m_lastState != null ? m_lastState.ModuleStates[3].speedMetersPerSecond : 0, null);
+                builder.addDoubleProperty("Robot Angle", () -> m_lastState != null ? m_lastState.Pose.getRotation().getRadians() : 0, null);
+            }
+        };
     }
 
     private final NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -76,6 +110,8 @@ public class Telemetry {
 
     /** Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger. */
     public void telemeterize(SwerveDriveState state) {
+        m_lastState = state;
+
         /* Telemeterize the swerve drive state */
         drivePose.set(state.Pose);
         driveSpeeds.set(state.Speeds);
@@ -113,5 +149,26 @@ public class Telemetry {
 
             SmartDashboard.putData("Module " + i, m_moduleMechanisms[i]);
         }
+
+        /* Elastic dashboard telemetry */
+        SmartDashboard.putBoolean("Aimed At Tag", vision.isAimedAtTag());
+        SmartDashboard.putBoolean("Flywheel Up to Speed", rollers.isVelocityWithinTolerance());
+        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
+        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+        SmartDashboard.putNumber("X Velocity", rollers.getFlywheelRPM()); // Flywheel velocity for gauge widget
+        SmartDashboard.putNumberArray(
+                "Swerve Positions Radians",
+                new double[] {
+                    state.ModuleStates[0].angle.getRadians(),
+                    state.ModuleStates[1].angle.getRadians(),
+                    state.ModuleStates[2].angle.getRadians(),
+                    state.ModuleStates[3].angle.getRadians()
+                });
+        String robotState = RobotState.isDisabled() ? "Disabled"
+                : RobotState.isAutonomous() ? "Autonomous"
+                : RobotState.isTeleop() ? "Teleop"
+                : RobotState.isTest() ? "Test"
+                : "Unknown";
+        SmartDashboard.putString("Robot State", robotState);
     }
 }
