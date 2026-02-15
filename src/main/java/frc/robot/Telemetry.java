@@ -23,26 +23,25 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-
-import frc.robot.subsystems.hopper.Conveyer;
-import frc.robot.subsystems.shooter.Rollers;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.FlywheelInterpolation;
 
 public class Telemetry {
     private final double MaxSpeed;
     private final Vision vision;
-    private final Rollers rollers;
-    private final Conveyer conveyer;
+    private final Flywheel flywheel;
+    private final Hopper hopper;
 
     /** Holder for latest state so SwerveDrive Sendable can read it. */
     private volatile SwerveDriveState m_lastState = null;
 
-    public Telemetry(double maxSpeed, Vision vision, Rollers rollers, Conveyer conveyer) {
+    public Telemetry(double maxSpeed, Vision vision, Flywheel flywheel, Hopper hopper) {
         MaxSpeed = maxSpeed;
         this.vision = vision;
-        this.rollers = rollers;
-        this.conveyer = conveyer;
+        this.flywheel = flywheel;
+        this.hopper = hopper;
         SignalLogger.start();
         SmartDashboard.putData("Swerve Drive", createSwerveDriveSendable());
         SmartDashboard.putData("Field", field2d);
@@ -152,15 +151,16 @@ public class Telemetry {
         }
 
         /* Elastic dashboard telemetry */
+        /*
         SmartDashboard.putBoolean("Aimed At Tag", vision.isAimedAtTag());
-        SmartDashboard.putBoolean("Flywheel Up to Speed", rollers.isVelocityWithinTolerance());
+        SmartDashboard.putBoolean("Flywheel Up to Speed", flywheel.isVelocityWithinTolerance());
         SmartDashboard.putBoolean("Shooter Being Fed",
-                rollers.isVelocityWithinTolerance() && conveyer.isFeeding());
+                flywheel.isVelocityWithinTolerance() && hopper.isFeeding());
         SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
         double matchTime = DriverStation.getMatchTime();
         SmartDashboard.putNumber("Match Time (FMS)", Double.isFinite(matchTime) ? matchTime : -1.0);
-        SmartDashboard.putNumber("Flywheel Velocity", rollers.getFlywheelRPM());
-        SmartDashboard.putNumber("Requested Flywheel Velocity", rollers.getRequestedRPM());
+        SmartDashboard.putNumber("Flywheel Velocity", flywheel.getFlywheelRPM());
+        SmartDashboard.putNumber("Requested Flywheel Velocity", flywheel.getRequestedRPM());
         var distanceToTag = vision.getDistanceToTag10();
         SmartDashboard.putNumber("Distance to Tag", distanceToTag.orElse(-1.0)); // PhotonVision range, used for flywheel interpolation
         SmartDashboard.putNumber("Target Flywheel RPM", FlywheelInterpolation.getRPMForDistance(distanceToTag));
@@ -181,5 +181,7 @@ public class Telemetry {
                 : RobotState.isTest() ? "Test"
                 : "Unknown";
         SmartDashboard.putString("Robot State", robotState);
+
+         */
     }
 }

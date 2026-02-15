@@ -31,7 +31,7 @@ public final class Constants {
 
     }
 
-    public static class Vision {
+    public static class VisionConstants {
       public static final String kCameraName = "dave";
 
       /** Camera height above ground (meters). */
@@ -53,6 +53,71 @@ public final class Constants {
       // (Fake values. Experiment and determine estimation noise on an actual robot.)
       public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
       public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+    }
+
+    public static class FlywheelConstants {
+      public static final double kFlywheelPercent = 0.8;
+      public static final int kFlywheelCurrentLimit = 95;
+      
+      public static final double kFlywheelRPMDouble = 4000;
+      public static final AngularVelocity kFlywheelRPM = RPM.of(4000);
+      public static final double KFlywheelP = 0.5;
+      public static final double KFlywheelI = 2;
+      public static final double KFlywheelD = 0;
+
+      public static final double FlywheelGearRatio = 1;
+
+      public static final double kFlywheelMinOutput = -1;
+      public static final double kFlywheelMaxOutput = 1;
+    }
+
+    public static class ElevatorConstants {
+      public static final double kElevatorPercent = 0.8;
+      public static final int kElevatorCurrentLimit = 90;
+      
+      public static final double kElevatorMinOutput = -1;
+      public static final double kElevatorMaxOutput = 1;
+    }
+
+    public static class HopperConstants {
+      public static final double kFloorPercent = 0.5;
+      public static final double kFeederPercent = 1;
+      public static final int kFloorCurrentLimit = 80;
+      public static final int kFeederCurrentLimit = 40;
+      
+      public static final double kFloorRPM = 2000;
+      public static final double KFloorP = 0.05;
+      public static final double KFloorI = 0;
+      public static final double KFloorD = 0;
+      public static final double FloorGearRatio = 1;
+      public static final double kFloorMinOutput = -1;
+      public static final double kFloorMaxOutput = 1;
+
+      public static final double kFeederRPM = 4000;
+      public static final double KFeederP = 0.05;
+      public static final double KFeederI = 0;
+      public static final double KFeederD = 0;
+      public static final double FeederGearRatio = 1;
+      public static final double kFeederMinOutput = -1;
+      public static final double kFeederMaxOutput = 1;
+    }
+
+    public static class FieldConstants {
+
+      public static final int RED_SHOOT_TAG = 10;
+      public static final int BLUE_SHOOT_TAG = 26;
+      //tags 10(red) & 26(blue)
+      public static final Transform2d RightTagToHub = new Transform2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)); // needs to be measured still
+    }
+
+    public static class AutoConstants {
+      
+      // Tuning constants
+      public static final double kPTheta = 2.0;
+      public static final double kMaxAngularRate = 4.5; // rad/s
+      public static final double kMaxAngularAccel = 6.0; // rad/s²
+      public static final double kRotationToleranceRadians = Math.toRadians(5); // Increased from 2° to allow rotation
+      public static final double kPositionToleranceMeters = 0.1;
     }
 
     public static class KrakenX60 {

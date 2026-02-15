@@ -19,7 +19,7 @@ import java.util.function.DoubleSupplier;
 
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.Vision;
-import static frc.robot.Constants.Vision.*;
+import static frc.robot.Constants.VisionConstants.*;
 import frc.robot.Constants;
 
 public class BasicRotate extends Command {
