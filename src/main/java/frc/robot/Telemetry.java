@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
@@ -76,6 +77,11 @@ public class Telemetry {
     private final StructArrayPublisher<SwerveModulePosition> driveModulePositions = driveStateTable.getStructArrayTopic("ModulePositions", SwerveModulePosition.struct).publish();
     private final DoublePublisher driveTimestamp = driveStateTable.getDoubleTopic("Timestamp").publish();
     private final DoublePublisher driveOdometryFrequency = driveStateTable.getDoubleTopic("OdometryFrequency").publish();
+
+    private final NetworkTable flywheelTable = inst.getTable("Flywheel");
+    private final DoubleSubscriber flywheelFFKS = flywheelTable.getDoubleTopic("FF KS").subscribe(0.0);
+    private final DoubleSubscriber flywheelFFKV = flywheelTable.getDoubleTopic("FF KV").subscribe(0.0);
+    private final DoubleSubscriber flywheelFFKA = flywheelTable.getDoubleTopic("FF KA").subscribe(0.0);
 
     /* Field2d for Elastic dashboard field widget */
     private final Field2d field2d = new Field2d();
@@ -164,6 +170,13 @@ public class Telemetry {
         var distanceToTag = vision.getDistanceToTag10();
         SmartDashboard.putNumber("Distance to Tag", distanceToTag.orElse(-1.0)); // PhotonVision range, used for flywheel interpolation
         SmartDashboard.putNumber("Target Flywheel RPM", FlywheelInterpolation.getRPMForDistance(distanceToTag));
+        
+        // Update flywheel feedforward values from editable dashboard entries
+        rollers.setFeedforwardKS(flywheelFFKS.get());
+        rollers.setFeedforwardKV(flywheelFFKV.get());
+        rollers.setFeedforwardKA(flywheelFFKA.get());
+        
+        // Publish current flywheel feedforward values to dashboard
         SmartDashboard.putNumber("Flywheel FF KS", rollers.getFeedforwardKS());
         SmartDashboard.putNumber("Flywheel FF KV", rollers.getFeedforwardKV());
         SmartDashboard.putNumber("Flywheel FF KA", rollers.getFeedforwardKA());
