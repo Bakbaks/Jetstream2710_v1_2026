@@ -1,37 +1,37 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import java.util.Optional;
 
-/**
- * Linear interpolation of flywheel RPM based on distance to target tag.
- * Distance is from PhotonVision range estimation (tag 10).  
- * Tune kMinDistance, kMaxDistance, kMinRPM, kMaxRPM for your robot.
- */
 public final class FlywheelInterpolation {
 
-    /** Distance (meters) at which to use minimum RPM. */
-    public static final double kMinDistance = 1.0;
-    /** Distance (meters) at which to suse maximum RPM. */
-    public static final double kMaxDistance = 50.0;
-    /** RPM at minimum distance. */
-    public static final double kMinRPM = 3000;
-    /** RPM at maximum distance. */
-    public static final double kMaxRPM = 3500;
     /** Default RPM when distance cannot be computed (tag not visible). */
     public static final double kDefaultRPM = 3000;
+
+    /** Shooter RPM lookup table - maps distance (meters) to RPM */
+    private static final InterpolatingDoubleTreeMap shooterTable = new InterpolatingDoubleTreeMap();
+
+    // Initialize the table with distance-RPM sweet spots
+    static {
+        // distance-RPM pairs here (distance in meters, RPM)
+        shooterTable.put(1.0, 3000.0);   // Close range
+        shooterTable.put(2.0, 3100.0);
+        shooterTable.put(3.0, 3200.0);
+        shooterTable.put(4.0, 3300.0);
+        shooterTable.put(5.0, 3400.0);   // Far range
+    }
 
     private FlywheelInterpolation() {}
 
     /**
-     * Linearly interpolates flywheel RPM from distance to target tag.
+     * Gets interpolated RPM for the given distance.
+     * Automatically performs linear interpolation between table entries.
      *
      * @param distanceMeters Distance to tag in meters (from PhotonVision)
      * @return RPM to use for shooter
      */
     public static double interpolateRPM(double distanceMeters) {
-        double clampedDistance = Math.max(kMinDistance, Math.min(kMaxDistance, distanceMeters));
-        double t = (clampedDistance - kMinDistance) / (kMaxDistance - kMinDistance);
-        return kMinRPM + t * (kMaxRPM - kMinRPM);
+        return shooterTable.get(distanceMeters);
     }
 
     /**
