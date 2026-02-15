@@ -191,6 +191,18 @@ public class Rollers extends SubsystemBase {
         applyFeedforwardToMotors();
     }
 
+    public double getFeedforwardKS() {
+        return feedforwardKS;
+    }
+
+    public double getFeedforwardKV() {
+        return feedforwardKV;
+    }
+
+    public double getFeedforwardKA() {
+        return feedforwardKA;
+    }
+
     private void initSendable(SendableBuilder builder, TalonFX motor, String name) {
         builder.addDoubleProperty(name + " RPM", () -> motor.getVelocity().getValue().in(RPM), null);
         builder.addDoubleProperty(name + " Stator Current", () -> motor.getStatorCurrent().getValue().in(Amps), null);

@@ -164,6 +164,9 @@ public class Telemetry {
         var distanceToTag = vision.getDistanceToTag10();
         SmartDashboard.putNumber("Distance to Tag", distanceToTag.orElse(-1.0)); // PhotonVision range, used for flywheel interpolation
         SmartDashboard.putNumber("Target Flywheel RPM", FlywheelInterpolation.getRPMForDistance(distanceToTag));
+        SmartDashboard.putNumber("Flywheel FF KS", rollers.getFeedforwardKS());
+        SmartDashboard.putNumber("Flywheel FF KV", rollers.getFeedforwardKV());
+        SmartDashboard.putNumber("Flywheel FF KA", rollers.getFeedforwardKA());
         SmartDashboard.putNumber("Robot Pose X", state.Pose.getX());
         SmartDashboard.putNumber("Robot Pose Y", state.Pose.getY());
         SmartDashboard.putNumber("Robot Pose Rotation", state.Pose.getRotation().getRadians());
