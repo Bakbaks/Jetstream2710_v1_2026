@@ -4,21 +4,21 @@ import java.util.Optional;
 
 /**
  * Linear interpolation of flywheel RPM based on distance to target tag.
- * Distance is from PhotonVision range estimation (tag 10).
+ * Distance is from PhotonVision range estimation (tag 10).  
  * Tune kMinDistance, kMaxDistance, kMinRPM, kMaxRPM for your robot.
  */
 public final class FlywheelInterpolation {
 
     /** Distance (meters) at which to use minimum RPM. */
     public static final double kMinDistance = 1.0;
-    /** Distance (meters) at which to use maximum RPM. */
-    public static final double kMaxDistance = 4.0;
+    /** Distance (meters) at which to suse maximum RPM. */
+    public static final double kMaxDistance = 50.0;
     /** RPM at minimum distance. */
-    public static final double kMinRPM = 800;
+    public static final double kMinRPM = 3000;
     /** RPM at maximum distance. */
-    public static final double kMaxRPM = 1200;
+    public static final double kMaxRPM = 3500;
     /** Default RPM when distance cannot be computed (tag not visible). */
-    public static final double kDefaultRPM = 1000;
+    public static final double kDefaultRPM = 3000;
 
     private FlywheelInterpolation() {}
 

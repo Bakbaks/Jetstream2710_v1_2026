@@ -177,8 +177,8 @@ public class RobotContainer {
     
     drivetrain.setDefaultCommand(
             drivetrain.applyRequest(() -> drive
-                .withVelocityX(-MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed)
-                .withVelocityY(-MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed)
+                .withVelocityX(MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed)
+                .withVelocityY(MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed)
                 .withRotationalRate(-MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate))
     );
     drivePovDOWN.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));

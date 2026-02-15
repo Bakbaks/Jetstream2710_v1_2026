@@ -39,7 +39,7 @@ public class BasicRotate extends Command {
     private boolean targetVisible = false;
     private double targetYaw = 0.0;
 
-    private double KPtheta = 1.0;
+    private double KPtheta = 1.5;
     private double maxLinSpeed;
     private double maxAngSpeed;
     public BasicRotate(CommandSwerveDrivetrain drivetrain, Vision vision, CommandXboxController m_driverController, double maxLinSpeed, double maxAngSpeed) {
