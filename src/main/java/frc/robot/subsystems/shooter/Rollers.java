@@ -22,7 +22,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,6 +34,20 @@ public class Rollers extends SubsystemBase {
   private static final AngularVelocity kVelocityTolerance = RPM.of(200);
   /** Minimum target RPM to consider shooter "ready" - avoids false positive when target is 0. */
   private static final double kMinTargetRPM = 100;
+
+  // PID gains (Slot 0)
+  private static final double kP = 0.5;
+  private static final double kI = 2.0;
+  private static final double kD = 0.0;
+
+  // Feedforward defaults (tunable via elastic)
+  private static final double kDefaultKS = 0.0;
+  private static final double kDefaultKV = 12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond);
+  private static final double kDefaultKA = 0.0;
+
+  private double feedforwardKS = kDefaultKS;
+  private double feedforwardKV = kDefaultKV;
+  private double feedforwardKA = kDefaultKA;
 
     private final TalonFX FrontLeftMotor, BackLeftMotor, FrontRightMotor, BackRightMotor;
     private final List<TalonFX> motors;
@@ -78,16 +92,18 @@ public class Rollers extends SubsystemBase {
         )
         .withSlot0(
             new Slot0Configs()
-                .withKP(0.5)
-                .withKI(2)
-                .withKD(0)
-                .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
+                    .withKP(kP)
+                    .withKI(kI)
+                    .withKD(kD)
+                    .withKS(feedforwardKS)
+                    .withKV(feedforwardKV) // velocity FF (Volts per RPS)
+                    .withKA(feedforwardKA)
         );
-    
+
     motor.getConfigurator().apply(config);
   }
 
-  public void setRPM(double rpm) {
+    public void setRPM(double rpm) {
         for (final TalonFX motor : motors) {
             motor.setControl(
                 velocityRequest
@@ -143,6 +159,38 @@ public class Rollers extends SubsystemBase {
         });
     }
 
+    /**
+     * Apply the current feedforward (KS/KV/KA) and PID values to all motors' Slot0 at runtime.
+     */
+    private void applyFeedforwardToMotors() {
+        final Slot0Configs slot0 = new Slot0Configs()
+            .withKP(kP)
+            .withKI(kI)
+            .withKD(kD)
+            .withKS(feedforwardKS)
+            .withKV(feedforwardKV)
+            .withKA(feedforwardKA);
+        final TalonFXConfiguration cfg = new TalonFXConfiguration().withSlot0(slot0);
+        for (final TalonFX motor : motors) {
+            motor.getConfigurator().apply(cfg);
+        }
+    }
+
+    public void setFeedforwardKS(double ks) {
+        feedforwardKS = ks;
+        applyFeedforwardToMotors();
+    }
+
+    public void setFeedforwardKV(double kv) {
+        feedforwardKV = kv;
+        applyFeedforwardToMotors();
+    }
+
+    public void setFeedforwardKA(double ka) {
+        feedforwardKA = ka;
+        applyFeedforwardToMotors();
+    }
+
     private void initSendable(SendableBuilder builder, TalonFX motor, String name) {
         builder.addDoubleProperty(name + " RPM", () -> motor.getVelocity().getValue().in(RPM), null);
         builder.addDoubleProperty(name + " Stator Current", () -> motor.getStatorCurrent().getValue().in(Amps), null);
@@ -156,5 +204,10 @@ public class Rollers extends SubsystemBase {
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         builder.addDoubleProperty("Dashboard RPM", () -> dashboardTargetRPM, value -> dashboardTargetRPM = value);
         builder.addDoubleProperty("Target RPM", () -> velocityRequest.getVelocityMeasure().in(RPM), null);
+
+        // Live feedforward tuning
+        builder.addDoubleProperty("FF KS", () -> feedforwardKS, this::setFeedforwardKS);
+        builder.addDoubleProperty("FF KV", () -> feedforwardKV, this::setFeedforwardKV);
+        builder.addDoubleProperty("FF KA", () -> feedforwardKA, this::setFeedforwardKA);
     }
 }
