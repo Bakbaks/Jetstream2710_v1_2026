@@ -194,12 +194,12 @@ public class RobotContainer {
         () -> -MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate;
 
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      new Volley(flywheel, hopper, drivetrain::getPose),
-      new ScoreOrientation(drivetrain, aimVX, aimVY, rotV).withTimeout(5.0)  // Timeout after 5 seconds to prevent hanging
-    ));
+      new Volley(flywheel, hopper, drivetrain::getPose)
+      ));
 
-
-    
+    driveRightBumper.whileTrue(new ParallelCommandGroup(
+      new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
+    )); 
   }
 
   /** Updates SmartDashboard telemetry. Call from robotPeriodic. */
