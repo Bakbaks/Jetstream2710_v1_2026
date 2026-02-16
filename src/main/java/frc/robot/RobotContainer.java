@@ -40,7 +40,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ExampleSubsystem.ExampleSubsystem;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.TunerConstants;
@@ -62,6 +62,7 @@ import frc.robot.commands.alignment.ScoreOrientation;
 import frc.robot.commands.ExampleCommand;
 
 import frc.robot.commands.shoot.Volley;
+import frc.robot.commands.intake.HungryHungryHippo;
 
 
 
@@ -122,6 +123,7 @@ public class RobotContainer {
 
   private final Flywheel flywheel = new Flywheel();
   private final Hopper hopper = new Hopper();
+  private final Intake intake = new Intake();
   private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, flywheel, hopper);
 
   //Autos
@@ -200,6 +202,10 @@ public class RobotContainer {
     driveRightBumper.whileTrue(new ParallelCommandGroup(
       new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
     )); 
+
+    driveLeftTrigger.whileTrue(new ParallelCommandGroup(
+      new HungryHungryHippo(intake)
+    ));
   }
 
   /** Updates SmartDashboard telemetry. Call from robotPeriodic. */

@@ -86,8 +86,22 @@ public final class Constants {
       public static final double KHopperP = 0.5;
       public static final double KHopperI = 2;
       public static final double KHopperD = 0;
+    }
 
-     
+    public static class IntakeConstants {
+      public static final double kExtendoPercent = 0.5;
+      public static final double kWheelPercent = 1;
+
+      //no current limits cuz sped
+      public static final int kIntakeStatorCurrentLimit = 100;
+      public static final int kIntakeSupplyCurrentLimit = 70;
+    
+      
+      public static final double kExtendoRPM = 50;
+      public static final double kWheelRPM = 1000;
+      public static final double KIntakeP = 0.5;
+      public static final double KIntakeI = 2;
+      public static final double KIntakeD = 0;
     }
 
     public static class FieldConstants {
@@ -95,7 +109,7 @@ public final class Constants {
       public static final int RED_SHOOT_TAG = 10;
       public static final int BLUE_SHOOT_TAG = 26;
       //tags 10(red) & 26(blue)
-      public static final Transform2d RightTagToHub = new Transform2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)); // needs to be measured still
+      public static final Transform2d RightTagToHub = new Transform2d(0.0, -0.737102412, Rotation2d.fromDegrees(0.0)); // needs to be measured still
     }
 
     public static class AutoConstants {
