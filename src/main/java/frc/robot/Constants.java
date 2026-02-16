@@ -56,19 +56,16 @@ public final class Constants {
     }
 
     public static class FlywheelConstants {
-      public static final double kFlywheelPercent = 0.8;
-      public static final int kFlywheelCurrentLimit = 95;
+      public static final int FlywheelStatorCurrentLimit = 120;
+      public static final int FlywheelSupplyCurrentLimit = 70;
       
-      public static final double kFlywheelRPMDouble = 4000;
-      public static final AngularVelocity kFlywheelRPM = RPM.of(4000);
+      
+      public static final double kMinTargetRPM = 100; 
+      public static final double kVelocityTolerance = 200;
       public static final double KFlywheelP = 0.5;
       public static final double KFlywheelI = 2;
       public static final double KFlywheelD = 0;
 
-      public static final double FlywheelGearRatio = 1;
-
-      public static final double kFlywheelMinOutput = -1;
-      public static final double kFlywheelMaxOutput = 1;
     }
 
     public static class ElevatorConstants {
@@ -82,24 +79,19 @@ public final class Constants {
     public static class HopperConstants {
       public static final double kFloorPercent = 0.5;
       public static final double kFeederPercent = 1;
-      public static final int kFloorCurrentLimit = 80;
-      public static final int kFeederCurrentLimit = 40;
+
+      //no current limits cuz sped
+      public static final int kHopperStatorCurrentLimit = 100;
+      public static final int kHopperSupplyCurrentLimit = 70;
+    
       
       public static final double kFloorRPM = 2000;
-      public static final double KFloorP = 0.05;
-      public static final double KFloorI = 0;
-      public static final double KFloorD = 0;
-      public static final double FloorGearRatio = 1;
-      public static final double kFloorMinOutput = -1;
-      public static final double kFloorMaxOutput = 1;
-
       public static final double kFeederRPM = 4000;
-      public static final double KFeederP = 0.05;
-      public static final double KFeederI = 0;
-      public static final double KFeederD = 0;
-      public static final double FeederGearRatio = 1;
-      public static final double kFeederMinOutput = -1;
-      public static final double kFeederMaxOutput = 1;
+      public static final double KHopperP = 0.5;
+      public static final double KHopperI = 2;
+      public static final double KHopperD = 0;
+
+     
     }
 
     public static class FieldConstants {

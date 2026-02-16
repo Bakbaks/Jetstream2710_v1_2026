@@ -1,4 +1,4 @@
-package frc.robot.subsystems.shooter;
+package frc.robot.subsystems;
 
 
 import static edu.wpi.first.units.Units.Amps;
@@ -27,65 +27,64 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.KrakenX60;
+import frc.robot.Constants.FlywheelConstants;
 import frc.robot.Ports;
 
-public class Rollers extends SubsystemBase {
+public class Flywheel extends SubsystemBase {
 
-  private static final AngularVelocity kVelocityTolerance = RPM.of(200);
-  /** Minimum target RPM to consider shooter "ready" - avoids false positive when target is 0. */
-  private static final double kMinTargetRPM = 100;
+    private static final AngularVelocity kVelocityTolerance = RPM.of(FlywheelConstants.kVelocityTolerance);
+    /** Minimum target RPM to consider shooter "ready" - avoids false positive when target is 0. */
+    private static final double kMinTargetRPM = FlywheelConstants.kMinTargetRPM;
 
     private final TalonFX FrontLeftMotor, BackLeftMotor, FrontRightMotor, BackRightMotor;
     private final List<TalonFX> motors;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
-    private double dashboardTargetRPM = 0.0;
-
   /** Creates a new subsystem. */
-  public Rollers() {
-    FrontLeftMotor = new TalonFX(Ports.kFrontLeftShooter, Ports.kRoboRioCANBus);
-    BackLeftMotor = new TalonFX(Ports.kBackLeftShooter, Ports.kRoboRioCANBus);
-    FrontRightMotor = new TalonFX(Ports.kFrontRightShooter, Ports.kRoboRioCANBus);
-    BackRightMotor = new TalonFX(Ports.kBackRightShooter, Ports.kRoboRioCANBus);
-    motors = List.of(FrontLeftMotor, BackLeftMotor, FrontRightMotor, BackRightMotor);
+    public Flywheel() {
+        FrontLeftMotor = new TalonFX(Ports.kFrontLeftShooter, Ports.kRoboRioCANBus);
+        BackLeftMotor = new TalonFX(Ports.kBackLeftShooter, Ports.kRoboRioCANBus);
+        FrontRightMotor = new TalonFX(Ports.kFrontRightShooter, Ports.kRoboRioCANBus);
+        BackRightMotor = new TalonFX(Ports.kBackRightShooter, Ports.kRoboRioCANBus);
+        motors = List.of(FrontLeftMotor, BackLeftMotor, FrontRightMotor, BackRightMotor);
 
-    configureMotor(FrontLeftMotor, InvertedValue.Clockwise_Positive);
-    configureMotor(BackLeftMotor, InvertedValue.Clockwise_Positive);
+        configureMotor(FrontLeftMotor, InvertedValue.Clockwise_Positive);
+        configureMotor(BackLeftMotor, InvertedValue.Clockwise_Positive);
 
-    configureMotor(FrontRightMotor, InvertedValue.CounterClockwise_Positive);
-    configureMotor(BackRightMotor, InvertedValue.CounterClockwise_Positive);
+        configureMotor(FrontRightMotor, InvertedValue.CounterClockwise_Positive);
+        configureMotor(BackRightMotor, InvertedValue.CounterClockwise_Positive);
   
-  }
+    }
 
-  private void configureMotor(TalonFX motor, InvertedValue invertDirection) {
-    final TalonFXConfiguration config = new TalonFXConfiguration()
-        .withMotorOutput(
-            new MotorOutputConfigs()
-                .withInverted(invertDirection)
-                .withNeutralMode(NeutralModeValue.Coast)
-        )
-        .withVoltage(
-            new VoltageConfigs()
-                .withPeakReverseVoltage(Volts.of(0))
-        )
-        .withCurrentLimits(
-            new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(Amps.of(120))
-                .withStatorCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(Amps.of(70))
-                .withSupplyCurrentLimitEnable(true)
-        )
-        .withSlot0(
-            new Slot0Configs()
-                .withKP(0.5)
-                .withKI(2)
-                .withKD(0)
-                .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
-        );
-    
-    motor.getConfigurator().apply(config);
-  }
+    private void configureMotor(TalonFX motor, InvertedValue invertDirection) {
+        final TalonFXConfiguration config = new TalonFXConfiguration()
+            .withMotorOutput(
+                new MotorOutputConfigs()
+                    .withInverted(invertDirection)
+                    .withNeutralMode(NeutralModeValue.Coast)
+            )
+            .withVoltage(
+                new VoltageConfigs()
+                    .withPeakReverseVoltage(Volts.of(0))
+            )
+            .withCurrentLimits(
+                new CurrentLimitsConfigs()
+                    .withStatorCurrentLimit(Amps.of(FlywheelConstants.FlywheelStatorCurrentLimit))
+                    .withStatorCurrentLimitEnable(true)
+                    .withSupplyCurrentLimit(Amps.of(FlywheelConstants.FlywheelSupplyCurrentLimit))
+                    .withSupplyCurrentLimitEnable(true)
+            )
+            .withSlot0(
+                new Slot0Configs()
+                    .withKP(FlywheelConstants.KFlywheelP)
+                    .withKI(FlywheelConstants.KFlywheelI)
+                    .withKD(FlywheelConstants.KFlywheelD)
+                    .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
+            );
+        
+        motor.getConfigurator().apply(config);
+    }
 
   public void setRPM(double rpm) {
         for (final TalonFX motor : motors) {
@@ -114,9 +113,6 @@ public class Rollers extends SubsystemBase {
             .andThen(Commands.waitUntil(this::isVelocityWithinTolerance));
     }
 
-    public Command dashboardSpinUpCommand() {
-        return defer(() -> spinUpCommand(dashboardTargetRPM)); 
-    }
 
     /** Returns the commanded/requested flywheel velocity in RPM. */
     public double getRequestedRPM() {
@@ -154,7 +150,6 @@ public class Rollers extends SubsystemBase {
         initSendable(builder, FrontLeftMotor, "FrontLeft");
         initSendable(builder, BackLeftMotor, "BackLeft");
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-        builder.addDoubleProperty("Dashboard RPM", () -> dashboardTargetRPM, value -> dashboardTargetRPM = value);
         builder.addDoubleProperty("Target RPM", () -> velocityRequest.getVelocityMeasure().in(RPM), null);
     }
 }

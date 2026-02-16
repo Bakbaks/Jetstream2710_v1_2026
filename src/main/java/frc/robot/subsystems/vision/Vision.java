@@ -24,10 +24,9 @@
 
  package frc.robot.subsystems.vision;
 
- import static frc.robot.Constants.Vision.*;
-
+ import static frc.robot.Constants.VisionConstants.*;
+ 
  import edu.wpi.first.math.Matrix;
- import org.photonvision.PhotonUtils;
  import edu.wpi.first.math.VecBuilder;
  import edu.wpi.first.math.geometry.Pose2d;
  import edu.wpi.first.math.geometry.Rotation2d;
@@ -49,20 +48,10 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
  
  public class Vision extends SubsystemBase {
-     /** Tag ID used for shooter alignment (matches BasicRotate). */
-     private static final int kAlignmentTagId = 10;
-     /** Yaw tolerance (degrees) to consider robot aimed at tag. */
-     private static final double kAimedToleranceDegrees = 3.0;
-
      private final PhotonCamera camera;
      private final PhotonPoseEstimator photonEstimator;
      private Matrix<N3, N1> curStdDevs;
      private final EstimateConsumer estConsumer;
-
-     /** Cached yaw of alignment tag from last processed frame. */
-     private volatile Double lastTag10Yaw = null;
-     /** Cached distance to alignment tag (meters) from PhotonVision range estimation. */
-     private volatile Double lastTag10RangeMeters = null;
  
      // Simulation
      private PhotonCameraSim cameraSim;
@@ -88,29 +77,17 @@ import org.photonvision.targeting.PhotonTrackedTarget;
          for (var change : camera.getAllUnreadResults()) {
              visionEst = photonEstimator.update(change);
              updateEstimationStdDevs(visionEst, change.getTargets());
-
-             // Cache alignment tag yaw and distance for telemetry / flywheel interpolation
-             lastTag10Yaw = null;
-             lastTag10RangeMeters = null;
-             for (var target : change.getTargets()) {
-                 if (target.getFiducialId() == kAlignmentTagId) {
-                     lastTag10Yaw = target.getYaw();
-                     lastTag10RangeMeters = PhotonUtils.calculateDistanceToTargetMeters(
-                             kCameraHeightMeters,
-                             kTag10HeightMeters,
-                             kCameraPitchRadians,
-                             java.lang.Math.toRadians(target.getPitch()));
-                     break;
-                 }
-             }
-
+ 
+            
              visionEst.ifPresent(
                      est -> {
                          // Change our trust in the measurement based on the tags we can see
                          var estStdDevs = getEstimationStdDevs();
-
+ 
                          estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                      });
+
+                     
          }
      }
  
@@ -176,17 +153,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
      public Matrix<N3, N1> getEstimationStdDevs() {
          return curStdDevs;
      }
-
-     /** Returns true if the alignment tag is visible and robot yaw is within tolerance. */
-     public boolean isAimedAtTag() {
-         return lastTag10Yaw != null && Math.abs(lastTag10Yaw) < kAimedToleranceDegrees;
-     }
-
-     /** Returns distance to tag 10 in meters from PhotonVision range estimation, or empty if not visible. */
-     public Optional<Double> getDistanceToTag10() {
-         return lastTag10RangeMeters != null ? Optional.of(lastTag10RangeMeters) : Optional.empty();
-     }
-
+ 
      // ----- Simulation
  
      public void simulationPeriodic(Pose2d robotSimPose) {

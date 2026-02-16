@@ -40,8 +40,8 @@ public class Hopper extends SubsystemBase {
 	private final VelocityVoltage FeedervelocityRequest = new VelocityVoltage(0).withSlot(0);
 
 	// Dashboard-configurable percent outputs
-	private double dashboardFloorPercent = 0.5;
-	private double dashboardFeederPercent = 1;
+	private double dashboardFloorPercent = HopperConstants.kFloorPercent;
+	private double dashboardFeederPercent = HopperConstants.kFeederPercent;
 
 	// I'm going to replace percent with rpm
 	private double dashboardFloorTargetRPM = HopperConstants.kFloorRPM;
@@ -59,12 +59,13 @@ public class Hopper extends SubsystemBase {
 		final TalonFXConfiguration config = new TalonFXConfiguration()
 				.withMotorOutput(new MotorOutputConfigs().withInverted(invertDirection).withNeutralMode(NeutralModeValue.Coast))
 				.withVoltage(new VoltageConfigs().withPeakReverseVoltage(Volts.of(0)))
-				.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(Amps.of(80)).withStatorCurrentLimitEnable(true))
+				.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(Amps.of(HopperConstants.kHopperStatorCurrentLimit)).withStatorCurrentLimitEnable(true))
+				.withCurrentLimits(new CurrentLimitsConfigs().withSupplyCurrentLimit(Amps.of(HopperConstants.kHopperSupplyCurrentLimit)).withSupplyCurrentLimitEnable(true))
 				.withSlot0(
 				new Slot0Configs()
-					.withKP(0.5)
-					.withKI(2)
-					.withKD(0)
+					.withKP(HopperConstants.KHopperP)
+					.withKI(HopperConstants.KHopperI)
+					.withKD(HopperConstants.KHopperD)
 					.withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond))); // 12 volts when requesting max RPS);
 					
 		motor.getConfigurator().apply(config);
