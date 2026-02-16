@@ -16,7 +16,7 @@ import java.util.function.DoubleSupplier;
 
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.Vision;
-import static frc.robot.Constants.Vision.*;
+import static frc.robot.Constants.VisionConstants.*;
 import frc.robot.Constants;
 
 public class RotateToTag extends Command {
@@ -96,7 +96,7 @@ public class RotateToTag extends Command {
         
         // Camera yaw from robot-to-camera transform (Z = yaw in radians).
         // Forward camera = 0; backward = Math.PI. Set in Constants.Vision.kRobotToCam.
-        double cameraYawOffset = Constants.Vision.kRobotToCam.getRotation().getZ();
+        double cameraYawOffset = Constants.VisionConstants.kRobotToCam.getRotation().getZ();
         double targetAngle = angleToTag + cameraYawOffset;
         
         // Normalize angle to [-π, π]

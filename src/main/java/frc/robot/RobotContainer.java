@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+//utils
+import java.util.function.DoubleSupplier;
+
 //units
 
 import static edu.wpi.first.units.Units.Degrees;
@@ -35,13 +38,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.ExampleSubsystem.ExampleSubsystem;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.TunerConstants;
 import frc.robot.subsystems.vision.Vision;
-
-import frc.robot.subsystems.shooter.Rollers;
-import frc.robot.subsystems.hopper.Conveyer;
 
 //Auto
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -53,15 +56,12 @@ import com.pathplanner.lib.path.PathConstraints;
 
 //robotcommands
 import frc.robot.commands.Autos;
-import frc.robot.commands.Drive;
-import frc.robot.commands.alignment.TagSetPose;
-import frc.robot.commands.alignment.GlobalSetPose;
-import frc.robot.commands.alignment.DriveAutoLock;
 import frc.robot.commands.alignment.RotateToTag;
 import frc.robot.commands.alignment.BasicRotate;
+import frc.robot.commands.alignment.ScoreOrientation;
 import frc.robot.commands.ExampleCommand;
 
-import frc.robot.commands.shoot.PopNAwe;
+import frc.robot.commands.shoot.Volley;
 
 
 
@@ -120,9 +120,9 @@ public class RobotContainer {
 
   private final Pose2d goalpose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
 
-  private final Rollers rollers = new Rollers();
-  private final Conveyer conveyer = new Conveyer();
-  private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, rollers, conveyer);
+  private final Flywheel flywheel = new Flywheel();
+  private final Hopper hopper = new Hopper();
+  //private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, rollers, hopper);
 
   //Autos
   PathConstraints lims = new PathConstraints(
@@ -135,7 +135,7 @@ public class RobotContainer {
 
   Command UnloadPreload = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new PopNAwe(rollers, vision)
+      new Volley(flywheel, hopper, drivetrain::getPose)
       ).withTimeout(2)
   );
   
@@ -183,33 +183,28 @@ public class RobotContainer {
     );
     drivePovDOWN.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    // Shoot + rotate to face center goal tag while allowing translation
-    // driveRightTrigger.whileTrue(new ParallelCommandGroup(
-    //   new PopNAwe(rollers),
-    //   new RotateToTag(drivetrain, vision, 10,  // CHANGE TO BASED ON AUTO SELECTED LATER
-    //     () -> -MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed,
-    //     () -> -MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed
-    //   ).withTimeout(5.0),  // Timeout after 5 seconds to prevent hanging
-    //   // Run conveyor when shooter is up to speed
-    //   conveyer.dashboardRunWhenReady(rollers)
-    // ));
+    
+    DoubleSupplier aimVX =
+        () -> MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed;
+
+    DoubleSupplier aimVY =
+        () -> MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed;
+
+    DoubleSupplier rotV =
+        () -> -MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate;
 
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      new PopNAwe(rollers, vision),
-      new BasicRotate(drivetrain, vision, m_driverController, MaxSpeed, MaxAngularRate).withTimeout(5.0),  // Timeout after 5 seconds to prevent hanging
-      // Run conveyor when shooter is up to speed
-      conveyer.dashboardRunWhenReady(rollers)
-    ));
-    //aux commands
-      // make branch
+      new Volley(flywheel, hopper, drivetrain::getPose)
+      ));
 
-    
-    
+    driveRightBumper.whileTrue(new ParallelCommandGroup(
+      new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
+    )); 
   }
 
   /** Updates SmartDashboard telemetry. Call from robotPeriodic. */
   public void updateTelemetry() {
-    telemetry.telemeterize(drivetrain.getState());
+    //telemetry.telemeterize(drivetrain.getState());
   }
 
   /**

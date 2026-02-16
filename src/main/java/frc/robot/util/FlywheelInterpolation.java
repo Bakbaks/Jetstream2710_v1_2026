@@ -3,10 +3,11 @@ package frc.robot.util;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import java.util.Optional;
 
+import frc.robot.Constants.FlywheelConstants;
 public final class FlywheelInterpolation {
 
     /** Default RPM when distance cannot be computed (tag not visible). */
-    public static final double kDefaultRPM = 3000;
+    private static final double kDefaultRPM = FlywheelConstants.kDefaultRPM;
 
     /** Shooter RPM lookup table - maps distance (meters) to RPM */
     private static final InterpolatingDoubleTreeMap shooterTable = new InterpolatingDoubleTreeMap();
