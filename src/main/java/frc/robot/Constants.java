@@ -34,17 +34,12 @@ public final class Constants {
     public static class VisionConstants {
       public static final String kCameraName = "dave";
 
-      /** Camera height above ground (meters). */
-      public static final double kCameraHeightMeters = 1.0;
       /** AprilTag 10 center height above ground (meters). 44.25 in = 1.12395 m. */
-      public static final double kTag10HeightMeters = Units.inchesToMeters(44.25);
       /** Camera pitch from horizontal in radians. 15 deg up from vertical = 75 deg from horizontal. */
-      public static final double kCameraPitchRadians = Units.degreesToRadians(75);
-
       // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
       //https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
       // Rotation3d(roll, pitch, yaw) in radians. Use (0,0,0) for forward camera, (0,0,Math.PI) for backward.
-      public static final Transform3d kRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, Math.PI));
+      public static final Transform3d kRobotToCam = new Transform3d(new Translation3d(0.5, 1.0, 0.5), new Rotation3d(0, Units.degreesToRadians(75), Math.PI));
 
       // The layout of the AprilTags on the field
       public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
@@ -61,11 +56,12 @@ public final class Constants {
       
       
       public static final double kMinTargetRPM = 100; 
-      public static final double kVelocityTolerance = 200;
+      public static final double kVelocityTolerance = 100;
       public static final double KFlywheelP = 0.5;
       public static final double KFlywheelI = 2;
       public static final double KFlywheelD = 0;
 
+      public static final double kDefaultRPM = 3000;
     }
 
     public static class ElevatorConstants {
@@ -103,12 +99,11 @@ public final class Constants {
     }
 
     public static class AutoConstants {
-      
       // Tuning constants
       public static final double kPTheta = 2.0;
       public static final double kMaxAngularRate = 4.5; // rad/s
       public static final double kMaxAngularAccel = 6.0; // rad/s²
-      public static final double kRotationToleranceRadians = Math.toRadians(5); // Increased from 2° to allow rotation
+      public static final double kRotationToleranceRadians = Math.toRadians(5);
       public static final double kPositionToleranceMeters = 0.1;
     }
 
