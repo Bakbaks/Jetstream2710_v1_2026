@@ -122,7 +122,7 @@ public class RobotContainer {
 
   private final Flywheel flywheel = new Flywheel();
   private final Hopper hopper = new Hopper();
-  //private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, rollers, hopper);
+  private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, flywheel, hopper);
 
   //Autos
   PathConstraints lims = new PathConstraints(
@@ -204,7 +204,7 @@ public class RobotContainer {
 
   /** Updates SmartDashboard telemetry. Call from robotPeriodic. */
   public void updateTelemetry() {
-    //telemetry.telemeterize(drivetrain.getState());
+    telemetry.telemeterize(drivetrain.getState());
   }
 
   /**
