@@ -46,6 +46,16 @@ public class Telemetry {
         SignalLogger.start();
         SmartDashboard.putData("Swerve Drive", createSwerveDriveSendable());
         SmartDashboard.putData("Field", field2d);
+
+        // Initialize network table entries with current values
+        flywheelFFKS = flywheelTable.getDoubleTopic("FF KS").subscribe(flywheel.getFeedforwardKS());
+        flywheelFFKV = flywheelTable.getDoubleTopic("FF KV").subscribe(flywheel.getFeedforwardKV());
+        flywheelFFKA = flywheelTable.getDoubleTopic("FF KA").subscribe(flywheel.getFeedforwardKA());
+        
+        // Also publish them to ensure they appear
+        flywheelTable.getDoubleTopic("FF KS").publish().set(flywheel.getFeedforwardKS());
+        flywheelTable.getDoubleTopic("FF KV").publish().set(flywheel.getFeedforwardKV());
+        flywheelTable.getDoubleTopic("FF KA").publish().set(flywheel.getFeedforwardKA());
     }
 
     private Sendable createSwerveDriveSendable() {
@@ -78,9 +88,9 @@ public class Telemetry {
     private final DoublePublisher driveOdometryFrequency = driveStateTable.getDoubleTopic("OdometryFrequency").publish();
 
     private final NetworkTable flywheelTable = inst.getTable("Flywheel");
-    private final DoubleSubscriber flywheelFFKS = flywheelTable.getDoubleTopic("FF KS").subscribe(0.0);
-    private final DoubleSubscriber flywheelFFKV = flywheelTable.getDoubleTopic("FF KV").subscribe(0.0);
-    private final DoubleSubscriber flywheelFFKA = flywheelTable.getDoubleTopic("FF KA").subscribe(0.0);
+    private final DoubleSubscriber flywheelFFKS;
+    private final DoubleSubscriber flywheelFFKV;
+    private final DoubleSubscriber flywheelFFKA;
 
     /* Field2d for Elastic dashboard field widget */
     private final Field2d field2d = new Field2d();
@@ -157,7 +167,6 @@ public class Telemetry {
         }
 
         /* Elastic dashboard telemetry */
-        /*
         SmartDashboard.putBoolean("Aimed At Tag", vision.isAimedAtTag());
         SmartDashboard.putBoolean("Flywheel Up to Speed", flywheel.isVelocityWithinTolerance());
         SmartDashboard.putBoolean("Shooter Being Fed",
@@ -172,14 +181,18 @@ public class Telemetry {
         SmartDashboard.putNumber("Target Flywheel RPM", FlywheelInterpolation.getRPMForDistance(distanceToTag));
         
         // Update flywheel feedforward values from editable dashboard entries
-        rollers.setFeedforwardKS(flywheelFFKS.get());
-        rollers.setFeedforwardKV(flywheelFFKV.get());
-        rollers.setFeedforwardKA(flywheelFFKA.get());
+        double ks = flywheelFFKS.get();
+        double kv = flywheelFFKV.get();
+        double ka = flywheelFFKA.get();
+
+        if (Math.abs(ks - flywheel.getFeedforwardKS()) > 1e-6) flywheel.setFeedforwardKS(ks);
+        if (Math.abs(kv - flywheel.getFeedforwardKV()) > 1e-6) flywheel.setFeedforwardKV(kv);
+        if (Math.abs(ka - flywheel.getFeedforwardKA()) > 1e-6) flywheel.setFeedforwardKA(ka);
         
         // Publish current flywheel feedforward values to dashboard
-        SmartDashboard.putNumber("Flywheel FF KS", rollers.getFeedforwardKS());
-        SmartDashboard.putNumber("Flywheel FF KV", rollers.getFeedforwardKV());
-        SmartDashboard.putNumber("Flywheel FF KA", rollers.getFeedforwardKA());
+        SmartDashboard.putNumber("Flywheel FF KS", flywheel.getFeedforwardKS());
+        SmartDashboard.putNumber("Flywheel FF KV", flywheel.getFeedforwardKV());
+        SmartDashboard.putNumber("Flywheel FF KA", flywheel.getFeedforwardKA());
         SmartDashboard.putNumber("Robot Pose X", state.Pose.getX());
         SmartDashboard.putNumber("Robot Pose Y", state.Pose.getY());
         SmartDashboard.putNumber("Robot Pose Rotation", state.Pose.getRotation().getRadians());
@@ -197,7 +210,5 @@ public class Telemetry {
                 : RobotState.isTest() ? "Test"
                 : "Unknown";
         SmartDashboard.putString("Robot State", robotState);
-
-         */
     }
 }

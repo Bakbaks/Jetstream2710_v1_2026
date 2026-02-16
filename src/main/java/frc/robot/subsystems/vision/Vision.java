@@ -143,6 +143,29 @@ import org.photonvision.targeting.PhotonTrackedTarget;
      public List<PhotonPipelineResult> getResults(){
         return camera.getAllUnreadResults();
      }
+
+     public boolean isAimedAtTag() {
+        var result = camera.getLatestResult();
+        if (result.hasTargets()) {
+            // Check if centered. Tolerance 2 degrees?
+            return Math.abs(result.getBestTarget().getYaw()) < 2.0;
+        }
+        return false;
+     }
+
+     public Optional<Double> getDistanceToTag(int tagId) {
+        var result = camera.getLatestResult();
+        for (var target : result.getTargets()) {
+            if (target.getFiducialId() == tagId) {
+                return Optional.of(target.getBestCameraToTarget().getTranslation().getNorm());
+            }
+        }
+        return Optional.empty();
+     }
+
+     public Optional<Double> getDistanceToTag10() {
+         return getDistanceToTag(10);
+     }
  
      /**
       * Returns the latest standard deviations of the estimated pose from {@link

@@ -95,6 +95,10 @@ public class Hopper extends SubsystemBase {
 		);
 	}
 
+    public boolean isFeeding() {
+        return Math.abs(FeederMotor.getVelocity().getValue().in(RPM)) > 100;
+    }
+
 
 	private void initSendable(SendableBuilder builder, TalonFX motor, String name) {
         builder.addDoubleProperty(name + " RPM", () -> motor.getVelocity().getValue().in(RPM), null);

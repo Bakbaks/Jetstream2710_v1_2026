@@ -41,6 +41,8 @@ public class Flywheel extends SubsystemBase {
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
 
+    private final Slot0Configs slot0Config = new Slot0Configs();
+
   /** Creates a new subsystem. */
     public Flywheel() {
         FrontLeftMotor = new TalonFX(Ports.kFrontLeftShooter, Ports.kRoboRioCANBus);
@@ -58,6 +60,12 @@ public class Flywheel extends SubsystemBase {
     }
 
     private void configureMotor(TalonFX motor, InvertedValue invertDirection) {
+        slot0Config
+            .withKP(FlywheelConstants.KFlywheelP)
+            .withKI(FlywheelConstants.KFlywheelI)
+            .withKD(FlywheelConstants.KFlywheelD)
+            .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond)); // 12 volts when requesting max RPS
+            
         final TalonFXConfiguration config = new TalonFXConfiguration()
             .withMotorOutput(
                 new MotorOutputConfigs()
@@ -75,13 +83,7 @@ public class Flywheel extends SubsystemBase {
                     .withSupplyCurrentLimit(Amps.of(FlywheelConstants.FlywheelSupplyCurrentLimit))
                     .withSupplyCurrentLimitEnable(true)
             )
-            .withSlot0(
-                new Slot0Configs()
-                    .withKP(FlywheelConstants.KFlywheelP)
-                    .withKI(FlywheelConstants.KFlywheelI)
-                    .withKD(FlywheelConstants.KFlywheelD)
-                    .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond)) // 12 volts when requesting max RPS
-            );
+            .withSlot0(slot0Config);
         
         motor.getConfigurator().apply(config);
     }
@@ -106,6 +108,39 @@ public class Flywheel extends SubsystemBase {
 
     public void stop() {
         setPercentOutput(0.0);
+    }
+
+    public void setFeedforwardKS(double ks) {
+        slot0Config.kS = ks;
+        refreshPID();
+    }
+
+    public void setFeedforwardKV(double kv) {
+        slot0Config.kV = kv;
+        refreshPID();
+    }
+
+    public void setFeedforwardKA(double ka) {
+        slot0Config.kA = ka;
+        refreshPID();
+    }
+
+    public double getFeedforwardKS() {
+        return slot0Config.kS;
+    }
+
+    public double getFeedforwardKV() {
+        return slot0Config.kV;
+    }
+
+    public double getFeedforwardKA() {
+        return slot0Config.kA;
+    }
+
+    private void refreshPID() {
+        for (TalonFX motor : motors) {
+            motor.getConfigurator().apply(slot0Config);
+        }
     }
 
     public Command spinUpCommand(double rpm) {
