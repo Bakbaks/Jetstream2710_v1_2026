@@ -174,9 +174,18 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     //drive commands
-    //set default command for drive
-    //drivetrain.setDefaultCommand(new Drive(drivetrain, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightX()));
-    
+    //
+
+    // Control binding
+    // sticks are normal
+    // Y is climb up
+    // A is climb down
+    // X is outake
+    // RTrig is Shoot
+    // RBump is Aim and Spin up
+    // LBump is hopper out toggle
+    // LTrigger is intake spinning
+
     drivetrain.setDefaultCommand(
             drivetrain.applyRequest(() -> drive
                 .withVelocityX(MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed)
