@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.util.RobotLocalization;
 
@@ -24,6 +25,7 @@ public class ScoreOrientation extends Command {
     private final DoubleSupplier velocityX;
     private final DoubleSupplier velocityY;
     private final DoubleSupplier velocityW;
+    private final double driveOverride = AutoConstants.kIntakeOverrideThreshold;
 
     private final SwerveRequest.ApplyFieldSpeeds applyFieldSpeeds = new SwerveRequest.ApplyFieldSpeeds();
 
@@ -69,7 +71,7 @@ public class ScoreOrientation extends Command {
         Optional<Pose2d> maybeTargetPose =
         RobotLocalization.fieldPoseFromTagTransform(tagId, FieldConstants.RightTagToHub);
 
-        if (maybeTargetPose.isEmpty()) {
+        if (maybeTargetPose.isEmpty() || velocityW.getAsDouble() >= driveOverride) {
             // Fail-safe: no target => don't rotate automatically
             drivetrain.setControl(
             applyFieldSpeeds.withSpeeds(

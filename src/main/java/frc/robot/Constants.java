@@ -119,6 +119,8 @@ public final class Constants {
       public static final double kMaxAngularAccel = 6.0; // rad/s²
       public static final double kRotationToleranceRadians = Math.toRadians(5);
       public static final double kPositionToleranceMeters = 0.1;
+
+      public static final double kIntakeOverrideThreshold = 0.5; // needs to be tuned based on driver preference
     }
 
     public static class KrakenX60 {
