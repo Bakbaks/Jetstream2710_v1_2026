@@ -182,7 +182,7 @@ public class RobotContainer {
     // A is climb down
     // X is outake
     // RTrig is Shoot
-    // RBump is Aim and Spin up
+    // RBump is Aim and Spin up -- override aim orientation using right sticks
     // LBump is hopper out toggle
     // LTrigger is intake spinning
 
