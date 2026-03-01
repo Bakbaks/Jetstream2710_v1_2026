@@ -75,18 +75,18 @@ public final class Constants {
     }
 
     public static class HopperConstants {
-      public static final double kFloorPercent = 0.5;
-      public static final double kFeederPercent = 1;
+      public static final double kFloorPercent = 0.9;
+      public static final double kFeederPercent = 0.9;
 
       //no current limits cuz sped
       public static final int kHopperStatorCurrentLimit = 100;
-      public static final int kHopperSupplyCurrentLimit = 70;
+      public static final int kHopperSupplyCurrentLimit = 100;
     
       
       public static final double kFloorRPM = 2000;
       public static final double kFeederRPM = 2000;
-      public static final double KHopperP = 0.5;
-      public static final double KHopperI = 2;
+      public static final double KHopperP = 2;
+      public static final double KHopperI = 0;
       public static final double KHopperD = 0;
     }
 
@@ -97,11 +97,11 @@ public final class Constants {
       public static final double kExtendoPercent = 0.5;
       public static final double kRollerPercent = 0.8;
       
-      public static final int kExtendoStatorCurrentLimit = 120;
-      public static final int kExtendoSupplyCurrentLimit = 70;
+      public static final int kExtendoStatorCurrentLimit = 100;
+      public static final int kExtendoSupplyCurrentLimit = 90;
 
-      public static final int kRollerStatorCurrentLimit = 120;
-      public static final int kRollerSupplyCurrentLimit = 70;
+      public static final int kRollerStatorCurrentLimit = 100;
+      public static final int kRollerSupplyCurrentLimit = 90;
     
       
       public static final double kExtendoReduction = 50.0; /// important need to set

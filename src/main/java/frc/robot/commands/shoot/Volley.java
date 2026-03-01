@@ -12,6 +12,7 @@ import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
 import frc.robot.util.FlywheelInterpolation;
 import frc.robot.util.RobotLocalization;
+import frc.robot.Constants.HopperConstants;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -74,8 +75,11 @@ public class Volley extends Command {
     m_flywheel.setRPM(FlywheelConstants.kDefaultRPM);// for testing
 
     if (m_flywheel.isVelocityWithinTolerance()) {
-      m_hopper.setFloorRPM();
-          m_hopper.setFeederRPM();
+        // m_hopper.setFloorRPM();
+        // m_hopper.setFeederRPM();
+
+        m_hopper.setPercentOutputs(HopperConstants.kFloorPercent, HopperConstants.kFeederPercent);
+
     } else {
       m_hopper.stop();
     }

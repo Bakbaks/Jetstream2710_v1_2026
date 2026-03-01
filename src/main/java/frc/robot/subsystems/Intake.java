@@ -100,16 +100,16 @@ public class Intake extends SubsystemBase {
                     .withSupplyCurrentLimit(Amps.of(IntakeConstants.kExtendoSupplyCurrentLimit))
                     .withSupplyCurrentLimitEnable(true)
             )
-            .withFeedback(
-                new FeedbackConfigs()
-                    .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
-                    .withSensorToMechanismRatio(kExtendoReduction)
-            )
-            .withMotionMagic(
-                new MotionMagicConfigs()
-                    .withMotionMagicCruiseVelocity(kMaxExtendoSpeed)
-                    .withMotionMagicAcceleration(kMaxExtendoSpeed.per(Second))
-            )
+            // .withFeedback(
+            //     new FeedbackConfigs()
+            //         .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
+            //         .withSensorToMechanismRatio(kExtendoReduction)
+            // )
+            // .withMotionMagic(
+            //     new MotionMagicConfigs()
+            //         .withMotionMagicCruiseVelocity(kMaxExtendoSpeed)
+            //         .withMotionMagicAcceleration(kMaxExtendoSpeed.per(Second))
+            // )
             .withSlot0(
                 new Slot0Configs()
                     .withKP(IntakeConstants.kExtendoIntakeP)
@@ -124,7 +124,7 @@ public class Intake extends SubsystemBase {
         final TalonFXConfiguration config = new TalonFXConfiguration()
             .withMotorOutput(
                 new MotorOutputConfigs()
-                    .withInverted(InvertedValue.Clockwise_Positive)
+                    .withInverted(InvertedValue.CounterClockwise_Positive)
                     .withNeutralMode(NeutralModeValue.Brake)
             )
             .withCurrentLimits(
