@@ -63,7 +63,7 @@ public final class Constants {
       public static final double KFlywheelI = 2;
       public static final double KFlywheelD = 0;
 
-      public static final double kDefaultRPM = 2000;
+      public static final double kDefaultRPM = 4000;
     }
 
     public static class ElevatorConstants {
@@ -83,8 +83,8 @@ public final class Constants {
       public static final int kHopperSupplyCurrentLimit = 70;
     
       
-      public static final double kFloorRPM = 200;
-      public static final double kFeederRPM = 200;
+      public static final double kFloorRPM = 2000;
+      public static final double kFeederRPM = 2000;
       public static final double KHopperP = 0.5;
       public static final double KHopperI = 2;
       public static final double KHopperD = 0;

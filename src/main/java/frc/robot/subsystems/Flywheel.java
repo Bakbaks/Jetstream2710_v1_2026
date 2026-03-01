@@ -51,10 +51,10 @@ public class Flywheel extends SubsystemBase {
         BackRightMotor = new TalonFX(Ports.kBackRightShooter, Ports.kRoboRioCANBus);
         motors = List.of(FrontLeftMotor, BackLeftMotor, FrontRightMotor, BackRightMotor);
 
-        configureMotor(FrontLeftMotor, InvertedValue.Clockwise_Positive);
+        configureMotor(FrontLeftMotor, InvertedValue.CounterClockwise_Positive);
         configureMotor(BackLeftMotor, InvertedValue.Clockwise_Positive);
 
-        configureMotor(FrontRightMotor, InvertedValue.CounterClockwise_Positive);
+        configureMotor(FrontRightMotor, InvertedValue.Clockwise_Positive);
         configureMotor(BackRightMotor, InvertedValue.CounterClockwise_Positive);
   
     }

@@ -52,7 +52,7 @@ public class Hopper extends SubsystemBase {
 		FeederMotor = new TalonFX(Ports.kFeeder, Ports.kRoboRioCANBus);
 
 		configureMotor(FloorMotor, InvertedValue.Clockwise_Positive);
-		configureMotor(FeederMotor, InvertedValue.CounterClockwise_Positive);
+		configureMotor(FeederMotor, InvertedValue.Clockwise_Positive);
 	}
 
 	private void configureMotor(TalonFX motor, InvertedValue invertDirection) {
