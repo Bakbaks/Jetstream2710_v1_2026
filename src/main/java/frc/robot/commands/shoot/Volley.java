@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.FlywheelConstants;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
 import frc.robot.util.FlywheelInterpolation;
@@ -69,7 +70,8 @@ public class Volley extends Command {
     double rpm = FlywheelInterpolation.getRPMForDistance(Optional.of(targetDistance));
 
     //Control
-    m_flywheel.setRPM(rpm);
+    //m_flywheel.setRPM(rpm); - for interpolation
+    m_flywheel.setRPM(FlywheelConstants.kDefaultRPM);// for testing
 
     if (m_flywheel.isVelocityWithinTolerance()) {
       m_hopper.setFloorRPM();

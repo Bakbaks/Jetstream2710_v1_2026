@@ -169,8 +169,8 @@ public class Telemetry {
         /* Elastic dashboard telemetry */
         SmartDashboard.putBoolean("Aimed At Tag", vision.isAimedAtTag());
         SmartDashboard.putBoolean("Flywheel Up to Speed", flywheel.isVelocityWithinTolerance());
-        SmartDashboard.putBoolean("Shooter Being Fed",
-                flywheel.isVelocityWithinTolerance() && hopper.isFeeding());
+        // SmartDashboard.putBoolean("Shooter Being Fed",
+        //         flywheel.isVelocityWithinTolerance() && hopper.isFeeding());
         SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
         double matchTime = DriverStation.getMatchTime();
         SmartDashboard.putNumber("Match Time (FMS)", Double.isFinite(matchTime) ? matchTime : -1.0);

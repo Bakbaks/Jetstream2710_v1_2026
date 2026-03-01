@@ -14,8 +14,10 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -61,7 +63,7 @@ public final class Constants {
       public static final double KFlywheelI = 2;
       public static final double KFlywheelD = 0;
 
-      public static final double kDefaultRPM = 3000;
+      public static final double kDefaultRPM = 2000;
     }
 
     public static class ElevatorConstants {
@@ -82,26 +84,35 @@ public final class Constants {
     
       
       public static final double kFloorRPM = 2000;
-      public static final double kFeederRPM = 4000;
+      public static final double kFeederRPM = 2000;
       public static final double KHopperP = 0.5;
       public static final double KHopperI = 2;
       public static final double KHopperD = 0;
     }
 
     public static class IntakeConstants {
-      public static final double kExtendoPercent = 0.5;
-      public static final double kWheelPercent = 1;
 
-      //no current limits cuz sped
-      public static final int kIntakeStatorCurrentLimit = 100;
-      public static final int kIntakeSupplyCurrentLimit = 70;
+      // every pi inches moved is 3 rotations.
+
+      public static final double kExtendoPercent = 0.5;
+      public static final double kRollerPercent = 0.8;
+      
+      public static final int kExtendoStatorCurrentLimit = 120;
+      public static final int kExtendoSupplyCurrentLimit = 70;
+
+      public static final int kRollerStatorCurrentLimit = 120;
+      public static final int kRollerSupplyCurrentLimit = 70;
     
       
-      public static final double kExtendoRPM = 50;
-      public static final double kWheelRPM = 1000;
-      public static final double KIntakeP = 0.5;
-      public static final double KIntakeI = 2;
-      public static final double KIntakeD = 0;
+      public static final double kExtendoReduction = 50.0; /// important need to set
+      public static final Angle kPositionTolerance = Degrees.of(5);
+
+
+      public static final double kExtendoIntakeP = 0.5;
+      public static final double kExtendoIntakeI = 0;
+      public static final double kExtendoIntakeD = 0;
+
+
     }
 
     public static class FieldConstants {

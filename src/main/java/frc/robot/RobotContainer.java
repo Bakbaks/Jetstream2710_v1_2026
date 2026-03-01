@@ -62,8 +62,10 @@ import frc.robot.commands.alignment.ScoreOrientation;
 import frc.robot.commands.ExampleCommand;
 
 import frc.robot.commands.shoot.Volley;
-import frc.robot.commands.intake.HungryHungryHippo;
 
+//temp commands
+import frc.robot.commands.intake.SpinRollers;
+import frc.robot.commands.intake.ExtendIntake;
 
 
 import frc.robot.Constants.OperatorConstants;
@@ -212,8 +214,13 @@ public class RobotContainer {
       new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
     )); 
 
+    driveLeftBumper.whileTrue(new ParallelCommandGroup(
+      new ExtendIntake(intake)
+    ));
+    
+
     driveLeftTrigger.whileTrue(new ParallelCommandGroup(
-      new HungryHungryHippo(intake)
+      new SpinRollers(intake)
     ));
   }
 

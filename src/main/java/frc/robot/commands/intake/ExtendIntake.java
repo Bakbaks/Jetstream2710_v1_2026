@@ -15,7 +15,7 @@ import frc.robot.util.RobotLocalization;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /** Shoots notes with flywheel speed interpolated from PhotonVision distance to tag 10. */
-public class HungryHungryHippo extends Command {
+public class ExtendIntake extends Command {
   private final Intake m_intake;
 
   /**
@@ -24,13 +24,10 @@ public class HungryHungryHippo extends Command {
    * @param rollers Shooter subsystem
    * @param vision Vision for PhotonVision distance to tag 10
    */
-  public HungryHungryHippo(Intake intake) {
+  public ExtendIntake(Intake intake) {
     m_intake = intake;
     addRequirements(m_intake);
   }
-
-
-
 
   @Override
   public void initialize() {
@@ -41,14 +38,14 @@ public class HungryHungryHippo extends Command {
   public void execute() {
     // Robot Pose to Goal distance
     
-    m_intake.setWheelRPM();
+    m_intake.setExtendoPercentOutput(10);
 }
   
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.stop();
+    m_intake.setExtendoPercentOutput(0);
   }
 
   @Override
