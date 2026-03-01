@@ -38,7 +38,7 @@ public class SpinRollers extends Command {
   public void execute() {
     // Robot Pose to Goal distance
     
-    m_intake.setRollerPercentOutput(40);
+    m_intake.setRollerPercentOutput(10);
 }
   
 
