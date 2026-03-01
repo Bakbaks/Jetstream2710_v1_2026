@@ -51,6 +51,7 @@ public class Intake extends SubsystemBase {
     }
 
     public enum Position {
+        DEFAULT(0),
         HOMED(110),
         STOWED(100),
         INTAKE(-4),
@@ -73,7 +74,7 @@ public class Intake extends SubsystemBase {
 
     private final TalonFX ExtendoMotor, rollerMotor;
     private final VoltageOut ExtendoVoltageRequest = new VoltageOut(0);
-    //private final MotionMagicVoltage ExtendoMotionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
+    private final MotionMagicVoltage ExtendoMotionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
     private final VoltageOut rollerVoltageRequest = new VoltageOut(0);
 
     //private boolean isHomed = false;
@@ -100,16 +101,16 @@ public class Intake extends SubsystemBase {
                     .withSupplyCurrentLimit(Amps.of(IntakeConstants.kExtendoSupplyCurrentLimit))
                     .withSupplyCurrentLimitEnable(true)
             )
-            // .withFeedback(
-            //     new FeedbackConfigs()
-            //         .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
-            //         .withSensorToMechanismRatio(kExtendoReduction)
-            // )
-            // .withMotionMagic(
-            //     new MotionMagicConfigs()
-            //         .withMotionMagicCruiseVelocity(kMaxExtendoSpeed)
-            //         .withMotionMagicAcceleration(kMaxExtendoSpeed.per(Second))
-            // )
+            .withFeedback(
+                new FeedbackConfigs()
+                    .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
+                    .withSensorToMechanismRatio(kExtendoReduction)
+            )
+            .withMotionMagic(
+                new MotionMagicConfigs()
+                    .withMotionMagicCruiseVelocity(kMaxExtendoSpeed)
+                    .withMotionMagicAcceleration(kMaxExtendoSpeed.per(Second))
+            )
             .withSlot0(
                 new Slot0Configs()
                     .withKP(IntakeConstants.kExtendoIntakeP)
@@ -150,14 +151,14 @@ public class Intake extends SubsystemBase {
         );
     }
 
-    // public void set(Position position) {
-    //     ExtendoMotor.setControl(
-    //         ExtendoMotionMagicRequest
-    //             .withPosition(position.angle())
-    //     );
-    // }
+     public void setExtendoPosition(Position position) {
+         ExtendoMotor.setControl(
+             ExtendoMotionMagicRequest
+                 .withPosition(position.angle())
+         );
+    }
 
-    public void set(Speed speed) {
+    public void setIntakeSpeed(Speed speed) {
         rollerMotor.setControl(
             rollerVoltageRequest
                 .withOutput(speed.voltage())
@@ -172,6 +173,7 @@ public class Intake extends SubsystemBase {
         );
     }
 
+    
     // public Command intakeCommand() {
     //     return startEnd(
     //         () -> {

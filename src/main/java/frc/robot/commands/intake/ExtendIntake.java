@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.Position;
 import frc.robot.util.FlywheelInterpolation;
 import frc.robot.util.RobotLocalization;
 
@@ -38,8 +39,9 @@ public class ExtendIntake extends Command {
   public void execute() {
     // Robot Pose to Goal distance
     
-    m_intake.setExtendoPercentOutput(0.1);
-}
+    //m_intake.setExtendoPercentOutput(0.1);
+    m_intake.setExtendoPosition(Position.DEFAULT);
+  }
   
 
   // Called once the command ends or is interrupted.

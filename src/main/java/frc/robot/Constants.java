@@ -54,7 +54,7 @@ public final class Constants {
 
     public static class FlywheelConstants {
       public static final int FlywheelStatorCurrentLimit = 120;
-      public static final int FlywheelSupplyCurrentLimit = 70;
+      public static final int FlywheelSupplyCurrentLimit = 90;
       
       
       public static final double kMinTargetRPM = 100; 
@@ -80,7 +80,7 @@ public final class Constants {
 
       //no current limits cuz sped
       public static final int kHopperStatorCurrentLimit = 100;
-      public static final int kHopperSupplyCurrentLimit = 100;
+      public static final int kHopperSupplyCurrentLimit = 90;
     
       
       public static final double kFloorRPM = 2000;
@@ -98,10 +98,10 @@ public final class Constants {
       public static final double kRollerPercent = 0.8;
       
       public static final int kExtendoStatorCurrentLimit = 100;
-      public static final int kExtendoSupplyCurrentLimit = 90;
+      public static final int kExtendoSupplyCurrentLimit = 80;
 
       public static final int kRollerStatorCurrentLimit = 100;
-      public static final int kRollerSupplyCurrentLimit = 90;
+      public static final int kRollerSupplyCurrentLimit = 80;
     
       
       public static final double kExtendoReduction = 50.0; /// important need to set
