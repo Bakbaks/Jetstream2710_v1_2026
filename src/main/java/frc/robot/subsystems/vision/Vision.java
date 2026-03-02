@@ -73,22 +73,22 @@ import org.photonvision.targeting.PhotonTrackedTarget;
  
      @Override
      public void periodic() {
-         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-         for (var change : camera.getAllUnreadResults()) {
-             visionEst = photonEstimator.update(change);
-             updateEstimationStdDevs(visionEst, change.getTargets());
+        //  Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        //  for (var change : camera.getAllUnreadResults()) {
+        //      visionEst = photonEstimator.update(change);
+        //      updateEstimationStdDevs(visionEst, change.getTargets());
  
             
-             visionEst.ifPresent(
-                     est -> {
-                         // Change our trust in the measurement based on the tags we can see
-                         var estStdDevs = getEstimationStdDevs();
+        //      visionEst.ifPresent(
+        //              est -> {
+        //                  // Change our trust in the measurement based on the tags we can see
+        //                  var estStdDevs = getEstimationStdDevs();
  
-                         estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                     });
+        //                  estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+        //              });
 
                      
-         }
+        //  }
      }
  
      /**

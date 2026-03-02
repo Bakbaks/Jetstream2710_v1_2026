@@ -58,12 +58,12 @@ public final class Constants {
       
       
       public static final double kMinTargetRPM = 100; 
-      public static final double kVelocityTolerance = 50;
+      public static final double kVelocityTolerance = 800;
       public static final double KFlywheelP = 0.5;
       public static final double KFlywheelI = 2;
       public static final double KFlywheelD = 0;
 
-      public static final double kDefaultRPM = 4000;
+      public static final double kDefaultRPM = 1500;
     }
 
     public static class ElevatorConstants {
@@ -80,11 +80,11 @@ public final class Constants {
 
       //no current limits cuz sped
       public static final int kHopperStatorCurrentLimit = 100;
-      public static final int kHopperSupplyCurrentLimit = 90;
+      public static final int kHopperSupplyCurrentLimit = 100;
     
       
       public static final double kFloorRPM = 2000;
-      public static final double kFeederRPM = 2000;
+      public static final double kFeederRPM = 5000;
       public static final double KHopperP = 2;
       public static final double KHopperI = 0;
       public static final double KHopperD = 0;
