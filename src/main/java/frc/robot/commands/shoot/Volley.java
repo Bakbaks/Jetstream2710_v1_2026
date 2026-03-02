@@ -15,6 +15,7 @@ import frc.robot.util.RobotLocalization;
 import frc.robot.Constants.HopperConstants;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Shoots notes with flywheel speed interpolated from PhotonVision distance to tag 10. */
 public class Volley extends Command {
@@ -66,6 +67,8 @@ public class Volley extends Command {
     Pose2d targetPose = maybeTargetPose.get();
 
     double targetDistance = RobotLocalization.robotToTargetDistanceMeters(robotPose, targetPose);
+
+    SmartDashboard.putNumber("Robot distance to Hub", targetDistance);
 
     //Distance to RPM map
     double rpm = FlywheelInterpolation.getRPMForDistance(Optional.of(targetDistance));
