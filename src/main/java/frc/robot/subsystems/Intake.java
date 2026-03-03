@@ -52,10 +52,9 @@ public class Intake extends SubsystemBase {
 
     public enum Position {
         DEFAULT(0),
-        HOMED(110),
-        STOWED(100),
-        INTAKE(-4),
-        AGITATE(20);
+        EXTENDED(110),
+        INTERMEDIATE(50);
+
 
         private final double degrees;
 
@@ -138,11 +137,11 @@ public class Intake extends SubsystemBase {
         rollerMotor.getConfigurator().apply(config);
     }
 
-    // private boolean isPositionWithinTolerance() {
-    //     final Angle currentPosition = ExtendoMotor.getPosition().getValue();
-    //     final Angle targetPosition = ExtendoMotionMagicRequest.getPositionMeasure();
-    //     return currentPosition.isNear(targetPosition, kPositionTolerance);
-    // }
+    private boolean isPositionWithinTolerance() {
+        final Angle currentPosition = ExtendoMotor.getPosition().getValue();
+        final Angle targetPosition = ExtendoMotionMagicRequest.getPositionMeasure();
+        return currentPosition.isNear(targetPosition, kPositionTolerance);
+    }
 
     public void setExtendoPercentOutput(double percentOutput) {
         ExtendoMotor.setControl(
@@ -174,15 +173,15 @@ public class Intake extends SubsystemBase {
     }
 
     
-    // public Command intakeCommand() {
-    //     return startEnd(
-    //         () -> {
-    //             set(Position.INTAKE);
-    //             set(Speed.INTAKE);
-    //         },
-    //         () -> set(Speed.STOP)
-    //     );
-    // }
+    public Command intakeCommand() {
+        return startEnd(
+            () -> {
+                setExtendoPosition(Position.EXTENDED);
+                setIntakeSpeed(Speed.INTAKE);
+            },
+            () -> setIntakeSpeed(Speed.STOP)
+        );
+    }
 
     // public Command agitateCommand() {
     //     return runOnce(() -> set(Speed.INTAKE))

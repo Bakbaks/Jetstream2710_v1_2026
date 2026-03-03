@@ -46,10 +46,15 @@ public final class Constants {
       // The layout of the AprilTags on the field
       public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
-      // The standard deviations of our vision estimated poses, which affect correction rate
-      // (Fake values. Experiment and determine estimation noise on an actual robot.)
-      public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1, 1, 1);
-      public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(1, 1, 1);
+      /*
+      *  Standard deviations of the vision pose measurement (x position
+      *  in meters, y position in meters, and heading in radians). Increase 
+      *  thes numbers to trustthe vision pose measurement less.
+      **/
+      // public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(.7, .7, 9999999);
+      // public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(.7, .7, 9999999);
+      public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1.5, 1.5, 9999999);
+      public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(1.5, 1.5, 9999999);
     }
 
     public static class FlywheelConstants {
@@ -104,7 +109,7 @@ public final class Constants {
       public static final int kRollerSupplyCurrentLimit = 80;
     
       
-      public static final double kExtendoReduction = 50.0; /// important need to set
+      public static final double kExtendoReduction = 5.0; /// important need to set
       public static final Angle kPositionTolerance = Degrees.of(5);
 
 

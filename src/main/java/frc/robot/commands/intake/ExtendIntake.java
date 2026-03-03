@@ -39,8 +39,8 @@ public class ExtendIntake extends Command {
   public void execute() {
     // Robot Pose to Goal distance
     
-    //m_intake.setExtendoPercentOutput(0.1);
-    m_intake.setExtendoPosition(Position.DEFAULT);
+    // m_intake.setExtendoPercentOutput(0.1);
+    // m_intake.setExtendoPosition(Position.DEFAULT);
   }
   
 

@@ -7,13 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TestMove"
+            "pathName": "Left1"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "UnloadPreload"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "UnloadPreload"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left3"
           }
         }
       ]

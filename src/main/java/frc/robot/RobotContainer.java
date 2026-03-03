@@ -178,15 +178,23 @@ public class RobotContainer {
     //drive commands
     //
 
-    // Control binding
+    // Driver Control binding
     // sticks are normal
-    // Y is climb up
-    // A is climb down
     // X is outake
-    // RTrig is Shoot
-    // RBump is Aim and Spin up -- override aim orientation using right sticks
+    // RTrig is Shoot & spin up and score - works fine
+    // RBump is Aim
     // LBump is hopper out toggle
     // LTrigger is intake spinning
+
+    // Remove vision if it somehow causes issues: A
+    //Re Zero d pad down
+
+    // Aux Control Debug binding
+    // Take Control by toggling X. Manual Intake movement Left Stick down is in, up is out
+    // Take Control by toggling Y for robot sifting: Conveyer.
+    // Disable pose: A
+    // Change shooter velocity to constant if interpolation is not work: B
+
 
     drivetrain.setDefaultCommand(
             drivetrain.applyRequest(() -> drive
