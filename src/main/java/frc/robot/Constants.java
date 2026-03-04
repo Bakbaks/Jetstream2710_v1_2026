@@ -16,9 +16,12 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
+
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Inches;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -108,9 +111,15 @@ public final class Constants {
       public static final int kRollerStatorCurrentLimit = 100;
       public static final int kRollerSupplyCurrentLimit = 80;
     
-      
-      public static final double kExtendoReduction = 5.0; /// important need to set
-      public static final Angle kPositionTolerance = Degrees.of(5);
+      //For the Extendo
+      public static final double kMotorToPinionReduction = 5.0;
+      public static final double kPinionRotPerPiInches = 3.0;
+
+      public static final double kInchesPerPinionRotation = Math.PI / kPinionRotPerPiInches; // pi/3
+      public static final double kInchesPerMotorRotation = kInchesPerPinionRotation / kMotorToPinionReduction; // pi/15
+      public static final double kMotorRotationsPerInch = 1.0 / kInchesPerMotorRotation; // 15/pi
+
+      public static final Distance kPositionTolerance = Inches.of(0.25);
 
 
       public static final double kExtendoIntakeP = 0.5;

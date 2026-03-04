@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.FlywheelInterpolation;
 
@@ -34,15 +35,17 @@ public class Telemetry {
     private final Vision vision;
     private final Flywheel flywheel;
     private final Hopper hopper;
+    private final Intake intake;
 
     /** Holder for latest state so SwerveDrive Sendable can read it. */
     private volatile SwerveDriveState m_lastState = null;
 
-    public Telemetry(double maxSpeed, Vision vision, Flywheel flywheel, Hopper hopper) {
+    public Telemetry(double maxSpeed, Vision vision, Flywheel flywheel, Hopper hopper, Intake intake) {
         MaxSpeed = maxSpeed;
         this.vision = vision;
         this.flywheel = flywheel;
         this.hopper = hopper;
+        this.intake = intake;
         SignalLogger.start();
         SmartDashboard.putData("Swerve Drive", createSwerveDriveSendable());
         SmartDashboard.putData("Field", field2d);
@@ -153,6 +156,12 @@ public class Telemetry {
         SignalLogger.writeDoubleArray("DriveState/ModuleStates", m_moduleStatesArray);
         SignalLogger.writeDoubleArray("DriveState/ModuleTargets", m_moduleTargetsArray);
         SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
+
+        //intake
+        SmartDashboard.putNumber("Intake/Extendo Inches", intake.getExtendoInches());
+        SmartDashboard.putNumber("Intake/Extendo Target Inches", intake.getExtendoTargetInches());
+        SmartDashboard.putNumber("Intake/Extendo Error Inches",
+                intake.getExtendoInches() - intake.getExtendoTargetInches());
 
         /* Telemeterize the pose to Field2d for Elastic dashboard */
         field2d.setRobotPose(state.Pose);

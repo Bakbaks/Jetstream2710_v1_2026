@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
@@ -20,14 +20,10 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.KrakenX60;
 import frc.robot.Ports;
@@ -51,25 +47,21 @@ public class Intake extends SubsystemBase {
     }
 
     public enum Position {
-        DEFAULT(0),
-        EXTENDED(110),
-        INTERMEDIATE(50);
+        DEFAULT(0.0),
+        INTERMEDIATE(3.0),
+        EXTENDED(6.0);
 
-
-        private final double degrees;
-
-        private Position(double degrees) {
-            this.degrees = degrees;
-        }
-
-        public Angle angle() {
-            return Degrees.of(degrees);
-        }
+        private final double inches;
+        Position(double inches) { this.inches = inches; }
+        public double inches() { return inches; }
     }
 
-    private static final double kExtendoReduction = IntakeConstants.kExtendoReduction;
-    private static final AngularVelocity kMaxExtendoSpeed = KrakenX60.kFreeSpeed.div(kExtendoReduction);
-    private static final Angle kPositionTolerance = IntakeConstants.kPositionTolerance;
+    private static final double kMotorToPinionReduction = IntakeConstants.kMotorToPinionReduction;
+
+    // This is *pinion* free speed (mechanism RPS) because we set mechanism = pinion rotations
+    private static final AngularVelocity kMaxExtendoSpeed = KrakenX60.kFreeSpeed.div(kMotorToPinionReduction);
+
+    private static final Distance kPositionTolerance = IntakeConstants.kPositionTolerance;
 
     private final TalonFX ExtendoMotor, rollerMotor;
     private final VoltageOut ExtendoVoltageRequest = new VoltageOut(0);
@@ -103,7 +95,7 @@ public class Intake extends SubsystemBase {
             .withFeedback(
                 new FeedbackConfigs()
                     .withFeedbackSensorSource(FeedbackSensorSourceValue.RotorSensor)
-                    .withSensorToMechanismRatio(kExtendoReduction)
+                    .withSensorToMechanismRatio(kMotorToPinionReduction)
             )
             .withMotionMagic(
                 new MotionMagicConfigs()
@@ -137,12 +129,19 @@ public class Intake extends SubsystemBase {
         rollerMotor.getConfigurator().apply(config);
     }
 
-    private boolean isPositionWithinTolerance() {
-        final Angle currentPosition = ExtendoMotor.getPosition().getValue();
-        final Angle targetPosition = ExtendoMotionMagicRequest.getPositionMeasure();
-        return currentPosition.isNear(targetPosition, kPositionTolerance);
+    private static double inchesToPinionRot(double inches) {
+        return inches / IntakeConstants.kInchesPerPinionRotation; // inches * 3/pi
     }
 
+    private static double pinionRotToInches(double pinionRot) {
+        return pinionRot * IntakeConstants.kInchesPerPinionRotation; // rot * pi/3
+    }
+
+    private boolean isPositionWithinTolerance() {
+        double errIn = Math.abs(getExtendoInches() - getExtendoTargetInches());
+        return errIn <= kPositionTolerance.in(Inches);
+    }
+    
     public void setExtendoPercentOutput(double percentOutput) {
         ExtendoMotor.setControl(
             ExtendoVoltageRequest
@@ -150,11 +149,15 @@ public class Intake extends SubsystemBase {
         );
     }
 
-     public void setExtendoPosition(Position position) {
-         ExtendoMotor.setControl(
-             ExtendoMotionMagicRequest
-                 .withPosition(position.angle())
-         );
+    public void setExtendoInches(double inches) {
+        double pinionRot = inchesToPinionRot(inches);
+        ExtendoMotor.setControl(
+            ExtendoMotionMagicRequest.withPosition(Rotations.of(pinionRot))
+        );
+    }
+
+    public void setExtendoPosition(Position position) {
+        setExtendoInches(position.inches());
     }
 
     public void setIntakeSpeed(Speed speed) {
@@ -183,43 +186,16 @@ public class Intake extends SubsystemBase {
         );
     }
 
-    // public Command agitateCommand() {
-    //     return runOnce(() -> set(Speed.INTAKE))
-    //         .andThen(
-    //             Commands.sequence(
-    //                 runOnce(() -> set(Position.AGITATE)),
-    //                 Commands.waitUntil(this::isPositionWithinTolerance),
-    //                 runOnce(() -> set(Position.INTAKE)),
-    //                 Commands.waitUntil(this::isPositionWithinTolerance)
-    //             )
-    //             .repeatedly()
-    //         )
-    //         .handleInterrupt(() -> {
-    //             set(Position.INTAKE);
-    //             set(Speed.STOP);
-    //         });
-    // }
+    public double getExtendoPinionRotations() {
+        return ExtendoMotor.getPosition().getValue().in(Rotations); // mechanism rotations = pinion rotations
+    }
 
-    // public Command homingCommand() {
-    //     return Commands.sequence(
-    //         runOnce(() -> setExtendoPercentOutput(0.1)),
-    //         Commands.waitUntil(() -> ExtendoMotor.getSupplyCurrent().getValue().in(Amps) > 6),
-    //         runOnce(() -> {
-    //             ExtendoMotor.setPosition(Position.HOMED.angle());
-    //             isHomed = true;
-    //             set(Position.STOWED);
-    //         })
-    //     )
-    //     .unless(() -> isHomed)
-    //     .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
-    // }
+    public double getExtendoInches() {
+        return pinionRotToInches(getExtendoPinionRotations());
+    }
 
-    // @Override
-    // public void initSendable(SendableBuilder builder) {
-    //     builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-    //     builder.addDoubleProperty("Angle (degrees)", () -> ExtendoMotor.getPosition().getValue().in(Degrees), null);
-    //     builder.addDoubleProperty("RPM", () -> rollerMotor.getVelocity().getValue().in(RPM), null);
-    //     builder.addDoubleProperty("Extendo Supply Current", () -> ExtendoMotor.getSupplyCurrent().getValue().in(Amps), null);
-    //     builder.addDoubleProperty("Roller Supply Current", () -> rollerMotor.getSupplyCurrent().getValue().in(Amps), null);
-    // }
+    public double getExtendoTargetInches() {
+        double targetPinionRot = ExtendoMotionMagicRequest.getPositionMeasure().in(Rotations);
+        return pinionRotToInches(targetPinionRot);
+    }
 }

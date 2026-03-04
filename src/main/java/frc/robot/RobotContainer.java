@@ -126,7 +126,7 @@ public class RobotContainer {
   private final Flywheel flywheel = new Flywheel();
   private final Hopper hopper = new Hopper();
   private final Intake intake = new Intake();
-  private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, flywheel, hopper);
+  private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, flywheel, hopper, intake);
 
   //Autos
   PathConstraints lims = new PathConstraints(
