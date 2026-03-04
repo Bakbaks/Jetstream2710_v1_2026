@@ -96,6 +96,11 @@ public final class Constants {
       public static final double KHopperP = 2;
       public static final double KHopperI = 0;
       public static final double KHopperD = 0;
+
+      //sifting for gold
+      public static final double kFloorSiftFrequencyHz = 2.0;
+      public static final double kFloorSiftAmplitudeRPM = 300.0;
+      public static final double kFloorSiftBiasRPM = 100.0;
     }
 
     public static class IntakeConstants {

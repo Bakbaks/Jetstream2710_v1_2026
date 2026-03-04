@@ -95,6 +95,23 @@ public class Hopper extends SubsystemBase {
 		);
 	}
 
+	public Command floorSiftRPMCommand() {
+		return Commands.run(() -> {
+			double t = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
+
+			double frequencyHz = HopperConstants.kFloorSiftFrequencyHz;
+			double ampRPM = HopperConstants.kFloorSiftAmplitudeRPM;
+			double biasRPM = HopperConstants.kFloorSiftBiasRPM;
+
+			double oscillation = Math.sin(2.0 * Math.PI * frequencyHz * t);
+			double targetRPM = biasRPM + ampRPM * oscillation;
+
+			FloorMotor.setControl(FloorvelocityRequest.withVelocity(RPM.of(targetRPM)));
+
+			// feeder stays off
+			FeederMotor.setControl(voltageRequest.withOutput(Volts.of(0.0)));
+		}, this).finallyDo(() -> stop());
+	}
 
 	private void initSendable(SendableBuilder builder, TalonFX motor, String name) {
         builder.addDoubleProperty(name + " RPM", () -> motor.getVelocity().getValue().in(RPM), null);
