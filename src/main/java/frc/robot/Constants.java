@@ -126,6 +126,12 @@ public final class Constants {
       public static final double kExtendoIntakeI = 0;
       public static final double kExtendoIntakeD = 0;
 
+      // Jiggle tuning (for retract / move-back shake)
+      public static final double kExtendoJiggleFrequencyHz = 3.0;      // cycles per second
+      public static final Distance kExtendoJiggleStep = Inches.of(0.25); // peak amplitude at start (in)
+      public static final Distance kExtendoJiggleMinStep = Inches.of(0.05); // optional: don't go smaller than this until very close
+      public static final Distance kExtendoJiggleHoldStep = Inches.of(0.10); // jiggle amplitude once "at goal"
+
 
     }
 

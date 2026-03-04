@@ -24,6 +24,8 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.KrakenX60;
 import frc.robot.Ports;
@@ -50,6 +52,7 @@ public class Intake extends SubsystemBase {
         DEFAULT(0.0),
         INTERMEDIATE(3.0),
         EXTENDED(6.0);
+
 
         private final double inches;
         Position(double inches) { this.inches = inches; }
@@ -141,7 +144,7 @@ public class Intake extends SubsystemBase {
         double errIn = Math.abs(getExtendoInches() - getExtendoTargetInches());
         return errIn <= kPositionTolerance.in(Inches);
     }
-    
+
     public void setExtendoPercentOutput(double percentOutput) {
         ExtendoMotor.setControl(
             ExtendoVoltageRequest
@@ -183,6 +186,91 @@ public class Intake extends SubsystemBase {
                 setIntakeSpeed(Speed.INTAKE);
             },
             () -> setIntakeSpeed(Speed.STOP)
+        );
+    }
+
+    /**
+     * Move the extendo toward a goal Position (defaults to DEFAULT) while adding a tunable
+     * "jiggle" (small forward/back oscillation) that fades out as you approach the goal.
+     *
+     * All tuning is pulled from Constants.IntakeConstants:
+     *  - kExtendoJiggleFrequencyHz
+     *  - kExtendoJiggleStep
+     *  - kExtendoJiggleMinStep (optional)
+     *  - kExtendoMinInches / kExtendoMaxInches (optional clamp)
+     */
+    public Command jiggleToDefault() {
+        final double goalInches = Position.DEFAULT.inches();
+
+        final double freqHz      = Math.max(0.0, IntakeConstants.kExtendoJiggleFrequencyHz);
+        final double approachAmp = Math.max(0.0, IntakeConstants.kExtendoJiggleStep.in(Inches));
+        final double minAmpIn    = Math.max(0.0, IntakeConstants.kExtendoJiggleMinStep.in(Inches));
+        final double holdAmpIn   = Math.max(0.0, IntakeConstants.kExtendoJiggleHoldStep.in(Inches));
+
+        // Clamp range from enum endpoints (DEFAULT..EXTENDED)
+        final double minIn = Math.min(Position.DEFAULT.inches(), Position.EXTENDED.inches());
+        final double maxIn = Math.max(Position.DEFAULT.inches(), Position.EXTENDED.inches());
+
+        final Timer timer = new Timer();
+
+        final double startIn = getExtendoInches();
+        final double totalDist = Math.max(1e-6, Math.abs(goalInches - startIn));
+
+        return Commands.sequence(
+            Commands.runOnce(() -> { timer.reset(); timer.start(); }),
+
+            // Runs forever until interrupted/canceled
+            Commands.run(() -> {
+                final double curIn = getExtendoInches();
+                final double remaining = Math.abs(goalInches - curIn);
+                final boolean atGoal = remaining <= kPositionTolerance.in(Inches);
+
+                // Two modes:
+                //  - approaching: taper amplitude down with distance (plus optional minimum)
+                //0.40
+                // 0.10
+                // 0.30
+                // 0.05
+                // 0.20
+                // 0.02
+                //  - holding: constant small amplitude around the goal
+                //0
+                // 0.10
+                // 0
+                // 0.10
+                // 0
+                // 0.10
+                double amp;
+                if (atGoal) {
+                    amp = holdAmpIn;
+                } else {
+                    amp = approachAmp * (remaining / totalDist);
+                    amp = Math.max(amp, minAmpIn);
+                    amp = Math.min(amp, remaining); // don't bounce past the goal near the end
+                }
+
+                // final double jiggle = (freqHz > 0.0)
+                //     ? amp * Math.abs(Math.sin(2.0 * Math.PI * freqHz * timer.get()))
+                //     : 0.0;
+
+                double jiggle;
+                if (freqHz > 0.0) {
+                    double phase = 2.0 * Math.PI * freqHz * timer.get();
+                    double oscillation = Math.abs(Math.sin(phase));
+                    jiggle = amp * oscillation;
+                } else {
+                    jiggle = 0.0;
+                }
+
+                double setpoint = goalInches + jiggle;
+
+                // Clamp to enum travel range
+                setpoint = Math.max(minIn, Math.min(maxIn, setpoint));
+
+                setExtendoInches(setpoint);
+            })
+            // Optional: ensure motors stop if you cancel the command
+            .finallyDo(interrupted -> timer.stop())
         );
     }
 
