@@ -1,6 +1,5 @@
-package frc.robot.commands.intake;
+package frc.robot.commands;
 
-import java.net.InetSocketAddress;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.function.Supplier;
@@ -8,15 +7,19 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.FlywheelConstants;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.Position;
-import frc.robot.util.FlywheelInterpolation;
-import frc.robot.util.RobotLocalization;
+import frc.robot.Constants.HopperConstants;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Shoots notes with flywheel speed interpolated from PhotonVision distance to tag 10. */
-public class ExtendIntake extends Command {
+public class OutTake extends Command {
+  private final Flywheel m_flywheel;
+  private final Hopper m_hopper;
   private final Intake m_intake;
 
   /**
@@ -25,9 +28,11 @@ public class ExtendIntake extends Command {
    * @param rollers Shooter subsystem
    * @param vision Vision for PhotonVision distance to tag 10
    */
-  public ExtendIntake(Intake intake) {
+  public OutTake(Flywheel flywheel, Hopper hopper, Intake intake) {
+    m_flywheel = flywheel;
+    m_hopper = hopper;
     m_intake = intake;
-    addRequirements(m_intake);
+    addRequirements(m_flywheel, m_hopper, m_intake);
   }
 
   @Override
@@ -37,17 +42,20 @@ public class ExtendIntake extends Command {
 
   @Override
   public void execute() {
-    // Robot Pose to Goal distance
-    
-    m_intake.setExtendoPercentOutput(0.05);
-    // m_intake.setExtendoPosition(Position.DEFAULT);
+    m_flywheel.setRPM(FlywheelConstants.kFlywheelReverseRPM);
+
+    m_hopper.setFloorRPM(HopperConstants.kFloorReverseRPM);
+    m_hopper.setFeederRPM(HopperConstants.kFeederReverseRPM);
+
+    //set intake reverse rpm and max position
+
   }
-  
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.setExtendoPercentOutput(0);
+    m_flywheel.stop();
+    m_hopper.stop();
   }
 
   @Override

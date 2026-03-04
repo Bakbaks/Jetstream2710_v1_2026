@@ -89,11 +89,23 @@ public class Hopper extends SubsystemBase {
         );
     }
 
+	public void setFeederRPM(double rpm) {
+        FeederMotor.setControl(
+            FeedervelocityRequest.withVelocity(RPM.of(rpm))
+        );
+    }
+
 	public void setFloorRPM() {
 		FloorMotor.setControl(
 			FloorvelocityRequest.withVelocity(RPM.of(dashboardFloorTargetRPM))
 		);
 	}
+
+	public void setFloorRPM(double rpm) {
+        FloorMotor.setControl(
+            FloorvelocityRequest.withVelocity(RPM.of(rpm))
+        );
+    }
 
 	public Command floorSiftRPMCommand() {
 		return Commands.run(() -> {

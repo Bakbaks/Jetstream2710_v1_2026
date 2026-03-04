@@ -43,7 +43,7 @@ public class Volley extends Command {
               ? FieldConstants.RED_SHOOT_TAG
               : FieldConstants.BLUE_SHOOT_TAG)
       .orElse(FieldConstants.RED_SHOOT_TAG);
-}
+  }
 
 
   @Override

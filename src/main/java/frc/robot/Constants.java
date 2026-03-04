@@ -33,6 +33,7 @@ import static edu.wpi.first.units.Units.Inches;
 public final class Constants {
     public static class OperatorConstants {
       public static final int kDriverControllerPort = 0;
+      public static final int kAuxControllerPort = 1;
 
     }
 
@@ -72,6 +73,8 @@ public final class Constants {
       public static final double KFlywheelD = 0;
 
       public static final double kDefaultRPM = 1500;
+
+      public static final double kFlywheelReverseRPM = 400;
     }
 
     public static class ElevatorConstants {
@@ -83,8 +86,8 @@ public final class Constants {
     }
 
     public static class HopperConstants {
-      public static final double kFloorPercent = 0.9;
-      public static final double kFeederPercent = 0.9;
+      public static final double kFloorPercent = 0.6;
+      public static final double kFeederPercent = 0.7;
 
       //no current limits cuz sped
       public static final int kHopperStatorCurrentLimit = 100;
@@ -101,6 +104,9 @@ public final class Constants {
       public static final double kFloorSiftFrequencyHz = 2.0;
       public static final double kFloorSiftAmplitudeRPM = 300.0;
       public static final double kFloorSiftBiasRPM = 100.0;
+
+      public static final double kFeederReverseRPM = 400;
+      public static final double kFloorReverseRPM = 400;
     }
 
     public static class IntakeConstants {
@@ -137,7 +143,7 @@ public final class Constants {
       public static final Distance kExtendoJiggleMinStep = Inches.of(0.05); // optional: don't go smaller than this until very close
       public static final Distance kExtendoJiggleHoldStep = Inches.of(0.10); // jiggle amplitude once "at goal"
 
-
+      public static final double kIntakeReverseRPM = 400;
     }
 
     public static class FieldConstants {

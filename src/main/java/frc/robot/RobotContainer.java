@@ -108,6 +108,9 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+  private final CommandXboxController m_auxController =
+      new CommandXboxController(OperatorConstants.kAuxControllerPort);
+
   //controller sticks
 
   private final Trigger driveY = m_driverController.y();
@@ -120,6 +123,11 @@ public class RobotContainer {
   private final Trigger driveLeftTrigger = m_driverController.leftTrigger();
   private final Trigger drivePovDOWN = m_driverController.povDown();
   private final Trigger drivePovUP = m_driverController.povUp();
+
+  private final Trigger auxY = m_auxController.y();
+  private final Trigger auxA = m_auxController.a();
+  private final Trigger auxB = m_auxController.b();
+  private final Trigger auxX = m_auxController.x();
 
   private final Pose2d goalpose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
 
@@ -203,8 +211,6 @@ public class RobotContainer {
         .withRotationalRate(-MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate))
     );
     drivePovDOWN.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-
-    hopper.setDefaultCommand(hopper.floorSiftRPMCommand());
 
     
     DoubleSupplier aimVX =

@@ -88,7 +88,7 @@ public class Flywheel extends SubsystemBase {
         motor.getConfigurator().apply(config);
     }
 
-  public void setRPM(double rpm) {
+    public void setRPM(double rpm) {
         for (final TalonFX motor : motors) {
             motor.setControl(
                 velocityRequest
