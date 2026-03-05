@@ -25,8 +25,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake.IntakeRollers;
+import frc.robot.subsystems.Intake.IntakeExtendo;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.FlywheelInterpolation;
 
@@ -35,17 +36,20 @@ public class Telemetry {
     private final Vision vision;
     private final Flywheel flywheel;
     private final Hopper hopper;
-    private final Intake intake;
+    private final IntakeRollers intakeRollers;
+    private final IntakeExtendo intakeExtendo;
+
 
     /** Holder for latest state so SwerveDrive Sendable can read it. */
     private volatile SwerveDriveState m_lastState = null;
 
-    public Telemetry(double maxSpeed, Vision vision, Flywheel flywheel, Hopper hopper, Intake intake) {
+    public Telemetry(double maxSpeed, Vision vision, Flywheel flywheel, Hopper hopper, IntakeRollers intakeRollers, IntakeExtendo intakeExtendo) {
         MaxSpeed = maxSpeed;
         this.vision = vision;
         this.flywheel = flywheel;
         this.hopper = hopper;
-        this.intake = intake;
+        this.intakeRollers = intakeRollers;
+        this.intakeExtendo = intakeExtendo;
         SignalLogger.start();
         SmartDashboard.putData("Swerve Drive", createSwerveDriveSendable());
         SmartDashboard.putData("Field", field2d);
@@ -158,10 +162,10 @@ public class Telemetry {
         SignalLogger.writeDouble("DriveState/OdometryPeriod", state.OdometryPeriod, "seconds");
 
         //intake
-        SmartDashboard.putNumber("Intake/Extendo Inches", intake.getExtendoInches());
-        SmartDashboard.putNumber("Intake/Extendo Target Inches", intake.getExtendoTargetInches());
+        SmartDashboard.putNumber("Intake/Extendo Inches", intakeExtendo.getExtendoInches());
+        SmartDashboard.putNumber("Intake/Extendo Target Inches", intakeExtendo.getExtendoTargetInches());
         SmartDashboard.putNumber("Intake/Extendo Error Inches",
-                intake.getExtendoInches() - intake.getExtendoTargetInches());
+                intakeExtendo.getExtendoInches() - intakeExtendo.getExtendoTargetInches());
 
         /* Telemeterize the pose to Field2d for Elastic dashboard */
         field2d.setRobotPose(state.Pose);

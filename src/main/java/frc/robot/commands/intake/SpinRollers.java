@@ -8,7 +8,8 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.IntakeRollers;
+import frc.robot.subsystems.Intake.IntakeRollers.Speed;
 import frc.robot.util.FlywheelInterpolation;
 import frc.robot.util.RobotLocalization;
 
@@ -16,7 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 /** Shoots notes with flywheel speed interpolated from PhotonVision distance to tag 10. */
 public class SpinRollers extends Command {
-  private final Intake m_intake;
+  private final IntakeRollers m_intakeRollers;
 
   /**
    * Creates a PopNAwe command.
@@ -24,9 +25,9 @@ public class SpinRollers extends Command {
    * @param rollers Shooter subsystem
    * @param vision Vision for PhotonVision distance to tag 10
    */
-  public SpinRollers(Intake intake) {
-    m_intake = intake;
-    addRequirements(m_intake);
+  public SpinRollers(IntakeRollers intakeRollers) {
+    m_intakeRollers = intakeRollers;
+    addRequirements(m_intakeRollers);
   }
 
   @Override
@@ -38,14 +39,14 @@ public class SpinRollers extends Command {
   public void execute() {
     // Robot Pose to Goal distance
     
-    m_intake.setRollerPercentOutput(1);
-}
+    m_intakeRollers.setIntakeSpeed(Speed.INTAKE);
+  }
   
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.setRollerPercentOutput(0);
+    m_intakeRollers.setIntakeSpeed(Speed.STOP);
   }
 
   @Override

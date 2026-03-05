@@ -10,13 +10,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.Intake.IntakeExtendo;
 import frc.robot.subsystems.Intake.IntakeExtendo.Position;
+import frc.robot.subsystems.Intake.IntakeRollers;
 import frc.robot.util.FlywheelInterpolation;
 import frc.robot.util.RobotLocalization;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
 /** Shoots notes with flywheel speed interpolated from PhotonVision distance to tag 10. */
-public class ExtendIntake extends Command {
+public class DebugExtendIntake extends Command {
   private final IntakeExtendo m_intakeExtendo;
 
   /**
@@ -25,8 +26,8 @@ public class ExtendIntake extends Command {
    * @param rollers Shooter subsystem
    * @param vision Vision for PhotonVision distance to tag 10
    */
-  public ExtendIntake(IntakeExtendo intakeExtendo) {
-    m_intakeExtendo = intakeExtendo;
+  public DebugExtendIntake(IntakeExtendo intakeExtendo) {
+    m_intakeExtendo =intakeExtendo;
     addRequirements(m_intakeExtendo);
   }
 
@@ -38,8 +39,7 @@ public class ExtendIntake extends Command {
   @Override
   public void execute() {
     
-
-    m_intakeExtendo.setExtendoPosition(Position.EXTENDED);
+    m_intakeExtendo.setExtendoPercentOutput(0.05);
   }
   
 

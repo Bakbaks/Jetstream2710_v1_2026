@@ -162,7 +162,7 @@ public final class Constants {
       public static final double kRotationToleranceRadians = Math.toRadians(5);
       public static final double kPositionToleranceMeters = 0.1;
 
-      public static final double kIntakeOverrideThreshold = 0.5; // needs to be tuned based on driver preference
+      public static final double kRotOverrideThreshold = 0.5; // needs to be tuned based on driver preference
     }
 
     public static class KrakenX60 {

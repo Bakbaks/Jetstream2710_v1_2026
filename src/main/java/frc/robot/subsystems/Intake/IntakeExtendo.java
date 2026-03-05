@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Intake;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
@@ -28,26 +28,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.KrakenX60;
+import frc.robot.commands.OutTake;
 import frc.robot.Ports;
 
 import frc.robot.Constants.IntakeConstants;
 
-public class Intake extends SubsystemBase {
-    public enum Speed {
-        STOP(0),
-        INTAKE(IntakeConstants.kRollerPercent);
-
-        private final double percentOutput;
-
-        private Speed(double percentOutput) {
-            this.percentOutput = percentOutput;
-        }
-
-        public Voltage voltage() {
-            return Volts.of(percentOutput * 12.0);
-        }
-    }
-
+public class IntakeExtendo extends SubsystemBase {
     public enum Position {
         DEFAULT(0.0),
         INTERMEDIATE(3.0),
@@ -55,7 +41,10 @@ public class Intake extends SubsystemBase {
 
 
         private final double inches;
-        Position(double inches) { this.inches = inches; }
+        Position(double inches) { 
+            this.inches = inches; 
+        }
+
         public double inches() { return inches; }
     }
 
@@ -66,18 +55,15 @@ public class Intake extends SubsystemBase {
 
     private static final Distance kPositionTolerance = IntakeConstants.kPositionTolerance;
 
-    private final TalonFX ExtendoMotor, rollerMotor;
+    private final TalonFX ExtendoMotor;
     private final VoltageOut ExtendoVoltageRequest = new VoltageOut(0);
     private final MotionMagicVoltage ExtendoMotionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
-    private final VoltageOut rollerVoltageRequest = new VoltageOut(0);
 
     //private boolean isHomed = false;
 
-    public Intake() {
+    public IntakeExtendo() {
         ExtendoMotor = new TalonFX(Ports.kIntakeExtendo);
-        rollerMotor = new TalonFX(Ports.kIntakeRollers);
         configureExtendoMotor();
-        configureRollerMotor();
         //SmartDashboard.putData(this);
     }
 
@@ -115,22 +101,6 @@ public class Intake extends SubsystemBase {
         ExtendoMotor.getConfigurator().apply(config);
     }
 
-    private void configureRollerMotor() {
-        final TalonFXConfiguration config = new TalonFXConfiguration()
-            .withMotorOutput(
-                new MotorOutputConfigs()
-                    .withInverted(InvertedValue.CounterClockwise_Positive)
-                    .withNeutralMode(NeutralModeValue.Brake)
-            )
-            .withCurrentLimits(
-                new CurrentLimitsConfigs()
-                    .withStatorCurrentLimit(Amps.of(IntakeConstants.kRollerStatorCurrentLimit))
-                    .withStatorCurrentLimitEnable(true)
-                    .withSupplyCurrentLimit(Amps.of(IntakeConstants.kRollerSupplyCurrentLimit))
-                    .withSupplyCurrentLimitEnable(true)
-            );
-        rollerMotor.getConfigurator().apply(config);
-    }
 
     private static double inchesToPinionRot(double inches) {
         return inches / IntakeConstants.kInchesPerPinionRotation; // inches * 3/pi
@@ -161,32 +131,6 @@ public class Intake extends SubsystemBase {
 
     public void setExtendoPosition(Position position) {
         setExtendoInches(position.inches());
-    }
-
-    public void setIntakeSpeed(Speed speed) {
-        rollerMotor.setControl(
-            rollerVoltageRequest
-                .withOutput(speed.voltage())
-        );
-    }
-
-
-    public void setRollerPercentOutput(double percentOutput) {
-        rollerMotor.setControl(
-            rollerVoltageRequest
-                .withOutput(Volts.of(percentOutput * 12.0))
-        );
-    }
-
-    
-    public Command intakeCommand() {
-        return startEnd(
-            () -> {
-                setExtendoPosition(Position.EXTENDED);
-                setIntakeSpeed(Speed.INTAKE);
-            },
-            () -> setIntakeSpeed(Speed.STOP)
-        );
     }
 
     /**
@@ -272,6 +216,10 @@ public class Intake extends SubsystemBase {
             // Optional: ensure motors stop if you cancel the command
             .finallyDo(interrupted -> timer.stop())
         );
+    }
+
+    public void setExtendoZero(){
+        ExtendoMotor.setPosition(0.0);
     }
 
     public double getExtendoPinionRotations() {

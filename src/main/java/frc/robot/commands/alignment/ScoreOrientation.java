@@ -25,7 +25,7 @@ public class ScoreOrientation extends Command {
     private final DoubleSupplier velocityX;
     private final DoubleSupplier velocityY;
     private final DoubleSupplier velocityW;
-    private final double driveOverride = AutoConstants.kIntakeOverrideThreshold;
+    private final double driveOverride = AutoConstants.kRotOverrideThreshold;
 
     private final SwerveRequest.ApplyFieldSpeeds applyFieldSpeeds = new SwerveRequest.ApplyFieldSpeeds();
 

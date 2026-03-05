@@ -4,15 +4,12 @@
 
 package frc.robot;
 
-//utils
-import java.util.function.DoubleSupplier;
-
-//units
-
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+//utils
+import java.util.function.DoubleSupplier;
 
 //pheonix6
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -24,52 +21,37 @@ import com.pathplanner.lib.path.PathConstraints;
 //math
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.RobotState;
-//wpilib
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ExampleSubsystem.ExampleSubsystem;
-import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
-import frc.robot.subsystems.drivetrain.TunerConstants;
-import frc.robot.subsystems.vision.Vision;
-
-//Auto
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathConstraints;
-
-
-//robotcommands
-import frc.robot.commands.Autos;
-import frc.robot.commands.alignment.RotateToTag;
-import frc.robot.commands.alignment.BasicRotate;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.OutTake;
 import frc.robot.commands.alignment.ScoreOrientation;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.intake.DebugDetractIntake;
+import frc.robot.commands.intake.DebugExtendIntake;
+import frc.robot.commands.intake.ExtendIntake;
+import frc.robot.commands.intake.DetractIntake;
 
-import frc.robot.commands.shoot.Volley;
 
 //temp commands
 import frc.robot.commands.intake.SpinRollers;
-import frc.robot.commands.intake.ExtendIntake;
+import frc.robot.commands.shoot.Volley;
 
 
-import frc.robot.Constants.OperatorConstants;
-import java.util.Optional;
+
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.ExampleSubsystem.ExampleSubsystem;
+import frc.robot.subsystems.Intake.IntakeRollers;
+import frc.robot.subsystems.Intake.IntakeExtendo;
+import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drivetrain.TunerConstants;
+import frc.robot.subsystems.vision.Vision;
 
 
 /**
@@ -128,27 +110,41 @@ public class RobotContainer {
   private final Trigger auxA = m_auxController.a();
   private final Trigger auxB = m_auxController.b();
   private final Trigger auxX = m_auxController.x();
+  private final Trigger auxRightTrigger = m_auxController.rightTrigger();
+  private final Trigger auxLeftTrigger  = m_auxController.leftTrigger();
+  private final Trigger auxPovDOWN = m_auxController.povDown();
 
   private final Pose2d goalpose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
 
   private final Flywheel flywheel = new Flywheel();
   private final Hopper hopper = new Hopper();
-  private final Intake intake = new Intake();
-  private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, flywheel, hopper, intake);
+  private final IntakeRollers intakeRollers = new IntakeRollers();
+  private final IntakeExtendo intakeExtendo = new IntakeExtendo();
+  private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, flywheel, hopper, intakeRollers, intakeExtendo);
+  private Boolean ConstSpeed = true;
+  private boolean driverIntakeExtended = false;
 
   //Autos
   PathConstraints lims = new PathConstraints(
-    3.0,                     // max m/s
-    1.0,                     // max m/s^2
+    4.4,                     // max m/s
+    3.500,                     // max m/s^2
     Math.toRadians(540.0),   // max rad/s
     Math.toRadians(720.0)    // max rad/s^2
   );
+
+
   private final SendableChooser<Command> autoChooser;
 
-  Command UnloadPreload = new SequentialCommandGroup(
+  Command PreloadVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new Volley(flywheel, hopper, drivetrain::getPose)
+      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
       ).withTimeout(2)
+  );
+
+  Command ExtraVolley = new SequentialCommandGroup(
+    new ParallelCommandGroup(
+      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
+      ).withTimeout(5)
   );
   
 
@@ -161,7 +157,7 @@ public class RobotContainer {
 
     
     
-    NamedCommands.registerCommand("UnloadPrelaod", UnloadPreload);
+    //NamedCommands.registerCommand("UnloadPrelaod", UnloadPreload);
 
     autoChooser = AutoBuilder.buildAutoChooser("Taxi");
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -188,20 +184,20 @@ public class RobotContainer {
 
     // Driver Control binding
     // sticks are normal
-    // X is outake
     // RTrig is Shoot & spin up and score - works fine
     // RBump is Aim
     // LBump is hopper out toggle
     // LTrigger is intake spinning
 
-    // Remove vision if it somehow causes issues: A
+    // Remove vision if it somehow causes issues: A ~~~~~~~~~~~~~~~~~~
     //Re Zero d pad down
 
     // Aux Control Debug binding
-    // Take Control by toggling X. Manual Intake movement Left Stick down is in, up is out
-    // Take Control by toggling Y for robot sifting: Conveyer.
-    // Disable pose: A
+    // X is outake
+    // Manual Intake movement Right and Left Triggger in and out
+    // Disable pose: A ~~~~~~~~~~~~~~~~~~~~~~~~
     // Change shooter velocity to constant if interpolation is not work: B
+    // Rezero intake d pad down
 
 
     drivetrain.setDefaultCommand(
@@ -213,6 +209,7 @@ public class RobotContainer {
     drivePovDOWN.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     
+
     DoubleSupplier aimVX =
         () -> MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed;
 
@@ -223,21 +220,55 @@ public class RobotContainer {
         () -> -MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate;
 
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      new Volley(flywheel, hopper, drivetrain::getPose)
-      ));
+      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
+    ));
 
     driveRightBumper.whileTrue(new ParallelCommandGroup(
       new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
     )); 
 
-    driveLeftBumper.whileTrue(new ParallelCommandGroup(
-      new ExtendIntake(intake)
-    ));
+    //private boolean driverIntakeExtended = false;
+    driveLeftBumper.onTrue(
+    Commands.runOnce(() -> {
+      if (!driverIntakeExtended) {
+        new ExtendIntake(intakeExtendo);
+        driverIntakeExtended = true;
+      } else {
+        new DetractIntake(intakeExtendo);
+        driverIntakeExtended = false;
+      }
+    })
+    );
     
 
-    driveLeftTrigger.whileTrue(new ParallelCommandGroup(
-      new SpinRollers(intake)
+    driveLeftTrigger.whileTrue(new ParallelCommandGroup( // can on true if u want
+      new SpinRollers(intakeRollers)
     ));
+
+    auxRightTrigger.whileTrue(new ParallelCommandGroup(
+      new DebugDetractIntake(intakeExtendo)
+    ));
+
+    auxLeftTrigger.whileTrue(new ParallelCommandGroup(
+      new DebugExtendIntake(intakeExtendo)
+    ));
+
+    auxX.whileTrue(new ParallelCommandGroup(
+      new OutTake(flywheel, hopper, intakeRollers, intakeExtendo)
+    ));
+
+    auxPovDOWN.onTrue(
+      Commands.runOnce(() -> intakeExtendo.setExtendoZero())
+    );
+
+    auxB.onTrue(
+      Commands.runOnce(() -> {
+        ConstSpeed = !ConstSpeed;
+        SmartDashboard.putBoolean("ConstSpeed", ConstSpeed);
+      })
+    );
+      
+
   }
 
   /** Updates SmartDashboard telemetry. Call from robotPeriodic. */

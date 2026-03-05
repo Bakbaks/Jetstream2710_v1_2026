@@ -10,7 +10,10 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.FlywheelConstants;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.IntakeRollers;
+import frc.robot.subsystems.Intake.IntakeExtendo;
+import frc.robot.subsystems.Intake.IntakeExtendo.Position;
+import frc.robot.subsystems.Intake.IntakeRollers.Speed;
 import frc.robot.Constants.HopperConstants;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,7 +23,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class OutTake extends Command {
   private final Flywheel m_flywheel;
   private final Hopper m_hopper;
-  private final Intake m_intake;
+  private final IntakeRollers m_intakeRollers;
+  private final IntakeExtendo m_intakeExtendo;
 
   /**
    * Creates a PopNAwe command.
@@ -28,11 +32,12 @@ public class OutTake extends Command {
    * @param rollers Shooter subsystem
    * @param vision Vision for PhotonVision distance to tag 10
    */
-  public OutTake(Flywheel flywheel, Hopper hopper, Intake intake) {
+  public OutTake(Flywheel flywheel, Hopper hopper, IntakeRollers intakeRollers, IntakeExtendo intakeExtendo) {
     m_flywheel = flywheel;
     m_hopper = hopper;
-    m_intake = intake;
-    addRequirements(m_flywheel, m_hopper, m_intake);
+    m_intakeRollers = intakeRollers;
+    m_intakeExtendo = intakeExtendo;
+    addRequirements(m_flywheel, m_hopper, m_intakeRollers, m_intakeExtendo);
   }
 
   @Override
@@ -47,6 +52,8 @@ public class OutTake extends Command {
     m_hopper.setFloorRPM(HopperConstants.kFloorReverseRPM);
     m_hopper.setFeederRPM(HopperConstants.kFeederReverseRPM);
 
+    m_intakeExtendo.setExtendoPosition(Position.EXTENDED);
+    m_intakeRollers.setIntakeSpeed(Speed.OUTAKE);
     //set intake reverse rpm and max position
 
   }
@@ -56,6 +63,7 @@ public class OutTake extends Command {
   public void end(boolean interrupted) {
     m_flywheel.stop();
     m_hopper.stop();
+    m_intakeRollers.setIntakeSpeed(Speed.STOP);
   }
 
   @Override
