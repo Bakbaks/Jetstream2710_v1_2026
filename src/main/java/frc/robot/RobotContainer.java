@@ -40,6 +40,7 @@ import frc.robot.commands.intake.DetractIntake;
 
 //temp commands
 import frc.robot.commands.intake.SpinRollers;
+import frc.robot.commands.intake.ReverseRollers;
 import frc.robot.commands.shoot.Volley;
 
 
@@ -112,6 +113,8 @@ public class RobotContainer {
   private final Trigger auxX = m_auxController.x();
   private final Trigger auxRightTrigger = m_auxController.rightTrigger();
   private final Trigger auxLeftTrigger  = m_auxController.leftTrigger();
+  private final Trigger auxLeftBumper = m_auxController.leftBumper();
+  private final Trigger auxRightBumper = m_auxController.rightBumper();
   private final Trigger auxPovDOWN = m_auxController.povDown();
 
   private final Pose2d goalpose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
@@ -137,13 +140,13 @@ public class RobotContainer {
 
   Command PreloadVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
+      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
       ).withTimeout(2)
   );
 
   Command ExtraVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
+      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
       ).withTimeout(5)
   );
   
@@ -220,7 +223,7 @@ public class RobotContainer {
         () -> -MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate;
 
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
+      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
     ));
 
     driveRightBumper.whileTrue(new ParallelCommandGroup(
@@ -245,6 +248,10 @@ public class RobotContainer {
       new SpinRollers(intakeRollers, hopper)
     ));
 
+    driveLeftBumper.whileTrue(new ParallelCommandGroup(
+      new ReverseRollers(intakeRollers)
+    ));
+
     auxRightTrigger.whileTrue(new ParallelCommandGroup(
       new DebugDetractIntake(intakeExtendo)
     ));
@@ -253,8 +260,12 @@ public class RobotContainer {
       new DebugExtendIntake(intakeExtendo)
     ));
 
-    auxX.whileTrue(new ParallelCommandGroup(
-      new OutTake(flywheel, hopper, intakeRollers, intakeExtendo)
+    auxLeftBumper.whileTrue(new ParallelCommandGroup(
+      new OutTake(flywheel, hopper, intakeRollers)
+    ));
+
+    auxRightBumper.whileTrue(new ParallelCommandGroup(
+      new OutTake(flywheel, hopper, intakeRollers)
     ));
 
     auxPovDOWN.onTrue(

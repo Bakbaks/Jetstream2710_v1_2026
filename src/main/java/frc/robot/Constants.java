@@ -94,7 +94,7 @@ public final class Constants {
       public static final int kHopperSupplyCurrentLimit = 100;
     
       
-      public static final double kFloorRPM = 2000;
+      public static final double kFloorRPM = 1500;
       public static final double kFeederRPM = 5000;
       public static final double KHopperP = 2;
       public static final double KHopperI = 0;

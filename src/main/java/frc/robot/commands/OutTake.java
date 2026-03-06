@@ -24,7 +24,6 @@ public class OutTake extends Command {
   private final Flywheel m_flywheel;
   private final Hopper m_hopper;
   private final IntakeRollers m_intakeRollers;
-  private final IntakeExtendo m_intakeExtendo;
 
   /**
    * Creates a PopNAwe command.
@@ -32,12 +31,11 @@ public class OutTake extends Command {
    * @param rollers Shooter subsystem
    * @param vision Vision for PhotonVision distance to tag 10
    */
-  public OutTake(Flywheel flywheel, Hopper hopper, IntakeRollers intakeRollers, IntakeExtendo intakeExtendo) {
+  public OutTake(Flywheel flywheel, Hopper hopper, IntakeRollers intakeRollers) {
     m_flywheel = flywheel;
     m_hopper = hopper;
     m_intakeRollers = intakeRollers;
-    m_intakeExtendo = intakeExtendo;
-    addRequirements(m_flywheel, m_hopper, m_intakeRollers, m_intakeExtendo);
+    addRequirements(m_flywheel, m_hopper, m_intakeRollers);
   }
 
   @Override
@@ -51,8 +49,6 @@ public class OutTake extends Command {
 
     m_hopper.setFloorRPM(HopperConstants.kFloorReverseRPM);
     m_hopper.setFeederRPM(HopperConstants.kFeederReverseRPM);
-
-    m_intakeExtendo.setExtendoPosition(Position.EXTENDED);
     m_intakeRollers.setIntakeSpeed(Speed.OUTAKE);
     //set intake reverse rpm and max position
 

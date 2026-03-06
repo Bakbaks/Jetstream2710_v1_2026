@@ -44,7 +44,7 @@ public class SpinRollers extends Command {
     // Robot Pose to Goal distance
     
     m_intakeRollers.setIntakeSpeed(Speed.INTAKE);
-    m_hopper.setFloorRPM();
+    m_hopper.setFloorRPM(500);
   }
   
 

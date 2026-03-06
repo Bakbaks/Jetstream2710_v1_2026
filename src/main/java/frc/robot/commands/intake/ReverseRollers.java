@@ -20,18 +20,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 /** Shoots notes with flywheel speed interpolated from PhotonVision distance to tag 10. */
 public class ReverseRollers extends Command {
   private final IntakeRollers m_intakeRollers;
-  private final Hopper m_hopper;
-
+  
   /**
    * Creates a PopNAwe command.
    *
    * @param rollers Shooter subsystem
    * @param vision Vision for PhotonVision distance to tag 10
    */
-  public ReverseRollers(IntakeRollers intakeRollers, Hopper hopper) {
+  public ReverseRollers(IntakeRollers intakeRollers) {
     m_intakeRollers = intakeRollers;
-    m_hopper = hopper;
-    addRequirements(m_intakeRollers, m_hopper);
+    addRequirements(m_intakeRollers);
   }
 
   @Override
