@@ -137,13 +137,13 @@ public class RobotContainer {
 
   Command PreloadVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
+      new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
       ).withTimeout(2)
   );
 
   Command ExtraVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
+      new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
       ).withTimeout(5)
   );
   
@@ -208,7 +208,7 @@ public class RobotContainer {
     );
     drivePovDOWN.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-    
+    //hopper.setDefaultCommand(hopper.floorSiftRPMCommand());
 
     DoubleSupplier aimVX =
         () -> MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed;
@@ -220,29 +220,29 @@ public class RobotContainer {
         () -> -MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate;
 
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
+      new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
     ));
 
     driveRightBumper.whileTrue(new ParallelCommandGroup(
       new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
     )); 
 
-    //private boolean driverIntakeExtended = false;
-    driveLeftBumper.onTrue(
-    Commands.runOnce(() -> {
-      if (!driverIntakeExtended) {
-        new ExtendIntake(intakeExtendo);
-        driverIntakeExtended = true;
-      } else {
-        new DetractIntake(intakeExtendo);
-        driverIntakeExtended = false;
-      }
-    })
-    );
+    // //private boolean driverIntakeExtended = false;
+    // driveLeftBumper.onTrue(
+    // Commands.runOnce(() -> {
+    //   if (!driverIntakeExtended) {
+    //     new ExtendIntake(intakeExtendo);
+    //     driverIntakeExtended = true;
+    //   } else {
+    //     new DetractIntake(intakeExtendo);
+    //     driverIntakeExtended = false;
+    //   }
+    // })
+    // );
     
 
     driveLeftTrigger.whileTrue(new ParallelCommandGroup( // can on true if u want
-      new SpinRollers(intakeRollers)
+      new SpinRollers(intakeRollers, hopper)
     ));
 
     auxRightTrigger.whileTrue(new ParallelCommandGroup(

@@ -38,7 +38,7 @@ public class DebugDetractIntake extends Command {
   @Override
   public void execute() {
 
-    m_intakeExtendo.setExtendoPercentOutput(-0.05);
+    m_intakeExtendo.setExtendoPercentOutput(-0.3);
   }
 
 

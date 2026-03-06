@@ -74,7 +74,7 @@ public final class Constants {
 
       public static final double kDefaultRPM = 1500;
 
-      public static final double kFlywheelReverseRPM = 400;
+      public static final double kFlywheelReverseRPM = -400;
     }
 
     public static class ElevatorConstants {
@@ -101,23 +101,23 @@ public final class Constants {
       public static final double KHopperD = 0;
 
       //sifting for gold
-      public static final double kFloorSiftFrequencyHz = 2.0;
-      public static final double kFloorSiftAmplitudeRPM = 300.0;
+      public static final double kFloorSiftFrequencyHz = 1.0;
+      public static final double kFloorSiftAmplitudeRPM = 350.0;
       public static final double kFloorSiftBiasRPM = 100.0;
 
-      public static final double kFeederReverseRPM = 400;
-      public static final double kFloorReverseRPM = 400;
+      public static final double kFeederReverseRPM = -400;
+      public static final double kFloorReverseRPM = -400;
     }
 
     public static class IntakeConstants {
 
       // every pi inches moved is 3 rotations.
 
-      public static final double kExtendoPercent = 0.5;
-      public static final double kRollerPercent = 0.8;
+      public static final double kExtendoPercent = 0.1;
+      public static final double kRollerPercent = 0.9;
       
-      public static final int kExtendoStatorCurrentLimit = 100;
-      public static final int kExtendoSupplyCurrentLimit = 80;
+      public static final int kExtendoStatorCurrentLimit = 60;
+      public static final int kExtendoSupplyCurrentLimit = 20;
 
       public static final int kRollerStatorCurrentLimit = 100;
       public static final int kRollerSupplyCurrentLimit = 80;

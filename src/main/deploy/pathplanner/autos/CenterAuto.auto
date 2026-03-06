@@ -7,19 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center3"
+            "pathName": "TestMove"
           }
         }
       ]
