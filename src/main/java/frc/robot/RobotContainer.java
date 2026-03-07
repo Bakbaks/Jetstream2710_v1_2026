@@ -144,6 +144,13 @@ public class RobotContainer {
       ).withTimeout(2)
   );
 
+  Command ExtendIntake = new SequentialCommandGroup(
+    new ParallelCommandGroup(
+      new DebugExtendIntake(intakeExtendo),
+      new SpinRollers(intakeRollers, hopper)
+    ).withTimeout(1.5)
+  );
+
   Command ExtraVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
       new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
@@ -160,8 +167,10 @@ public class RobotContainer {
 
     
     
-    //NamedCommands.registerCommand("UnloadPrelaod", UnloadPreload);
-
+    NamedCommands.registerCommand("PreloadVolley", PreloadVolley);
+    NamedCommands.registerCommand("ExtendIntake", ExtendIntake);
+    NamedCommands.registerCommand("ExtraVolley", ExtraVolley);
+    
     autoChooser = AutoBuilder.buildAutoChooser("Taxi");
         SmartDashboard.putData("Auto Chooser", autoChooser);
         

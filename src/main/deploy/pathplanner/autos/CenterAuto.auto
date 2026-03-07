@@ -7,7 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TestMove"
+            "pathName": "Center1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreloadVolley"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtendIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 4.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtraVolley"
           }
         }
       ]

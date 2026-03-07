@@ -156,7 +156,7 @@ public final class Constants {
 
     public static class AutoConstants {
       // Tuning constants
-      public static final double kPTheta = 2.0;
+      public static final double kPTheta = 2.0; // go here to tune
       public static final double kMaxAngularRate = 4.5; // rad/s
       public static final double kMaxAngularAccel = 6.0; // rad/s²
       public static final double kRotationToleranceRadians = Math.toRadians(5);
