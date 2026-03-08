@@ -289,13 +289,13 @@ public class RobotContainer {
       new OutTake(flywheel, hopper, intakeRollers)
     ));
 
-    auxRightBumper.whileTrue(new ParallelCommandGroup(
-      new OutTake(flywheel, hopper, intakeRollers)
-    ));
+    // auxRightBumper.whileTrue(new ParallelCommandGroup(
+    //   new OutTake(flywheel, hopper, intakeRollers)
+    // ));
 
-    auxPovDOWN.onTrue(
-      Commands.runOnce(() -> intakeExtendo.setExtendoZero())
-    );
+    // auxPovDOWN.onTrue(
+    //   Commands.runOnce(() -> intakeExtendo.setExtendoZero())
+    // );
 
     auxB.onTrue(
       Commands.runOnce(() -> {
