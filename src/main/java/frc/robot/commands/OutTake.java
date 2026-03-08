@@ -45,9 +45,9 @@ public class OutTake extends Command {
 
   @Override
   public void execute() {
-    m_flywheel.setPercentOutput(-0.35);
-
-    m_hopper.setPercentOutputs(-0.5, -0.5);
+    m_flywheel.setRPM(FlywheelConstants.kFlywheelReverseRPM);
+    m_hopper.setFeederRPM(HopperConstants.kFeederReverseRPM);
+    m_hopper.setFloorRPM(HopperConstants.kFloorReverseRPM);
     m_intakeRollers.setIntakeSpeed(Speed.OUTAKE);
     //set intake reverse rpm and max position
 

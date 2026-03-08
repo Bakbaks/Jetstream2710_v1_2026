@@ -58,7 +58,7 @@ public class Hopper extends SubsystemBase {
 	private void configureMotor(TalonFX motor, InvertedValue invertDirection) {
 		final TalonFXConfiguration config = new TalonFXConfiguration()
 				.withMotorOutput(new MotorOutputConfigs().withInverted(invertDirection).withNeutralMode(NeutralModeValue.Coast))
-				.withVoltage(new VoltageConfigs().withPeakReverseVoltage(Volts.of(0)))
+				.withVoltage(new VoltageConfigs().withPeakReverseVoltage(Volts.of(-12)))
 				// .withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(Amps.of(HopperConstants.kHopperStatorCurrentLimit)).withStatorCurrentLimitEnable(true))
 				// .withCurrentLimits(new CurrentLimitsConfigs().withSupplyCurrentLimit(Amps.of(HopperConstants.kHopperSupplyCurrentLimit)).withSupplyCurrentLimitEnable(true))
 				.withSlot0(
