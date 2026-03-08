@@ -21,6 +21,7 @@ import com.pathplanner.lib.path.PathConstraints;
 //math
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,6 +43,7 @@ import frc.robot.commands.intake.DetractIntake;
 import frc.robot.commands.intake.SpinRollers;
 import frc.robot.commands.intake.ReverseRollers;
 import frc.robot.commands.shoot.Volley;
+import frc.robot.commands.shoot.TempVolley;
 
 
 
@@ -133,6 +135,7 @@ public class RobotContainer {
     3.500,                     // max m/s^2
     Math.toRadians(540.0),   // max rad/s
     Math.toRadians(720.0)    // max rad/s^2
+
   );
 
 
@@ -140,7 +143,7 @@ public class RobotContainer {
 
   Command PreloadVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
+      new TempVolley(flywheel, hopper, intakeRollers, drivetrain::getPose, 1325)
       ).withTimeout(2)
   );
 
@@ -148,13 +151,25 @@ public class RobotContainer {
     new ParallelCommandGroup(
       new DebugExtendIntake(intakeExtendo),
       new SpinRollers(intakeRollers, hopper)
-    ).withTimeout(1.5)
+    ).withTimeout(2)
   );
 
   Command ExtraVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
+      new TempVolley(flywheel, hopper, intakeRollers, drivetrain::getPose, 1325)
       ).withTimeout(5)
+  );
+
+  Command RetractIntake = new SequentialCommandGroup(
+    new ParallelCommandGroup(
+      new SequentialCommandGroup(
+        new DebugDetractIntake(intakeExtendo).withTimeout(0.35),
+        new DebugExtendIntake(intakeExtendo).withTimeout(0.25),
+        new DebugDetractIntake(intakeExtendo).withTimeout(0.35),
+        new DebugExtendIntake(intakeExtendo).withTimeout(0.25),
+        new DebugDetractIntake(intakeExtendo).withTimeout(0.35)
+      )
+    ).withTimeout(3)
   );
   
 
@@ -170,7 +185,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("PreloadVolley", PreloadVolley);
     NamedCommands.registerCommand("ExtendIntake", ExtendIntake);
     NamedCommands.registerCommand("ExtraVolley", ExtraVolley);
-    
+    NamedCommands.registerCommand("RetractIntake", RetractIntake);
+
     autoChooser = AutoBuilder.buildAutoChooser("Taxi");
         SmartDashboard.putData("Auto Chooser", autoChooser);
         

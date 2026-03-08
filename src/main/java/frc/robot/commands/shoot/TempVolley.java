@@ -1,0 +1,111 @@
+package frc.robot.commands.shoot;
+
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.function.Supplier;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.FlywheelConstants;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake.IntakeRollers;
+import frc.robot.subsystems.Intake.IntakeRollers.Speed;
+import frc.robot.util.FlywheelInterpolation;
+import frc.robot.util.RobotLocalization;
+import frc.robot.Constants.HopperConstants;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+/** Shoots notes with flywheel speed interpolated from PhotonVision distance to tag 10. */
+public class TempVolley extends Command {
+  private final Flywheel m_flywheel;
+  private final Hopper m_hopper;
+  private final IntakeRollers m_intakeRollers;
+  private final Supplier<Pose2d> robotPoseSupplier;
+
+  private double rpm;
+  /**
+   * Creates a PopNAwe command.
+   *
+   * @param rollers Shooter subsystem
+   * @param vision Vision for PhotonVision distance to tag 10
+   */
+  public TempVolley(Flywheel flywheel, Hopper hopper, IntakeRollers intakeRollers, Supplier<Pose2d> robotPoseSupplier, double RPM) {
+    m_flywheel = flywheel;
+    m_hopper = hopper;
+    m_intakeRollers = intakeRollers;
+    this.robotPoseSupplier = robotPoseSupplier;
+    this.rpm = RPM;
+    addRequirements(m_flywheel, m_hopper, m_intakeRollers);
+  }
+
+  private int getAllianceTagId() {
+  return DriverStation.getAlliance()
+      .map(alliance ->
+          alliance == DriverStation.Alliance.Red
+              ? FieldConstants.RED_SHOOT_TAG
+              : FieldConstants.BLUE_SHOOT_TAG)
+      .orElse(FieldConstants.RED_SHOOT_TAG);
+  }
+
+
+  @Override
+  public void initialize() {
+    
+  }
+
+  @Override
+  public void execute() {
+    // Robot Pose to Goal distance
+    // Pose2d robotPose = robotPoseSupplier.get();
+    // int tagId = getAllianceTagId();
+  
+    // Optional<Pose2d> maybeTargetPose =
+    //     RobotLocalization.fieldPoseFromTagTransform(tagId, FieldConstants.RightTagToHub);
+    // if (maybeTargetPose.isEmpty()) {
+    //   m_flywheel.stop();
+    //   m_hopper.stop();
+    //   return;
+    // }
+    // Pose2d targetPose = maybeTargetPose.get();
+
+    // double targetDistance = RobotLocalization.robotToTargetDistanceMeters(robotPose, targetPose);
+
+    // SmartDashboard.putNumber("Robot distance to Hub", targetDistance);
+
+    //Distance to RPM map
+    //double rpm = FlywheelInterpolation.getRPMForDistance(Optional.of(targetDistance));
+
+    //Control
+    
+    m_flywheel.setRPM(rpm);// for testing
+    //if (!ConstSpeed){m_flywheel.setRPM(rpm);}; // for interpolation
+
+    // if (m_flywheel.isVelocityWithinTolerance()) {
+    m_hopper.setFloorRPM();
+    m_hopper.setFeederRPM();
+    m_intakeRollers.setIntakeSpeed(Speed.INTAKE);
+
+    // m_hopper.setPercentOutputs(HopperConstants.kFloorPercent, HopperConstants.kFeederPercent);
+
+    // } else {
+    //   m_hopper.stop();
+    // }
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    m_flywheel.stop();
+    m_hopper.stop();
+    m_intakeRollers.setIntakeSpeed(Speed.STOP);
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+}

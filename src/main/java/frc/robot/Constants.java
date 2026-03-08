@@ -72,7 +72,7 @@ public final class Constants {
       public static final double KFlywheelI = 2;
       public static final double KFlywheelD = 0;
 
-      public static final double kDefaultRPM = 1500;
+      public static final double kDefaultRPM = 1300;
 
       public static final double kFlywheelReverseRPM = -400;
     }
@@ -100,6 +100,8 @@ public final class Constants {
       public static final double KHopperI = 0;
       public static final double KHopperD = 0;
 
+
+
       //sifting for gold
       public static final double kFloorSiftFrequencyHz = 1.0;
       public static final double kFloorSiftAmplitudeRPM = 350.0;
@@ -114,7 +116,7 @@ public final class Constants {
       // every pi inches moved is 3 rotations.
 
       public static final double kExtendoPercent = 0.1;
-      public static final double kRollerPercent = 0.9;
+      public static final double kRollerPercent = 0.8;
       
       public static final int kExtendoStatorCurrentLimit = 60;
       public static final int kExtendoSupplyCurrentLimit = 20;

@@ -17,21 +17,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ExtendIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 3.0
           }
         },
         {
@@ -41,9 +48,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ExtraVolley"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtraVolley"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RetractIntake"
+                }
+              }
+            ]
           }
         }
       ]

@@ -15,8 +15,8 @@ public final class FlywheelInterpolation {
     // Initialize the table with distance-RPM sweet spots
     static {
         // distance-RPM pairs here (distance in meters, RPM)
-        shooterTable.put(1.0, 1500.0);   // Close range
-        shooterTable.put(2.0, 1500.0);
+        shooterTable.put(1.0, 0.0);   // Close range
+        shooterTable.put(2.0, 200.0);
         shooterTable.put(3.0, 1500.0);
         shooterTable.put(4.0, 2000.0);
         shooterTable.put(5.0, 2500.0);   // Far range
