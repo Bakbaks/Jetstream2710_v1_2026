@@ -72,9 +72,9 @@ public final class Constants {
       public static final double KFlywheelI = 2;
       public static final double KFlywheelD = 0;
 
-      public static final double kDefaultRPM = 1300;
+      public static final double kDefaultRPM = 1350;
 
-      public static final double kFlywheelReverseRPM = -400;
+      public static final double kFlywheelReverseRPM = -900;
     }
 
     public static class ElevatorConstants {
@@ -107,8 +107,8 @@ public final class Constants {
       public static final double kFloorSiftAmplitudeRPM = 350.0;
       public static final double kFloorSiftBiasRPM = 100.0;
 
-      public static final double kFeederReverseRPM = -400;
-      public static final double kFloorReverseRPM = -400;
+      public static final double kFeederReverseRPM = -900;
+      public static final double kFloorReverseRPM = -900;
     }
 
     public static class IntakeConstants {

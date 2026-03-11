@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 0.5113253012048191,
-        "y": 0.680192771084337
+        "y": 0.68
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.511325301204819,
-        "y": 0.6801927710843372
+        "y": 0.6800000000000003
       },
       "isLocked": false,
       "linkedName": "CenterOutpostPosition"

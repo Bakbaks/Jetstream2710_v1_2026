@@ -18,8 +18,8 @@ import frc.robot.util.RobotLocalization;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /** Shoots notes with flywheel speed interpolated from PhotonVision distance to tag 10. */
-public class SpinRollers extends Command {
-  private final IntakeRollers m_intakeRollers;
+public class SpinFloor extends Command {
+  private final Hopper m_hopper;
   //private final Hopper m_hopper;
 
   /**
@@ -28,10 +28,10 @@ public class SpinRollers extends Command {
    * @param rollers Shooter subsystem
    * @param vision Vision for PhotonVision distance to tag 10
    */
-  public SpinRollers(IntakeRollers intakeRollers) {
-    m_intakeRollers = intakeRollers;
+  public SpinFloor(Hopper hopper) {
+    m_hopper = hopper;
     //m_hopper = hopper;
-    addRequirements(m_intakeRollers);
+    addRequirements(m_hopper);
   }
 
   @Override
@@ -43,16 +43,16 @@ public class SpinRollers extends Command {
   public void execute() {
     // Robot Pose to Goal distance
     
-    m_intakeRollers.setIntakeSpeed(Speed.INTAKE);
-    //m_hopper.setFloorRPM(500);
+    //m_intakeRollers.setIntakeSpeed(Speed.INTAKE);
+    m_hopper.setFloorRPM(500);
   }
   
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intakeRollers.setIntakeSpeed(Speed.STOP);
-    //m_hopper.stop();
+    //m_intakeRollers.setIntakeSpeed(Speed.STOP);
+    m_hopper.stop();
   }
 
   @Override

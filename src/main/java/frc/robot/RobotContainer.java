@@ -44,7 +44,7 @@ import frc.robot.commands.intake.SpinRollers;
 import frc.robot.commands.intake.ReverseRollers;
 import frc.robot.commands.shoot.Volley;
 import frc.robot.commands.shoot.TempVolley;
-
+import frc.robot.commands.intake.SpinFloor;
 
 
 import frc.robot.subsystems.Flywheel;
@@ -150,7 +150,7 @@ public class RobotContainer {
   Command ExtendIntake = new SequentialCommandGroup(
     new ParallelCommandGroup(
       new DebugExtendIntake(intakeExtendo),
-      new SpinRollers(intakeRollers, hopper)
+      new SpinRollers(intakeRollers)
     ).withTimeout(2)
   );
 
@@ -250,10 +250,10 @@ public class RobotContainer {
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
       new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
     ));
-
-    driveRightBumper.whileTrue(new ParallelCommandGroup(
-      new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
-    )); 
+ 
+    // driveRightBumper.whileTrue(new ParallelCommandGroup(
+    //   new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
+    // )); 
 
     // //private boolean driverIntakeExtended = false;
     // driveLeftBumper.onTrue(
@@ -270,11 +270,15 @@ public class RobotContainer {
     
 
     driveLeftTrigger.whileTrue(new ParallelCommandGroup( // can on true if u want
-      new SpinRollers(intakeRollers, hopper)
+      new SpinRollers(intakeRollers)
     ));
 
     driveLeftBumper.whileTrue(new ParallelCommandGroup(
       new ReverseRollers(intakeRollers)
+    ));
+
+    driveRightBumper.whileTrue(new ParallelCommandGroup(
+      new OutTake(flywheel, hopper, intakeRollers)
     ));
 
     auxRightTrigger.whileTrue(new ParallelCommandGroup(
@@ -285,13 +289,9 @@ public class RobotContainer {
       new DebugExtendIntake(intakeExtendo)
     ));
 
-    auxLeftBumper.whileTrue(new ParallelCommandGroup(
-      new OutTake(flywheel, hopper, intakeRollers)
+    auxRightBumper.whileTrue(new ParallelCommandGroup(
+      new SpinFloor(hopper)
     ));
-
-    // auxRightBumper.whileTrue(new ParallelCommandGroup(
-    //   new OutTake(flywheel, hopper, intakeRollers)
-    // ));
 
     // auxPovDOWN.onTrue(
     //   Commands.runOnce(() -> intakeExtendo.setExtendoZero())
