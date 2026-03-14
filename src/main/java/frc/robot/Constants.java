@@ -153,7 +153,7 @@ public final class Constants {
       public static final int RED_SHOOT_TAG = 10;
       public static final int BLUE_SHOOT_TAG = 26;
       //tags 10(red) & 26(blue)
-      public static final Transform2d RightTagToHub = new Transform2d(0.0, -0.737102412, Rotation2d.fromDegrees(0.0)); // needs to be measured still
+      public static final Transform2d RightTagToHub = new Transform2d(0.0, -0.737102412, Rotation2d.fromDegrees(180.0)); // needs to be measured still
     }
 
     public static class AutoConstants {
