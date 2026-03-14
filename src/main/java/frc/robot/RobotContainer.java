@@ -251,9 +251,9 @@ public class RobotContainer {
       new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
     ));
  
-    // driveRightBumper.whileTrue(new ParallelCommandGroup(
-    //   new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
-    // )); 
+    driveRightBumper.whileTrue(new ParallelCommandGroup(
+      new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
+    )); 
 
     // //private boolean driverIntakeExtended = false;
     // driveLeftBumper.onTrue(
@@ -274,12 +274,10 @@ public class RobotContainer {
     ));
 
     driveLeftBumper.whileTrue(new ParallelCommandGroup(
-      new ReverseRollers(intakeRollers)
-    ));
-
-    driveRightBumper.whileTrue(new ParallelCommandGroup(
       new OutTake(flywheel, hopper, intakeRollers)
     ));
+
+
 
     auxRightTrigger.whileTrue(new ParallelCommandGroup(
       new DebugDetractIntake(intakeExtendo)
