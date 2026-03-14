@@ -23,7 +23,6 @@ public final class RobotLocalization {
       AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
 
-    /** Distance (meters) at which to use minimum RPM. */
     public static final double r_width = 27;
     public static final double r_length = 27;
 

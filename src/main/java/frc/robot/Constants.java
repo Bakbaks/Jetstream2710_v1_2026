@@ -153,7 +153,7 @@ public final class Constants {
       public static final int RED_SHOOT_TAG = 10;
       public static final int BLUE_SHOOT_TAG = 26;
       //tags 10(red) & 26(blue)
-      public static final Transform2d RightTagToHub = new Transform2d(0.0, -0.737102412, Rotation2d.fromDegrees(180.0)); // needs to be measured still
+      public static final Transform2d RightTagToHub = new Transform2d(0.0, 0.0, Rotation2d.fromDegrees(0)); // needs to be measured still
     }
 
     public static class AutoConstants {
@@ -161,7 +161,7 @@ public final class Constants {
       public static final double kPTheta = 2.0; // go here to tune
       public static final double kMaxAngularRate = 4.5; // rad/s
       public static final double kMaxAngularAccel = 6.0; // rad/s²
-      public static final double kRotationToleranceRadians = Math.toRadians(5);
+      public static final double kRotationToleranceRadians = Math.toRadians(1);
       public static final double kPositionToleranceMeters = 0.1;
 
       public static final double kRotOverrideThreshold = 0.5; // needs to be tuned based on driver preference

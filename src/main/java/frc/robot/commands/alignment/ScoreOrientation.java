@@ -92,7 +92,7 @@ public class ScoreOrientation extends Command {
 
         
         // desiredHeadingField = robotHeadingField + (robot-relative bearing)
-        Rotation2d desiredHeadingField = robotPose.getRotation().plus(bearingRobotFrame);
+        Rotation2d desiredHeadingField = robotPose.getRotation().plus(bearingRobotFrame).plus(Rotation2d.fromDegrees(180));
 
         double thetaNow = robotPose.getRotation().getRadians();
         double thetaGoal = desiredHeadingField.getRadians();
