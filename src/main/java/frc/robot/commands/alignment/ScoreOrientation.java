@@ -71,7 +71,7 @@ public class ScoreOrientation extends Command {
         Optional<Pose2d> maybeTargetPose =
         RobotLocalization.fieldPoseFromTagTransform(tagId, FieldConstants.RightTagToHub);
 
-        if (maybeTargetPose.isEmpty() || Math.abs(velocityW.getAsDouble()) >= driveOverride) {
+        if (maybeTargetPose.isEmpty()) {
             // Fail-safe: no target => don't rotate automatically
             drivetrain.setControl(
             applyFieldSpeeds.withSpeeds(
