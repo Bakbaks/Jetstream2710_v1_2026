@@ -57,8 +57,8 @@ public final class Constants {
       **/
       // public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(.7, .7, 9999999);
       // public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(.7, .7, 9999999);
-      public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(9999999, 9999999, 9999999);
-      public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(99999999, 99999999, 9999999);
+      public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
+      public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
     }
 
     public static class FlywheelConstants {
