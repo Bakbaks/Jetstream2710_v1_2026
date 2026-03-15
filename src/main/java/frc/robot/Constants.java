@@ -39,6 +39,7 @@ public final class Constants {
 
     public static class VisionConstants {
       public static final String kCameraName = "dave";
+      public static final String kCameraName2 = "crazy";
 
       /** AprilTag 10 center height above ground (meters). 44.25 in = 1.12395 m. */
       /** Camera pitch from horizontal in radians. 15 deg up from vertical = 75 deg from horizontal. */
@@ -46,10 +47,9 @@ public final class Constants {
       //https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
       // Rotation3d(roll, pitch, yaw) in radians. Use (0,0,0) for forward camera, (0,0,Math.PI) for backward.
       public static final Transform3d kRobotToCam = new Transform3d(new Translation3d(-0.2931456926, 0, 0.7338025964), new Rotation3d(0, Units.degreesToRadians(-15), Math.PI));
-
+      public static final Transform3d kRobotToCam2 = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, Math.PI));
       // The layout of the AprilTags on the field
       public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-
       /*
       *  Standard deviations of the vision pose measurement (x position
       *  in meters, y position in meters, and heading in radians). Increase 
@@ -116,7 +116,7 @@ public final class Constants {
       // every pi inches moved is 3 rotations.
 
       public static final double kExtendoPercent = 0.1;
-      public static final double kRollerPercent = 0.8;
+      public static final double kRollerPercent = 0.65;
       
       public static final int kExtendoStatorCurrentLimit = 60;
       public static final int kExtendoSupplyCurrentLimit = 20;

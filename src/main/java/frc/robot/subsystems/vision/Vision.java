@@ -51,6 +51,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  
 public class Vision extends SubsystemBase {
     private final PhotonCamera camera;
+    private final PhotonCamera camera2;
     private final PhotonPoseEstimator photonEstimator;
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
@@ -67,6 +68,7 @@ public class Vision extends SubsystemBase {
     public Vision(EstimateConsumer estConsumer) {
         this.estConsumer = estConsumer;
         camera = new PhotonCamera(kCameraName);
+        camera2 = new PhotonCamera(kCameraName2);
  
         photonEstimator =
                 new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, kRobotToCam);
