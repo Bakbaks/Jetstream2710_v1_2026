@@ -126,7 +126,7 @@ public class RobotContainer {
   private final IntakeRollers intakeRollers = new IntakeRollers();
   private final IntakeExtendo intakeExtendo = new IntakeExtendo();
   private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, flywheel, hopper, intakeRollers, intakeExtendo);
-  private Boolean ConstSpeed = true;
+  private Boolean ConstSpeed = false;
   private boolean driverIntakeExtended = false;
 
   //Autos

@@ -81,10 +81,10 @@ public class Volley extends Command {
 
     //Control
     
-    //m_flywheel.setRPM(FlywheelConstants.kDefaultRPM);// for testing
-    //if (!ConstSpeed){m_flywheel.setRPM(rpm);}; // for interpolation
+    m_flywheel.setRPM(FlywheelConstants.kDefaultRPM);// for testing
+    if (!ConstSpeed){m_flywheel.setRPM(rpm);}; // for interpolation
 
-    m_flywheel.setRPM(rpm);
+    //m_flywheel.setRPM(rpm);
     // if (m_flywheel.isVelocityWithinTolerance()) {
     m_hopper.setFloorRPM();
     m_hopper.setFeederRPM();
