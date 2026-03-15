@@ -96,7 +96,7 @@ public class RotateToTag extends Command {
         
         // Camera yaw from robot-to-camera transform (Z = yaw in radians).
         // Forward camera = 0; backward = Math.PI. Set in Constants.Vision.kRobotToCam.
-        double cameraYawOffset = Constants.VisionConstants.kRobotToCam.getRotation().getZ();
+        double cameraYawOffset = Constants.VisionConstants.kRobotToCam1.getRotation().getZ();
         double targetAngle = angleToTag + cameraYawOffset;
         
         // Normalize angle to [-π, π]

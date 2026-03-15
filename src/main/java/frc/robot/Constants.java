@@ -38,7 +38,7 @@ public final class Constants {
     }
 
     public static class VisionConstants {
-      public static final String kCameraName = "dave";
+      public static final String kCameraName1 = "dave";
       public static final String kCameraName2 = "crazy";
 
       /** AprilTag 10 center height above ground (meters). 44.25 in = 1.12395 m. */
@@ -46,8 +46,10 @@ public final class Constants {
       // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
       //https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
       // Rotation3d(roll, pitch, yaw) in radians. Use (0,0,0) for forward camera, (0,0,Math.PI) for backward.
-      public static final Transform3d kRobotToCam = new Transform3d(new Translation3d(-0.2931456926, 0, 0.7338025964), new Rotation3d(0, Units.degreesToRadians(-15), Math.PI));
-      public static final Transform3d kRobotToCam2 = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, Math.PI));
+      public static final Transform3d kRobotToCam1 = new Transform3d(new Translation3d(-0.2931456926, 0, 0.7338025964), new Rotation3d(0, Units.degreesToRadians(-15), Math.PI));
+
+      //height 0.5127625 // back from center 0.0523875 // right from center 0.376555
+      public static final Transform3d kRobotToCam2 = new Transform3d(new Translation3d(-0.0523875, -0.376555, 0.5127625), new Rotation3d(0, 0, -Math.PI/2));
       // The layout of the AprilTags on the field
       public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
       /*
@@ -57,8 +59,11 @@ public final class Constants {
       **/
       // public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(.7, .7, 9999999);
       // public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(.7, .7, 9999999);
-      public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
-      public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
+      public static final Matrix<N3, N1> kCamera1SingleTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
+      public static final Matrix<N3, N1> kCamera1MultiTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
+
+      public static final Matrix<N3, N1> kCamera2SingleTagStdDevs = VecBuilder.fill(0.9, 0.9, 0.6);
+      public static final Matrix<N3, N1> kCamera2MultiTagStdDevs = VecBuilder.fill(0.9, 0.9, 0.6);
     }
 
     public static class FlywheelConstants {
