@@ -54,7 +54,8 @@ public class Vision extends SubsystemBase {
     private final PhotonCamera camera2;
     private final PhotonPoseEstimator photonEstimator1;
     private final PhotonPoseEstimator photonEstimator2;
-    private Matrix<N3, N1> curStdDevs;
+    private Matrix<N3, N1> curStdDevs1;
+    private Matrix<N3, N1> curStdDevs2;
     private final EstimateConsumer estConsumer;
 
  
@@ -91,11 +92,11 @@ public class Vision extends SubsystemBase {
                 visionEst1.ifPresent(
                         est -> {
                             // Change our trust in the measurement based on the tags we can see
-                            var estStdDevs = getEstimationStdDevs();
+                            var estStdDevs = getEstimationStdDevs1();
                             estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                         });
 
-            }
+             }
 
 
             Optional<EstimatedRobotPose> visionEst2 = Optional.empty();
@@ -105,7 +106,7 @@ public class Vision extends SubsystemBase {
                 visionEst2.ifPresent(
                         est -> {
                             // Change our trust in the measurement based on the tags we can see
-                            var estStdDevs = getEstimationStdDevs();
+                            var estStdDevs = getEstimationStdDevs2();
                             estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                         });
 
@@ -127,7 +128,7 @@ public class Vision extends SubsystemBase {
             Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
          if (estimatedPose.isEmpty()) {
              // No pose input. Default to single-tag std devs
-             curStdDevs = kCamera1SingleTagStdDevs;
+             curStdDevs1 = kCamera1SingleTagStdDevs;
  
          } else {
              // Pose present. Start running Heuristic
@@ -150,7 +151,7 @@ public class Vision extends SubsystemBase {
  
              if (numTags == 0) {
                  // No tags visible. Default to single-tag std devs
-                 curStdDevs = kCamera1SingleTagStdDevs;
+                 curStdDevs1 = kCamera1SingleTagStdDevs;
              } else {
                  // One or more tags visible, run the full heuristic.
                  avgDist /= numTags;
@@ -160,7 +161,7 @@ public class Vision extends SubsystemBase {
                  if (numTags == 1 && avgDist > 4)
                      estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
                  else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
-                 curStdDevs = estStdDevs;
+                 curStdDevs1 = estStdDevs;
              }
          }
      }
@@ -169,7 +170,7 @@ public class Vision extends SubsystemBase {
             Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
          if (estimatedPose.isEmpty()) {
              // No pose input. Default to single-tag std devs
-             curStdDevs = kCamera2SingleTagStdDevs;
+             curStdDevs2 = kCamera2SingleTagStdDevs;
  
          } else {
              // Pose present. Start running Heuristic
@@ -192,7 +193,7 @@ public class Vision extends SubsystemBase {
  
              if (numTags == 0) {
                  // No tags visible. Default to single-tag std devs
-                 curStdDevs = kCamera2SingleTagStdDevs;
+                 curStdDevs2 = kCamera2SingleTagStdDevs;
              } else {
                  // One or more tags visible, run the full heuristic.
                  avgDist /= numTags;
@@ -202,7 +203,7 @@ public class Vision extends SubsystemBase {
                  if (numTags == 1 && avgDist > 4)
                      estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
                  else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
-                 curStdDevs = estStdDevs;
+                 curStdDevs2 = estStdDevs;
              }
          }
      }
@@ -246,8 +247,12 @@ public class Vision extends SubsystemBase {
       * edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}. This should
       * only be used when there are targets visible.
       */
-     public Matrix<N3, N1> getEstimationStdDevs() {
-         return curStdDevs;
+     public Matrix<N3, N1> getEstimationStdDevs1() {
+         return curStdDevs1;
+     }
+
+     public Matrix<N3, N1> getEstimationStdDevs2(){
+        return curStdDevs2;
      }
  
      // ----- Simulation

@@ -49,7 +49,7 @@ public final class Constants {
       public static final Transform3d kRobotToCam1 = new Transform3d(new Translation3d(-0.2931456926, 0, 0.7338025964), new Rotation3d(0, Units.degreesToRadians(-15), Math.PI));
 
       //height 0.5127625 // back from center 0.0523875 // right from center 0.376555
-      public static final Transform3d kRobotToCam2 = new Transform3d(new Translation3d(-0.0523875, -0.376555, 0.5127625), new Rotation3d(0, 0, -Math.PI/2));
+      public static final Transform3d kRobotToCam2 = new Transform3d(new Translation3d(-0.0523875, -0.376555, 0.5127625), new Rotation3d(0, 0, Math.PI/2));
       // The layout of the AprilTags on the field
       public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
       /*
