@@ -45,7 +45,7 @@ public final class Constants {
       // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
       //https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
       // Rotation3d(roll, pitch, yaw) in radians. Use (0,0,0) for forward camera, (0,0,Math.PI) for backward.
-      public static final Transform3d kRobotToCam = new Transform3d(new Translation3d(-0.2931456926, 0, 0.7338025964), new Rotation3d(0, Units.degreesToRadians(15), Math.PI));
+      public static final Transform3d kRobotToCam = new Transform3d(new Translation3d(-0.2931456926, 0, 0.7338025964), new Rotation3d(0, Units.degreesToRadians(-15), Math.PI));
 
       // The layout of the AprilTags on the field
       public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
@@ -153,12 +153,12 @@ public final class Constants {
       public static final int RED_SHOOT_TAG = 10;
       public static final int BLUE_SHOOT_TAG = 26;
       //tags 10(red) & 26(blue)
-      public static final Transform2d RightTagToHub = new Transform2d(0.0, 0.0, Rotation2d.fromDegrees(0)); // needs to be measured still
+      public static final Transform2d RightTagToHub = new Transform2d(-0.737102412, 0.0, Rotation2d.fromDegrees(0)); // needs to be measured still
     }
 
     public static class AutoConstants {
       // Tuning constants
-      public static final double kPTheta = 2.0; // go here to tune
+      public static final double kPTheta = 6.0; // go here to tune
       public static final double kMaxAngularRate = 4.5; // rad/s
       public static final double kMaxAngularAccel = 6.0; // rad/s²
       public static final double kRotationToleranceRadians = Math.toRadians(1);

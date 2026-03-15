@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FastCenter1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PreloadVolley"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "FastCenter2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FastCenter3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtraVolley"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RetractIntake"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

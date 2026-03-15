@@ -76,7 +76,7 @@ public class Vision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!DriverStation.isAutonomous()) {
+        //if (!DriverStation.isAutonomous()) {
             Optional<EstimatedRobotPose> visionEst = Optional.empty();
             for (var change : camera.getAllUnreadResults()) {
                 visionEst = photonEstimator.update(change);
@@ -89,7 +89,7 @@ public class Vision extends SubsystemBase {
                         });
 
             }
-        }
+        //}
     }
  
      /**

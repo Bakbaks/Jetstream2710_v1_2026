@@ -60,6 +60,8 @@ public class ScoreOrientation extends Command {
         // Start controller from current heading so it doesn't "jump"
         double thetaNow = drivetrain.getPose().getRotation().getRadians();
         rotationController.reset(thetaNow);
+
+        // maybe look into what this does.
     }
 
     @Override

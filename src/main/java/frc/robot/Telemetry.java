@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 
@@ -27,9 +29,11 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake.IntakeRollers;
 import frc.robot.subsystems.Intake.IntakeExtendo;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.FlywheelInterpolation;
+import frc.robot.util.RobotLocalization;
 
 public class Telemetry {
     private final double MaxSpeed;
@@ -223,5 +227,22 @@ public class Telemetry {
                 : RobotState.isTest() ? "Test"
                 : "Unknown";
         SmartDashboard.putString("Robot State", robotState);
+
+
+
+
+        Pose2d robotPose = state.Pose;
+        int tagId = DriverStation.getAlliance().map(alliance ->
+          alliance == DriverStation.Alliance.Red
+              ? FieldConstants.RED_SHOOT_TAG
+              : FieldConstants.BLUE_SHOOT_TAG)
+            .orElse(FieldConstants.RED_SHOOT_TAG);
+    
+        Optional<Pose2d> maybeTargetPose = RobotLocalization.fieldPoseFromTagTransform(tagId, FieldConstants.RightTagToHub);
+        Pose2d targetPose = maybeTargetPose.get();
+
+        double targetDistance = RobotLocalization.robotToTargetDistanceMeters(robotPose, targetPose);
+
+        SmartDashboard.putNumber("Robot distance to Hub", targetDistance);
     }
 }
