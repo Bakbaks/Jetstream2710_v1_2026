@@ -184,7 +184,6 @@ public class Telemetry {
         }
 
         /* Elastic dashboard telemetry */
-        SmartDashboard.putBoolean("Aimed At Tag", vision.isAimedAtTag());
         SmartDashboard.putBoolean("Flywheel Up to Speed", flywheel.isVelocityWithinTolerance());
         // SmartDashboard.putBoolean("Shooter Being Fed",
         //         flywheel.isVelocityWithinTolerance() && hopper.isFeeding());

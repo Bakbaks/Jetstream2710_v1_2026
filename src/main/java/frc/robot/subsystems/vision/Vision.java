@@ -210,22 +210,22 @@ public class Vision extends SubsystemBase {
 
     
 
-     public List<PhotonPipelineResult> getResults(){
-        return camera1.getAllUnreadResults();
-     }
+    //  public List<PhotonPipelineResult> getResults(){
+    //     return camera1.getAllUnreadResults();
+    //  }
 
-     public List<PhotonPipelineResult> getResults2(){
-        return camera2.getAllUnreadResults();
-     }
+    //  public List<PhotonPipelineResult> getResults2(){
+    //     return camera2.getAllUnreadResults();
+    //  }
 
-     public boolean isAimedAtTag() {
-        var result = camera1.getLatestResult();
-        if (result.hasTargets()) {
-            // Check if centered. Tolerance 2 degrees?
-            return Math.abs(result.getBestTarget().getYaw()) < 2.0;
-        }
-        return false;
-     }
+    //  public boolean isAimedAtTag() {
+    //     var result = camera1.getLatestResult();
+    //     if (result.hasTargets()) {
+    //         // Check if centered. Tolerance 2 degrees?
+    //         return Math.abs(result.getBestTarget().getYaw()) < 2.0;
+    //     }
+    //     return false;
+    //  }
 
      public Optional<Double> getDistanceToTag(int tagId) {
         var result = camera1.getLatestResult();

@@ -239,10 +239,10 @@ public class RobotContainer {
     //hopper.setDefaultCommand(hopper.floorSiftRPMCommand());
 
     DoubleSupplier aimVX =
-        () -> -MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed;
+        () -> MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed;
 
     DoubleSupplier aimVY =
-        () -> -MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed;
+        () -> MathProfiles.exponentialDrive(m_driverController.getLeftX(), 3) * MaxSpeed;
 
     DoubleSupplier rotV =
         () -> -MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate;
