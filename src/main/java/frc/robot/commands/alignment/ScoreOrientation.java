@@ -55,6 +55,13 @@ public class ScoreOrientation extends Command {
                 : FieldConstants.BLUE_SHOOT_TAG)
         .orElse(FieldConstants.RED_SHOOT_TAG);
     }
+
+    private boolean shouldFlipForAlliance(){
+        return DriverStation.getAlliance()
+        .map(alliance -> alliance == DriverStation.Alliance.Blue)
+        .orElse(false);
+    }
+
     @Override
     public void initialize() {
         // Start controller from current heading so it doesn't "jump"
@@ -73,14 +80,23 @@ public class ScoreOrientation extends Command {
         Optional<Pose2d> maybeTargetPose =
         RobotLocalization.fieldPoseFromTagTransform(tagId, FieldConstants.RightTagToHub);
 
+        double xSpeed = velocityX.getAsDouble();
+        double ySpeed = velocityY.getAsDouble();
+
+        if(shouldFlipForAlliance()){
+            xSpeed = -xSpeed;
+            ySpeed = -ySpeed;
+        }
+
         if (maybeTargetPose.isEmpty()) {
             // Fail-safe: no target => don't rotate automatically
             drivetrain.setControl(
             applyFieldSpeeds.withSpeeds(
                 new edu.wpi.first.math.kinematics.ChassisSpeeds(
-                velocityX.getAsDouble(),
-                velocityY.getAsDouble(),
+                xSpeed,
+                ySpeed,
                 velocityW.getAsDouble())));
+            SmartDashboard.putBoolean("ScoreOrientation/AllianceFlip", shouldFlipForAlliance());
             SmartDashboard.putBoolean("ScoreOrientation/HasTarget", false);
             return;
         }
@@ -104,11 +120,11 @@ public class ScoreOrientation extends Command {
         drivetrain.setControl(
             applyFieldSpeeds.withSpeeds(
                 new edu.wpi.first.math.kinematics.ChassisSpeeds(
-                    velocityX.getAsDouble(),
-                    velocityY.getAsDouble(),
+                    xSpeed,
+                    ySpeed,
                     omegaCmd)));
 
-    
+        SmartDashboard.putBoolean("ScoreOrientation/AllianceFlip", shouldFlipForAlliance());
         SmartDashboard.putNumber("ScoreOrientation/tagId", tagId);
         SmartDashboard.putNumber("ScoreOrientation/thetaNowDeg", robotPose.getRotation().getDegrees());
         SmartDashboard.putNumber("ScoreOrientation/thetaGoalDeg", desiredHeadingField.getDegrees());

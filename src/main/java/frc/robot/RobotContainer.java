@@ -250,7 +250,9 @@ public class RobotContainer {
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
       new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
     ));
- 
+    //just run the flywheel
+    //driveRightTrigger.whileTrue(Commands.runOnce(() -> {flywheel.setRPM(1500);}));
+    //auxA.whileTrue(Commands.runOnce(() -> {hopper.setFloorRPM(); hopper.setFeederRPM();}));
     driveRightBumper.whileTrue(new ParallelCommandGroup(
       new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
     )); 
