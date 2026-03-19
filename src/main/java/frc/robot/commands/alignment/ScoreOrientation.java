@@ -12,6 +12,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.math.MathUtil;
 
 import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
@@ -87,14 +88,17 @@ public class ScoreOrientation extends Command {
             xSpeed = -xSpeed;
             ySpeed = -ySpeed;
         }
+        double maxSpeed = 0.3;// tune tis
 
+        double clampedXSpeed = MathUtil.clamp(xSpeed, -maxSpeed, maxSpeed);
+        double clampedYSpeed = MathUtil.clamp(ySpeed, -maxSpeed, maxSpeed);
         if (maybeTargetPose.isEmpty()) {
             // Fail-safe: no target => don't rotate automatically
             drivetrain.setControl(
             applyFieldSpeeds.withSpeeds(
                 new edu.wpi.first.math.kinematics.ChassisSpeeds(
-                xSpeed,
-                ySpeed,
+                clampedXSpeed,
+                clampedYSpeed,
                 velocityW.getAsDouble())));
             SmartDashboard.putBoolean("ScoreOrientation/AllianceFlip", shouldFlipForAlliance());
             SmartDashboard.putBoolean("ScoreOrientation/HasTarget", false);
@@ -120,8 +124,8 @@ public class ScoreOrientation extends Command {
         drivetrain.setControl(
             applyFieldSpeeds.withSpeeds(
                 new edu.wpi.first.math.kinematics.ChassisSpeeds(
-                    xSpeed,
-                    ySpeed,
+                    clampedXSpeed,
+                    clampedYSpeed,
                     omegaCmd)));
 
         SmartDashboard.putBoolean("ScoreOrientation/AllianceFlip", shouldFlipForAlliance());
