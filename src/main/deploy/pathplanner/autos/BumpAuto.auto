@@ -7,19 +7,70 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left2"
+            "pathName": "Right1"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Right2"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "ExtendIntake"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Right3"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Right4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left3"
+            "pathName": "Right5"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left4"
+            "pathName": "Right6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtraVolley"
           }
         }
       ]
