@@ -163,13 +163,15 @@ public final class Constants {
 
     public static class AutoConstants {
       // Tuning constants
-      public static final double kPTheta = 10.0; // go here to tune
+      public static final double kPTheta = 12.0; // go here to tune // was 10
       public static final double kMaxAngularRate = 4.5; // rad/s
-      public static final double kMaxAngularAccel = 6.0; // rad/s²
+      public static final double kMaxAngularAccel = 8.0; // rad/s² // was 6
       public static final double kRotationToleranceRadians = Math.toRadians(1);
       public static final double kPositionToleranceMeters = 0.1;
 
       public static final double kRotOverrideThreshold = 0.5; // needs to be tuned based on driver preference
+
+      public static final double MaxShootMoveSpeed = 0.3; //m/s
     }
 
     public static class KrakenX60 {

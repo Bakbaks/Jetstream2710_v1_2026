@@ -88,7 +88,7 @@ public class ScoreOrientation extends Command {
             xSpeed = -xSpeed;
             ySpeed = -ySpeed;
         }
-        double maxSpeed = 0.3;// tune tis
+        double maxSpeed = AutoConstants.MaxShootMoveSpeed;
 
         double clampedXSpeed = MathUtil.clamp(xSpeed, -maxSpeed, maxSpeed);
         double clampedYSpeed = MathUtil.clamp(ySpeed, -maxSpeed, maxSpeed);

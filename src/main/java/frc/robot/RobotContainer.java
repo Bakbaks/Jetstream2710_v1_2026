@@ -211,27 +211,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    //drive commands
-    //
-
-    // Driver Control binding
-    // sticks are normal
-    // RTrig is Shoot & spin up and score - works fine
-    // RBump is Aim
-    // LBump is hopper out toggle
-    // LTrigger is intake spinning
-
-    // Remove vision if it somehow causes issues: A ~~~~~~~~~~~~~~~~~~
-    //Re Zero d pad down
-
-    // Aux Control Debug binding
-    // X is outake
-    // Manual Intake movement Right and Left Triggger in and out
-    // Disable pose: A ~~~~~~~~~~~~~~~~~~~~~~~~
-    // Change shooter velocity to constant if interpolation is not work: B
-    // Rezero intake d pad down
-
-
+    //Drive Sticks
     drivetrain.setDefaultCommand(
       drivetrain.applyRequest(() -> drive
         .withVelocityX(-MathProfiles.exponentialDrive(m_driverController.getLeftY(), 3) * MaxSpeed)
@@ -251,29 +231,14 @@ public class RobotContainer {
     DoubleSupplier rotV =
         () -> -MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate;
 
+    //Drive buttons
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
       new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
     ));
-    //just run the flywheel
-    //driveRightTrigger.whileTrue(Commands.runOnce(() -> {flywheel.setRPM(1500);}));
-    //auxA.whileTrue(Commands.runOnce(() -> {hopper.setFloorRPM(); hopper.setFeederRPM();}));
+
     driveRightBumper.whileTrue(new ParallelCommandGroup(
       new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
     )); 
-
-    // //private boolean driverIntakeExtended = false;
-    // driveLeftBumper.onTrue(
-    // Commands.runOnce(() -> {
-    //   if (!driverIntakeExtended) {
-    //     new ExtendIntake(intakeExtendo);
-    //     driverIntakeExtended = true;
-    //   } else {
-    //     new DetractIntake(intakeExtendo);
-    //     driverIntakeExtended = false;
-    //   }
-    // })
-    // );
-    
 
     driveLeftTrigger.whileTrue(new ParallelCommandGroup( // can on true if u want
       new SpinRollers(intakeRollers)
@@ -282,9 +247,13 @@ public class RobotContainer {
     driveLeftBumper.whileTrue(new ParallelCommandGroup(
       new OutTake(flywheel, hopper, intakeRollers)
     ));
+    
+    //just run the flywheel
+    //driveRightTrigger.whileTrue(Commands.runOnce(() -> {flywheel.setRPM(1500);}));
+    //auxA.whileTrue(Commands.runOnce(() -> {hopper.setFloorRPM(); hopper.setFeederRPM();}));
 
-
-
+    
+    //Aux Buttons
     auxRightTrigger.whileTrue(new ParallelCommandGroup(
       new DebugDetractIntake(intakeExtendo)
     ));
@@ -293,18 +262,9 @@ public class RobotContainer {
       new DebugExtendIntake(intakeExtendo)
     ));
 
-    // auxRightBumper.whileTrue(new P[\]arallelCommandGroup(
-    //   new SpinFloor(hopper)
-    // ));
-
     auxLeftBumper.whileTrue(new ParallelCommandGroup(
       new SpinRollers(intakeRollers)
     ));
-
-  
-    // auxPovDOWN.onTrue(
-    //   Commands.runOnce(() -> intakeExtendo.setExtendoZero())
-    // );
 
     auxB.onTrue(
       Commands.runOnce(() -> {
