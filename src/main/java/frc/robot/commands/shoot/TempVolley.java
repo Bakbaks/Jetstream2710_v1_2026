@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class TempVolley extends Command {
   private final Flywheel m_flywheel;
   private final Hopper m_hopper;
-  private final IntakeRollers m_intakeRollers;
+  //private final IntakeRollers m_intakeRollers;
   private final Supplier<Pose2d> robotPoseSupplier;
 
   private double rpm;
@@ -33,13 +33,13 @@ public class TempVolley extends Command {
    * @param rollers Shooter subsystem
    * @param vision Vision for PhotonVision distance to tag 10
    */
-  public TempVolley(Flywheel flywheel, Hopper hopper, IntakeRollers intakeRollers, Supplier<Pose2d> robotPoseSupplier, double RPM) {
+  public TempVolley(Flywheel flywheel, Hopper hopper, Supplier<Pose2d> robotPoseSupplier, double RPM) {
     m_flywheel = flywheel;
     m_hopper = hopper;
-    m_intakeRollers = intakeRollers;
+    //m_intakeRollers = intakeRollers;
     this.robotPoseSupplier = robotPoseSupplier;
     this.rpm = RPM;
-    addRequirements(m_flywheel, m_hopper, m_intakeRollers);
+    addRequirements(m_flywheel, m_hopper);
   }
 
   private int getAllianceTagId() {
@@ -87,7 +87,7 @@ public class TempVolley extends Command {
     // if (m_flywheel.isVelocityWithinTolerance()) {
     m_hopper.setFloorRPM();
     m_hopper.setFeederRPM();
-    m_intakeRollers.setIntakeSpeed(Speed.INTAKE);
+   // m_intakeRollers.setIntakeSpeed(Speed.INTAKE);
 
     // m_hopper.setPercentOutputs(HopperConstants.kFloorPercent, HopperConstants.kFeederPercent);
 
@@ -101,7 +101,7 @@ public class TempVolley extends Command {
   public void end(boolean interrupted) {
     m_flywheel.stop();
     m_hopper.stop();
-    m_intakeRollers.setIntakeSpeed(Speed.STOP);
+    //m_intakeRollers.setIntakeSpeed(Speed.STOP);
   }
 
   @Override

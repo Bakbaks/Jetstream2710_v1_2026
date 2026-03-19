@@ -143,7 +143,7 @@ public class RobotContainer {
 
   Command PreloadVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new TempVolley(flywheel, hopper, intakeRollers, drivetrain::getPose, 1325)
+      new TempVolley(flywheel, hopper, drivetrain::getPose, 1325)
       ).withTimeout(2)
   );
 
@@ -156,7 +156,7 @@ public class RobotContainer {
 
   Command ExtraVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new TempVolley(flywheel, hopper, intakeRollers, drivetrain::getPose, 1325)
+      new TempVolley(flywheel, hopper, drivetrain::getPose, 1325)
       ).withTimeout(5)
   );
 
@@ -168,6 +168,10 @@ public class RobotContainer {
         new DebugDetractIntake(intakeExtendo).withTimeout(0.35),
         new DebugExtendIntake(intakeExtendo).withTimeout(0.25),
         new DebugDetractIntake(intakeExtendo).withTimeout(0.35)
+      ),
+
+      new SequentialCommandGroup(
+        new SpinRollers(intakeRollers).withTimeout(1.25)
       )
     ).withTimeout(3)
   );
@@ -248,7 +252,7 @@ public class RobotContainer {
         () -> -MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate;
 
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      new Volley(flywheel, hopper, intakeRollers, drivetrain::getPose, ConstSpeed)
+      new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
     ));
     //just run the flywheel
     //driveRightTrigger.whileTrue(Commands.runOnce(() -> {flywheel.setRPM(1500);}));
@@ -289,10 +293,15 @@ public class RobotContainer {
       new DebugExtendIntake(intakeExtendo)
     ));
 
-    auxRightBumper.whileTrue(new ParallelCommandGroup(
-      new SpinFloor(hopper)
+    // auxRightBumper.whileTrue(new P[\]arallelCommandGroup(
+    //   new SpinFloor(hopper)
+    // ));
+
+    auxLeftBumper.whileTrue(new ParallelCommandGroup(
+      new SpinRollers(intakeRollers)
     ));
 
+  
     // auxPovDOWN.onTrue(
     //   Commands.runOnce(() -> intakeExtendo.setExtendoZero())
     // );

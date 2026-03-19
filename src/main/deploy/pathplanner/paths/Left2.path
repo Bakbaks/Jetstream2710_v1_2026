@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.087398644511778,
-        "y": 2.433392118481287
+        "x": 4.445301204819277,
+        "y": 2.461409638554217
       },
       "isLocked": false,
       "linkedName": "JumpBumpStart"
     },
     {
       "anchor": {
-        "x": 6.816614457831325,
+        "x": 6.2265180722891555,
         "y": 2.461
       },
       "prevControl": {
-        "x": 7.08832629805957,
-        "y": 2.4480613409415137
+        "x": 4.915192771084336,
+        "y": 2.4504819277108436
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 145.71312302279102
+    "velocity": 1.0,
+    "rotation": -43.51237780256316
   },
   "reversed": false,
   "folder": "Left",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 145.30484646876596
+    "velocity": 1.0,
+    "rotation": -43.64222784446578
   },
   "useDefaultConstraints": true
 }

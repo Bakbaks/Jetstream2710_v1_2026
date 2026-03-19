@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Volley extends Command {
   private final Flywheel m_flywheel;
   private final Hopper m_hopper;
-  private final IntakeRollers m_intakeRollers;
+  //private final IntakeRollers m_intakeRollers;
   private final Supplier<Pose2d> robotPoseSupplier;
 
   private boolean ConstSpeed;
@@ -33,13 +33,13 @@ public class Volley extends Command {
    * @param rollers Shooter subsystem
    * @param vision Vision for PhotonVision distance to tag 10
    */
-  public Volley(Flywheel flywheel, Hopper hopper, IntakeRollers intakeRollers, Supplier<Pose2d> robotPoseSupplier, boolean ConstSpeed) {
+  public Volley(Flywheel flywheel, Hopper hopper, Supplier<Pose2d> robotPoseSupplier, boolean ConstSpeed) {
     m_flywheel = flywheel;
     m_hopper = hopper;
-    m_intakeRollers = intakeRollers;
+    //m_intakeRollers = intakeRollers;
     this.robotPoseSupplier = robotPoseSupplier;
     this.ConstSpeed = ConstSpeed;
-    addRequirements(m_flywheel, m_hopper, m_intakeRollers);
+    addRequirements(m_flywheel, m_hopper);
   }
 
   private int getAllianceTagId() {
@@ -88,7 +88,7 @@ public class Volley extends Command {
     // if (m_flywheel.isVelocityWithinTolerance()) {
     m_hopper.setFloorRPM();
     m_hopper.setFeederRPM();
-    m_intakeRollers.setIntakeSpeed(Speed.INTAKE);
+    //m_intakeRollers.setIntakeSpeed(Speed.INTAKE);
 
     // m_hopper.setPercentOutputs(HopperConstants.kFloorPercent, HopperConstants.kFeederPercent);
 
@@ -102,7 +102,7 @@ public class Volley extends Command {
   public void end(boolean interrupted) {
     m_flywheel.stop();
     m_hopper.stop();
-    m_intakeRollers.setIntakeSpeed(Speed.STOP);
+    //m_intakeRollers.setIntakeSpeed(Speed.STOP);
   }
 
   @Override
