@@ -141,6 +141,11 @@ public class RobotContainer {
 
   private final SendableChooser<Command> autoChooser;
 
+  Command SpinIntake = new SequentialCommandGroup(
+    new SpinRollers(intakeRollers)
+  ).withTimeout(3.5);
+
+
   Command PreloadVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
       new TempVolley(flywheel, hopper, drivetrain::getPose, 1325)
@@ -149,8 +154,8 @@ public class RobotContainer {
 
   Command ExtendIntake = new SequentialCommandGroup(
     new ParallelCommandGroup(
-      new DebugExtendIntake(intakeExtendo),
-      new SpinRollers(intakeRollers)
+      new DebugExtendIntake(intakeExtendo)
+      //new SpinRollers(intakeRollers)
     ).withTimeout(2)
   );
 
@@ -190,6 +195,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ExtendIntake", ExtendIntake);
     NamedCommands.registerCommand("ExtraVolley", ExtraVolley);
     NamedCommands.registerCommand("RetractIntake", RetractIntake);
+    NamedCommands.registerCommand("SpinIntake", SpinIntake);
 
     autoChooser = AutoBuilder.buildAutoChooser("Taxi");
         SmartDashboard.putData("Auto Chooser", autoChooser);
