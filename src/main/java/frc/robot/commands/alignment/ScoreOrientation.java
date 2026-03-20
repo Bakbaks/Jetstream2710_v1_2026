@@ -133,6 +133,13 @@ public class ScoreOrientation extends Command {
         SmartDashboard.putNumber("ScoreOrientation/thetaNowDeg", robotPose.getRotation().getDegrees());
         SmartDashboard.putNumber("ScoreOrientation/thetaGoalDeg", desiredHeadingField.getDegrees());
         SmartDashboard.putNumber("ScoreOrientation/omegaCmd", omegaCmd);
+
+        Boolean canShoot = false; 
+        if (Math.abs(thetaNow - thetaGoal) < 0.05){
+            canShoot = true;
+        }
+
+        SmartDashboard.putBoolean("CanShoot", canShoot);
   }
 
   @Override
