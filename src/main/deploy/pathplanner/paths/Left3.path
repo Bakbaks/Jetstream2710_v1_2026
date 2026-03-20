@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5862054208273886,
-        "y": 4.067346647646221
+        "x": 7.071433333333334,
+        "y": 6.4223888888888885
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.695916540207664,
-        "y": 4.055090868842711
+        "x": 7.990078126485976,
+        "y": 6.2930022983040095
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LSweapStart"
     },
     {
       "anchor": {
-        "x": 2.3958487874465044,
-        "y": 4.067346647646221
+        "x": 7.610128388017117,
+        "y": 4.675463623395149
       },
       "prevControl": {
-        "x": 2.706376604850214,
-        "y": 4.041469329529244
+        "x": 7.6268666666666665,
+        "y": 5.223822222222222
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LSweapEnd"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2732502396931934,
+      "rotationDegrees": -84.91500817752441
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -41,14 +46,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -90.0
+    "velocity": 0.25,
+    "rotation": -85.91438322002539
   },
   "reversed": false,
-  "folder": "Right",
+  "folder": "Left",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 0.5,
+    "rotation": -26.565051177077933
   },
   "useDefaultConstraints": true
 }

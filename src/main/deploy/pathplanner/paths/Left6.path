@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5862054208273886,
-        "y": 4.067346647646221
+        "x": 3.52151212553495,
+        "y": 5.387089871611984
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.695916540207664,
-        "y": 4.055090868842711
+        "x": 3.1721683309557767,
+        "y": 5.400028530670471
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LReturnEnd"
     },
     {
       "anchor": {
-        "x": 2.3958487874465044,
-        "y": 4.067346647646221
+        "x": 2.8616405135520675,
+        "y": 5.7364336661911555
       },
       "prevControl": {
-        "x": 2.706376604850214,
-        "y": 4.041469329529244
+        "x": 3.0298430813124098,
+        "y": 5.4647218259629105
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 137.48955292199904
   },
   "reversed": false,
-  "folder": "Right",
+  "folder": "Left",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 2.0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5862054208273886,
-        "y": 4.067346647646221
+        "x": 5.708145506419401,
+        "y": 5.34827389443652
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.695916540207664,
-        "y": 4.055090868842711
+        "x": 4.3884022824536375,
+        "y": 5.374151212553495
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LReturnStart"
     },
     {
       "anchor": {
-        "x": 2.3958487874465044,
-        "y": 4.067346647646221
+        "x": 3.52151212553495,
+        "y": 5.387089871611984
       },
       "prevControl": {
-        "x": 2.706376604850214,
-        "y": 4.041469329529244
+        "x": 4.556604850213979,
+        "y": 5.335335235378032
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LReturnEnd"
     }
   ],
   "rotationTargets": [],
@@ -34,21 +34,21 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -90.0
+    "velocity": 2.0,
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Right",
+  "folder": "Left",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 3.0,
+    "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

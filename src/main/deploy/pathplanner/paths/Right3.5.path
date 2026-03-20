@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.053766048502139,
-        "y": 6.357489300998574
+        "x": 7.071433333333334,
+        "y": 6.4223888888888885
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.985349500713266,
-        "y": 6.215164051355207
+        "x": 8.00301678554446,
+        "y": 6.280063639245522
       },
       "isLocked": false,
-      "linkedName": "SweapStartRight"
+      "linkedName": "LSweapStart"
     },
     {
       "anchor": {
@@ -57,7 +57,7 @@
   "folder": "Right",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -15.124007308310624
+    "rotation": -26.565051177077933
   },
   "useDefaultConstraints": true
 }
