@@ -78,7 +78,8 @@ public class RobotContainer {
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   
 
-  public final Vision vision = new Vision(drivetrain::addVisionMeasurement);
+  public final Vision vision =
+      new Vision(drivetrain::addVisionMeasurement, drivetrain::getRobotPitchRadians);
 
 
   // private final CommandXboxController m_driverController = new CommandXboxController(
