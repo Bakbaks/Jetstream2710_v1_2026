@@ -59,53 +59,11 @@ public final class Constants {
       **/
       // public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(.7, .7, 9999999);
       // public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(.7, .7, 9999999);
-      // Replaced by kVisionSingleTagTrustStdDevs / kVisionMultiTagTrustStdDevs / kCamera2VisionStdDevScale in Vision.
-      // public static final Matrix<N3, N1> kCamera1SingleTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
-      // public static final Matrix<N3, N1> kCamera1MultiTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
-      // public static final Matrix<N3, N1> kCamera2SingleTagStdDevs = VecBuilder.fill(0.9, 0.9, 0.6);
-      // public static final Matrix<N3, N1> kCamera2MultiTagStdDevs = VecBuilder.fill(0.9, 0.9, 0.6);
+      public static final Matrix<N3, N1> kCamera1SingleTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
+      public static final Matrix<N3, N1> kCamera1MultiTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
 
-      /** Reject vision fusion if any tag in the frame has pose ambiguity above this (0–1 scale). */
-      public static final double kMaxTagPoseAmbiguity = 0.2;
-
-      /** Skip vision while |pitch| exceeds this (degrees); reduces bump error */
-      public static final double kVisionTiltGatePitchDeg = 3.0;
-
-      /**
-       * Beyond this average tag distance (m), scale vision std devs up exponentially (trust vision
-       * less; reduces far-tag jitter).
-       */
-      public static final double kVisionDistancePenaltyThresholdM = 4.0;
-
-      /** Exponential growth of std-dev scale per meter past */
-      public static final double kVisionDistancePenaltyExpPerMeter = 0.45;
-
-      /**
-       * Vision measurement std devs [x, y, θ] when coprocessor multi-tag PnP is used (meters, radians).
-       * Low values = strong correction (trust in field fixed tags).
-       */
-      public static final Matrix<N3, N1> kVisionMultiTagTrustStdDevs = VecBuilder.fill(0.05, 0.05, 0.05);
-
-      /**
-       * Vision std devs for single tag (low ambiguity) estimates after ambiguity gate (meters, radians).
-       */
-      public static final Matrix<N3, N1> kVisionSingleTagTrustStdDevs = VecBuilder.fill(0.45, 0.45, 0.45);
-
-      /** Multiply camera-2 vision std devs by this vs camera-1 (secondary cam trusted slightly less). */
-      public static final double kCamera2VisionStdDevScale = 1.15;
-    }
-
-    /**
-     * Phoenix pose-Kalman tuning: higher odometry std
-     * devs = less trust in wheel integration (mitigates slip); vision overrides per
-     * measurement via addVisionMeasurement.
-     */
-    public static class DrivetrainPoseConstants {
-      /** Process noise [x, y, θ] for odometry (meters, radians). try 0.10–0.15 */
-      public static final Matrix<N3, N1> kOdometryStdDevs = VecBuilder.fill(0.12, 0.12, 0.12);
-
-      /** Default vision process prior in CTRE constructor; per-frame std devs still come from vision code. */
-      public static final Matrix<N3, N1> kDefaultVisionStdDevs = VecBuilder.fill(0.45, 0.45, 0.45);
+      public static final Matrix<N3, N1> kCamera2SingleTagStdDevs = VecBuilder.fill(0.9, 0.9, 0.6);
+      public static final Matrix<N3, N1> kCamera2MultiTagStdDevs = VecBuilder.fill(0.9, 0.9, 0.6);
     }
 
     public static class FlywheelConstants {
