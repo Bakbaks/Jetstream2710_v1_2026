@@ -1,6 +1,8 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+
 import java.util.Optional;
 
 import frc.robot.Constants.FlywheelConstants;
@@ -15,8 +17,11 @@ public final class FlywheelInterpolation {
     // Initialize the table with distance-RPM sweet spots
     static {
         // distance-RPM pairs here (distance in meters, RPM)
-        shooterTable.put(1.7, 1350.0);   // Close range
-        shooterTable.put(3.0, 1550.0);   // Far range
+        shooterTable.put(1.7, 1250.0);   // Close range
+        shooterTable.put(3.0, 1450.0);   // Far range
+        shooterTable.put(3.6, 1570.0);
+        shooterTable.put(4.3, 1650.0);
+
     }
 
     private FlywheelInterpolation() {}

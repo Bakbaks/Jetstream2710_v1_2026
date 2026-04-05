@@ -194,7 +194,6 @@ public class Telemetry {
         SmartDashboard.putNumber("Requested Flywheel Velocity", flywheel.getRequestedRPM());
         var distanceToTag = vision.getDistanceToTag10();
         SmartDashboard.putNumber("Distance to Tag", distanceToTag.orElse(-1.0)); // PhotonVision range, used for flywheel interpolation
-        SmartDashboard.putNumber("Target Flywheel RPM", FlywheelInterpolation.getRPMForDistance(distanceToTag));
         
         // Update flywheel feedforward values from editable dashboard entries
         double ks = flywheelFFKS.get();
@@ -241,6 +240,9 @@ public class Telemetry {
         Pose2d targetPose = maybeTargetPose.get();
 
         double targetDistance = RobotLocalization.robotToTargetDistanceMeters(robotPose, targetPose);
+
+        SmartDashboard.putNumber("Target Flywheel RPM", FlywheelInterpolation.getRPMForDistance(Optional.of(targetDistance)));
+
 
         SmartDashboard.putNumber("Robot distance to Hub", targetDistance);
     }
