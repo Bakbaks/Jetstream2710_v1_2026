@@ -336,6 +336,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     //extra
+
+    /** Pigeon 2 pitch (rad), absolute value compared to a threshold before accepting vision pose. */
+    public double getRobotPitchRadians() {
+        return getPigeon2().getPitch().refresh().getValue().in(Radians);
+    }
+
     public Pose2d getPose() {
         return this.getState().Pose;
     }
