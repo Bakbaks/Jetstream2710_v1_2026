@@ -52,10 +52,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class Vision extends SubsystemBase {
     private final PhotonCamera camera1;
     private final PhotonCamera camera2;
+    private final PhotonCamera camera3;
     private final PhotonPoseEstimator photonEstimator1;
     private final PhotonPoseEstimator photonEstimator2;
+    private final PhotonPoseEstimator photonEstimator3;
     private Matrix<N3, N1> curStdDevs1;
     private Matrix<N3, N1> curStdDevs2;
+    private Matrix<N3, N1> curStdDevs3;
     private final EstimateConsumer estConsumer;
 
  
@@ -71,6 +74,7 @@ public class Vision extends SubsystemBase {
         this.estConsumer = estConsumer;
         camera1 = new PhotonCamera(kCameraName1);
         camera2 = new PhotonCamera(kCameraName2);
+        camera3 = new PhotonCamera(kCameraName3);
  
         photonEstimator1 =
                 new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, kRobotToCam1);
@@ -79,6 +83,10 @@ public class Vision extends SubsystemBase {
         photonEstimator2 =
                 new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, kRobotToCam2);
         photonEstimator2.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+        photonEstimator3 =
+                new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, kRobotToCam3);
+        photonEstimator3.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
  
     }
 
@@ -107,6 +115,19 @@ public class Vision extends SubsystemBase {
                         est -> {
                             // Change our trust in the measurement based on the tags we can see
                             var estStdDevs = getEstimationStdDevs2();
+                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                        });
+
+            }
+
+            Optional<EstimatedRobotPose> visionEst3 = Optional.empty();
+            for (var change : camera3.getAllUnreadResults()) {
+                visionEst3 = photonEstimator3.update(change);
+                updateEstimationStdDevs3(visionEst3, change.getTargets());            
+                visionEst3.ifPresent(
+                        est -> {
+                            // Change our trust in the measurement based on the tags we can see
+                            var estStdDevs = getEstimationStdDevs3();
                             estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                         });
 
@@ -208,6 +229,48 @@ public class Vision extends SubsystemBase {
          }
      }
 
+     private void updateEstimationStdDevs3(
+            Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
+         if (estimatedPose.isEmpty()) {
+             // No pose input. Default to single-tag std devs
+             curStdDevs3 = kCamera3SingleTagStdDevs;
+ 
+         } else {
+             // Pose present. Start running Heuristic
+             var estStdDevs = kCamera3SingleTagStdDevs;
+             int numTags = 0;
+             double avgDist = 0;
+ 
+             // Precalculation - see how many tags we found, and calculate an average-distance metric
+             for (var tgt : targets) {
+                 var tagPose = photonEstimator3.getFieldTags().getTagPose(tgt.getFiducialId());
+                 if (tagPose.isEmpty()) continue;
+                 numTags++;
+                 avgDist +=
+                         tagPose
+                                 .get()
+                                 .toPose2d()
+                                 .getTranslation()
+                                 .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+             }
+ 
+             if (numTags == 0) {
+                 // No tags visible. Default to single-tag std devs
+                 curStdDevs3 = kCamera3SingleTagStdDevs;
+             } else {
+                 // One or more tags visible, run the full heuristic.
+                 avgDist /= numTags;
+                 // Decrease std devs if multiple targets are visible
+                 if (numTags > 1) estStdDevs = kCamera3MultiTagStdDevs;
+                 // Increase std devs based on (average) distance
+                 if (numTags == 1 && avgDist > 4)
+                     estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                 else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+                 curStdDevs3 = estStdDevs;
+             }
+         }
+     }
+
     
 
     //  public List<PhotonPipelineResult> getResults(){
@@ -253,6 +316,10 @@ public class Vision extends SubsystemBase {
 
      public Matrix<N3, N1> getEstimationStdDevs2(){
         return curStdDevs2;
+     }
+
+     public Matrix<N3, N1> getEstimationStdDevs3(){
+        return curStdDevs3;
      }
  
      // ----- Simulation

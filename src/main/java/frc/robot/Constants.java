@@ -40,18 +40,21 @@ public final class Constants {
     public static class VisionConstants {
       public static final String kCameraName1 = "dave";
       public static final String kCameraName2 = "crazy";
+      public static final String kCameraName3 = "wabbo";
 
       /** AprilTag 10 center height above ground (meters). 44.25 in = 1.12395 m. */
       /** Camera pitch from horizontal in radians. 15 deg up from vertical = 75 deg from horizontal. */
       // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
       //https://docs.photonvision.org/en/latest/docs/apriltag-pipelines/coordinate-systems.html#coordinate-systems
       // Rotation3d(roll, pitch, yaw) in radians. Use (0,0,0) for forward camera, (0,0,Math.PI) for backward.
-      public static final Transform3d kRobotToCam1 = new Transform3d(new Translation3d(-0.2931456926, 0, 0.7338025964), new Rotation3d(0, Units.degreesToRadians(-15), Math.PI));
-
+      //public static final Transform3d kRobotToCam1 = new Transform3d(new Translation3d(-0.2931456926, 0, 0.7338025964), new Rotation3d(0, Units.degreesToRadians(-15), Math.PI));
+      public static final Transform3d kRobotToCam1 = new Transform3d(new Translation3d(-0.0301625, 0.367665, 0.5381625), new Rotation3d(0, 0, Math.PI/2));
       //height 0.5127625 // back from center 0.0523875 // right from center 0.376555
       //public static final Transform3d kRobotToCam2 = new Transform3d(new Translation3d(-0.0523875, -0.376555, 0.5127625), new Rotation3d(0, 0, -Math.PI/2));
       public static final Transform3d kRobotToCam2 = new Transform3d(new Translation3d(-0.2645918, 0, 0.452630667), new Rotation3d(Math.PI, Units.degreesToRadians(21.75), Math.PI));
 
+      public static final Transform3d kRobotToCam3 = new Transform3d(new Translation3d(-0.0301625, -0.367665, 0.5381625), new Rotation3d(0, 0, -Math.PI/2));
+      
       //crazy is now the camera on the shooter:
 
       // The layout of the AprilTags on the field
@@ -68,6 +71,9 @@ public final class Constants {
 
       public static final Matrix<N3, N1> kCamera2SingleTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
       public static final Matrix<N3, N1> kCamera2MultiTagStdDevs = VecBuilder.fill(0.3, 0.3, 0.3);
+
+      public static final Matrix<N3, N1> kCamera3SingleTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
+      public static final Matrix<N3, N1> kCamera3MultiTagStdDevs = VecBuilder.fill(0.3, 0.3, 0.3);
     }
 
     public static class FlywheelConstants {
