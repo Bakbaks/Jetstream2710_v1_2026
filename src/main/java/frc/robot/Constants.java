@@ -49,7 +49,11 @@ public final class Constants {
       public static final Transform3d kRobotToCam1 = new Transform3d(new Translation3d(-0.2931456926, 0, 0.7338025964), new Rotation3d(0, Units.degreesToRadians(-15), Math.PI));
 
       //height 0.5127625 // back from center 0.0523875 // right from center 0.376555
-      public static final Transform3d kRobotToCam2 = new Transform3d(new Translation3d(-0.0523875, -0.376555, 0.5127625), new Rotation3d(0, 0, -Math.PI/2));
+      //public static final Transform3d kRobotToCam2 = new Transform3d(new Translation3d(-0.0523875, -0.376555, 0.5127625), new Rotation3d(0, 0, -Math.PI/2));
+      public static final Transform3d kRobotToCam2 = new Transform3d(new Translation3d(-0.2645918, 0, 0.452630667), new Rotation3d(Math.PI, Units.degreesToRadians(21.75), Math.PI));
+
+      //crazy is now the camera on the shooter:
+
       // The layout of the AprilTags on the field
       public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
       /*
@@ -60,10 +64,10 @@ public final class Constants {
       // public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(.7, .7, 9999999);
       // public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(.7, .7, 9999999);
       public static final Matrix<N3, N1> kCamera1SingleTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
-      public static final Matrix<N3, N1> kCamera1MultiTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
+      public static final Matrix<N3, N1> kCamera1MultiTagStdDevs = VecBuilder.fill(0.3, 0.3, 0.3);
 
-      public static final Matrix<N3, N1> kCamera2SingleTagStdDevs = VecBuilder.fill(0.9, 0.9, 0.6);
-      public static final Matrix<N3, N1> kCamera2MultiTagStdDevs = VecBuilder.fill(0.9, 0.9, 0.6);
+      public static final Matrix<N3, N1> kCamera2SingleTagStdDevs = VecBuilder.fill(0.7, 0.7, 0.6);
+      public static final Matrix<N3, N1> kCamera2MultiTagStdDevs = VecBuilder.fill(0.3, 0.3, 0.3);
     }
 
     public static class FlywheelConstants {
@@ -121,7 +125,7 @@ public final class Constants {
       // every pi inches moved is 3 rotations.
 
       public static final double kExtendoPercent = 0.1;
-      public static final double kRollerPercent = 0.65;
+      public static final double kRollerPercent = 0.5;
       
       public static final int kExtendoStatorCurrentLimit = 60;
       public static final int kExtendoSupplyCurrentLimit = 20;
