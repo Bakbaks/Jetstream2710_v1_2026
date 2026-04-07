@@ -131,7 +131,7 @@ public final class Constants {
       // every pi inches moved is 3 rotations.
 
       public static final double kExtendoPercent = 0.1;
-      public static final double kRollerPercent = 0.5;
+      public static final double kRollerPercent = 0.65;
       
       public static final int kExtendoStatorCurrentLimit = 60;
       public static final int kExtendoSupplyCurrentLimit = 20;
@@ -181,7 +181,7 @@ public final class Constants {
 
       public static final double kRotOverrideThreshold = 0.5; // needs to be tuned based on driver preference
 
-      public static final double MaxShootMoveSpeed = 0.3; //m/s
+      public static final double MaxShootMoveSpeed = 1.5; //m/s
     }
 
     public static class ShotConstants {
@@ -189,11 +189,11 @@ public final class Constants {
       public static final Transform2d RobotToShooterExit = new Transform2d(-0.1435885114, 0.0, Rotation2d.kZero);
 
 
-      public static final double kShotLatencySeconds = 0.15;
+      public static final double kShotLatencySeconds = 0.34; // measure this and dive by 10
 
       public static final int kShotPredictionIterations = 2;
 
-      public static final double kShootHeadingToleranceRad = Math.toRadians(2.0);
+      public static final double kShootHeadingToleranceRad = Math.toRadians(1.0);
     }
 
     public static class KrakenX60 {

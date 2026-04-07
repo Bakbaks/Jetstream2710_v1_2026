@@ -21,13 +21,13 @@ public final class FlywheelInterpolation {
     static {
         shooterTable.put(1.7, 1250.0);
         shooterTable.put(3.0, 1450.0);
-        shooterTable.put(3.6, 1570.0);
-        shooterTable.put(4.3, 1650.0);
+        shooterTable.put(3.6, 1590.0);
+        shooterTable.put(4.3, 1670.0);
 
-        tofTable.put(1.7, 0.20);
-        tofTable.put(3.0, 0.27);
-        tofTable.put(3.6, 0.32);
-        tofTable.put(4.3, 0.38);
+        tofTable.put(1.7, 0.75);
+        tofTable.put(3.0, 0.905);
+        tofTable.put(3.6, 1.085);
+        tofTable.put(4.3, 1.085);
     }
 
     private FlywheelInterpolation() {}

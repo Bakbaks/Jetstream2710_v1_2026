@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.081177777777778,
-        "y": 1.7158222222222217
+        "x": 7.800108433734941,
+        "y": 1.3467831325301212
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.016644444444445,
-        "y": 1.6573555555555561
+        "x": 7.789180722891565,
+        "y": 1.9805903614457838
       },
       "isLocked": false,
       "linkedName": "RSweapStart"
     },
     {
       "anchor": {
-        "x": 7.665844444444444,
-        "y": 3.5575222222222216
+        "x": 7.690831325301204,
+        "y": 3.4886144578313254
       },
       "prevControl": {
-        "x": 7.665844444444444,
-        "y": 3.3041666666666663
+        "x": 7.690831325301204,
+        "y": 3.23525890227577
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.2732502396931934,
-      "rotationDegrees": 82.85964807703458
+      "rotationDegrees": 90.48185378279652
     }
   ],
   "constraintZones": [],
@@ -53,7 +53,7 @@
   "folder": "Right",
   "idealStartingState": {
     "velocity": 0.5,
-    "rotation": 25.01689347810004
+    "rotation": 88.72696997994343
   },
   "useDefaultConstraints": true
 }
