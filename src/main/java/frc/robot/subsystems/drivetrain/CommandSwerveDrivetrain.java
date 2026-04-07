@@ -343,6 +343,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public ChassisSpeeds getRobotRelativeSpeeds() {
         return this.getState().Speeds; // CTRE returns robot-relative chassis speeds
     }
+
+    public ChassisSpeeds getFieldRelativeSpeeds() {
+        ChassisSpeeds robotRelative = this.getRobotRelativeSpeeds();
+        return ChassisSpeeds.fromRobotRelativeSpeeds(
+            robotRelative,
+            this.getPose().getRotation()
+        );
+    }
     
     public void resetOdometry(Pose2d pose) {
         this.resetPose(pose); // CTRE base method

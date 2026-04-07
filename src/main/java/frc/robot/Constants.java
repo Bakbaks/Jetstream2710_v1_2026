@@ -184,6 +184,18 @@ public final class Constants {
       public static final double MaxShootMoveSpeed = 0.3; //m/s
     }
 
+    public static class ShotConstants {
+
+      public static final Transform2d RobotToShooterExit = new Transform2d(-0.1435885114, 0.0, Rotation2d.kZero);
+
+
+      public static final double kShotLatencySeconds = 0.15;
+
+      public static final int kShotPredictionIterations = 2;
+
+      public static final double kShootHeadingToleranceRad = Math.toRadians(2.0);
+    }
+
     public static class KrakenX60 {
       public static final AngularVelocity kFreeSpeed = RPM.of(6000);
     }

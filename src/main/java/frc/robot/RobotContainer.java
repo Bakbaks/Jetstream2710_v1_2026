@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.OutTake;
 import frc.robot.commands.alignment.ScoreOrientation;
+import frc.robot.commands.alignment.ScoreOrientation2;
 import frc.robot.commands.intake.DebugDetractIntake;
 import frc.robot.commands.intake.DebugExtendIntake;
 import frc.robot.commands.intake.ExtendIntake;
@@ -43,6 +44,7 @@ import frc.robot.commands.intake.DetractIntake;
 import frc.robot.commands.intake.SpinRollers;
 import frc.robot.commands.intake.ReverseRollers;
 import frc.robot.commands.shoot.Volley;
+import frc.robot.commands.shoot.Volley2;
 import frc.robot.commands.shoot.TempVolley;
 import frc.robot.commands.intake.SpinFloor;
 
@@ -125,7 +127,7 @@ public class RobotContainer {
   private final Hopper hopper = new Hopper();
   private final IntakeRollers intakeRollers = new IntakeRollers();
   private final IntakeExtendo intakeExtendo = new IntakeExtendo();
-  private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, flywheel, hopper, intakeRollers, intakeExtendo);
+  private final Telemetry telemetry = new Telemetry(MaxSpeed, vision, flywheel, hopper, intakeRollers, intakeExtendo, drivetrain::getFieldRelativeSpeeds);
   private Boolean ConstSpeed = false;
   private boolean driverIntakeExtended = false;
 
@@ -245,11 +247,12 @@ public class RobotContainer {
 
     //Drive buttons
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
+      // new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
+      new Volley2(flywheel, hopper, drivetrain::getPose, drivetrain::getFieldRelativeSpeeds, () -> ConstSpeed)
     ));
 
     driveRightBumper.whileTrue(new ParallelCommandGroup(
-      new ScoreOrientation(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
+      new ScoreOrientation2(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
     )); 
 
     driveLeftTrigger.whileTrue(new ParallelCommandGroup( // can on true if u want

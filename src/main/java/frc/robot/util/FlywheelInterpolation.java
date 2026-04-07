@@ -1,51 +1,50 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-
 import java.util.Optional;
-
 import frc.robot.Constants.FlywheelConstants;
+
 public final class FlywheelInterpolation {
 
-    /** Default RPM when distance cannot be computed (tag not visible). */
+    /** Default RPM when distance cannot be computed. */
     private static final double kDefaultRPM = FlywheelConstants.kDefaultRPM;
 
-    /** Shooter RPM lookup table - maps distance (meters) to RPM */
+    /** Temporary fallback TOF if needed. Tune later. */
+    private static final double kDefaultTOF = 0.28;
+
+    /** Distance (m) -> shooter RPM */
     private static final InterpolatingDoubleTreeMap shooterTable = new InterpolatingDoubleTreeMap();
 
-    // Initialize the table with distance-RPM sweet spots
+    /** Distance (m) -> time of flight (s) */
+    private static final InterpolatingDoubleTreeMap tofTable = new InterpolatingDoubleTreeMap();
+
     static {
-        // distance-RPM pairs here (distance in meters, RPM)
-        shooterTable.put(1.7, 1250.0);   // Close range
-        shooterTable.put(3.0, 1450.0);   // Far range
+        shooterTable.put(1.7, 1250.0);
+        shooterTable.put(3.0, 1450.0);
         shooterTable.put(3.6, 1570.0);
         shooterTable.put(4.3, 1650.0);
 
+        tofTable.put(1.7, 0.20);
+        tofTable.put(3.0, 0.27);
+        tofTable.put(3.6, 0.32);
+        tofTable.put(4.3, 0.38);
     }
 
     private FlywheelInterpolation() {}
 
-    /**
-     * Gets interpolated RPM for the given distance.
-     * Automatically performs linear interpolation between table entries.
-     *
-     * @param distanceMeters Distance to tag in meters (from PhotonVision)
-     * @return RPM to use for shooter
-     */
     public static double interpolateRPM(double distanceMeters) {
         return shooterTable.get(distanceMeters);
     }
 
-    /**
-     * Gets interpolated RPM from PhotonVision distance. Uses default RPM if tag not visible.
-     *
-     * @param distanceMeters Optional distance from Vision.getDistanceToTag10()
-     * @return RPM to use for shooter
-     */
+    public static double interpolateTOF(double distanceMeters) {
+        return tofTable.get(distanceMeters);
+    }
+
     public static double getRPMForDistance(Optional<Double> distanceMeters) {
-        return distanceMeters
-                .map(FlywheelInterpolation::interpolateRPM)
-                .orElse(kDefaultRPM);
+        return distanceMeters.map(FlywheelInterpolation::interpolateRPM).orElse(kDefaultRPM);
+    }
+
+    public static double getTOFForDistance(Optional<Double> distanceMeters) {
+        return distanceMeters.map(FlywheelInterpolation::interpolateTOF).orElse(kDefaultTOF);
     }
 }

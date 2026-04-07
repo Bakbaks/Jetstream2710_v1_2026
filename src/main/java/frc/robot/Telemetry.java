@@ -1,17 +1,16 @@
 package frc.robot;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -20,20 +19,25 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Intake.IntakeRollers;
-import frc.robot.subsystems.Intake.IntakeExtendo;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake.IntakeExtendo;
+import frc.robot.subsystems.Intake.IntakeRollers;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.FlywheelInterpolation;
 import frc.robot.util.RobotLocalization;
+import frc.robot.util.ShootOnMoveUtil;
+import frc.robot.util.ShootOnMoveUtil.ShotSolution;
 
 public class Telemetry {
     private final double MaxSpeed;
@@ -42,18 +46,19 @@ public class Telemetry {
     private final Hopper hopper;
     private final IntakeRollers intakeRollers;
     private final IntakeExtendo intakeExtendo;
-
+    private final Supplier<ChassisSpeeds> fieldRelativeSpeedsSupplier;
 
     /** Holder for latest state so SwerveDrive Sendable can read it. */
     private volatile SwerveDriveState m_lastState = null;
 
-    public Telemetry(double maxSpeed, Vision vision, Flywheel flywheel, Hopper hopper, IntakeRollers intakeRollers, IntakeExtendo intakeExtendo) {
+    public Telemetry(double maxSpeed, Vision vision, Flywheel flywheel, Hopper hopper, IntakeRollers intakeRollers, IntakeExtendo intakeExtendo, Supplier<ChassisSpeeds> fieldRelativeSpeedsSupplier) {
         MaxSpeed = maxSpeed;
         this.vision = vision;
         this.flywheel = flywheel;
         this.hopper = hopper;
         this.intakeRollers = intakeRollers;
         this.intakeExtendo = intakeExtendo;
+        this.fieldRelativeSpeedsSupplier = fieldRelativeSpeedsSupplier;
         SignalLogger.start();
         SmartDashboard.putData("Swerve Drive", createSwerveDriveSendable());
         SmartDashboard.putData("Field", field2d);
@@ -105,7 +110,6 @@ public class Telemetry {
 
     /* Field2d for Elastic dashboard field widget */
     private final Field2d field2d = new Field2d();
-
     /* Mechanisms to represent the swerve module states */
     private final Mechanism2d[] m_moduleMechanisms = new Mechanism2d[] {
         new Mechanism2d(1, 1),
@@ -231,19 +235,48 @@ public class Telemetry {
 
         Pose2d robotPose = state.Pose;
         int tagId = DriverStation.getAlliance().map(alliance ->
-          alliance == DriverStation.Alliance.Red
-              ? FieldConstants.RED_SHOOT_TAG
-              : FieldConstants.BLUE_SHOOT_TAG)
-            .orElse(FieldConstants.RED_SHOOT_TAG);
-    
-        Optional<Pose2d> maybeTargetPose = RobotLocalization.fieldPoseFromTagTransform(tagId, FieldConstants.RightTagToHub);
-        Pose2d targetPose = maybeTargetPose.get();
+            alliance == DriverStation.Alliance.Red
+                ? FieldConstants.RED_SHOOT_TAG
+                : FieldConstants.BLUE_SHOOT_TAG
+        ).orElse(FieldConstants.RED_SHOOT_TAG);
 
-        double targetDistance = RobotLocalization.robotToTargetDistanceMeters(robotPose, targetPose);
+        Optional<Pose2d> maybeTargetPose =
+            RobotLocalization.fieldPoseFromTagTransform(tagId, FieldConstants.RightTagToHub);
 
-        SmartDashboard.putNumber("Target Flywheel RPM", FlywheelInterpolation.getRPMForDistance(Optional.of(targetDistance)));
+        if (maybeTargetPose.isPresent()) {
+            Pose2d targetPose = maybeTargetPose.get();
+            Pose2d shooterExitPose = RobotLocalization.robotToShooterExitPose(robotPose);
 
+            ShotSolution shotSolution = ShootOnMoveUtil.solve(
+                robotPose,
+                fieldRelativeSpeedsSupplier.get(),
+                targetPose.getTranslation()
+            );
 
-        SmartDashboard.putNumber("Robot distance to Hub", targetDistance);
+            double staticShooterExitDistance =
+                RobotLocalization.shooterExitToTargetDistanceMeters(robotPose, targetPose);
+
+            SmartDashboard.putNumber("Shot/Static ShooterExit Distance", staticShooterExitDistance);
+            SmartDashboard.putNumber("Shot/Predicted Effective Distance", shotSolution.effectiveDistance);
+            SmartDashboard.putNumber("Shot/Raw Distance", shotSolution.rawDistance);
+            SmartDashboard.putNumber("Shot/TOF", shotSolution.timeOfFlight);
+            SmartDashboard.putNumber("Shot/Target RPM Static",
+                FlywheelInterpolation.interpolateRPM(staticShooterExitDistance));
+            SmartDashboard.putNumber("Shot/Target RPM Effective",
+                FlywheelInterpolation.interpolateRPM(shotSolution.effectiveDistance));
+
+            SmartDashboard.putNumber("Shot/ShooterExit X", shooterExitPose.getX());
+            SmartDashboard.putNumber("Shot/ShooterExit Y", shooterExitPose.getY());
+            SmartDashboard.putNumber("Shot/PredictedExit X", shotSolution.predictedExitPoint.getX());
+            SmartDashboard.putNumber("Shot/PredictedExit Y", shotSolution.predictedExitPoint.getY());
+            SmartDashboard.putNumber("Shot/ExitVel X", shotSolution.shooterExitVelocityField.getX());
+            SmartDashboard.putNumber("Shot/ExitVel Y", shotSolution.shooterExitVelocityField.getY());
+
+            field2d.getObject("Hub Center").setPose(targetPose);
+            field2d.getObject("Shooter Exit").setPose(shooterExitPose);
+            field2d.getObject("Predicted Exit").setPose(
+                new Pose2d(shotSolution.predictedExitPoint, Rotation2d.kZero)
+            );
+        }
     }
 }
