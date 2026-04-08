@@ -131,7 +131,7 @@ public final class Constants {
       // every pi inches moved is 3 rotations.
 
       public static final double kExtendoPercent = 0.1;
-      public static final double kRollerPercent = 0.65;
+      public static final double kRollerPercent = 0.70;
       
       public static final int kExtendoStatorCurrentLimit = 60;
       public static final int kExtendoSupplyCurrentLimit = 20;
@@ -168,7 +168,7 @@ public final class Constants {
       public static final int RED_SHOOT_TAG = 10;
       public static final int BLUE_SHOOT_TAG = 26;
       //tags 10(red) & 26(blue)
-      public static final Transform2d RightTagToHub = new Transform2d(-0.737102412, 0.0, Rotation2d.fromDegrees(0)); // needs to be measured still
+      public static final Transform2d RightTagToHub = new Transform2d(-0.62, 0.0, Rotation2d.fromDegrees(0)); // needs to be measured still
     }
 
     public static class AutoConstants {
@@ -181,7 +181,7 @@ public final class Constants {
 
       public static final double kRotOverrideThreshold = 0.5; // needs to be tuned based on driver preference
 
-      public static final double MaxShootMoveSpeed = 1.5; //m/s
+      public static final double MaxShootMoveSpeed = 1; //m/s
     }
 
     public static class ShotConstants {

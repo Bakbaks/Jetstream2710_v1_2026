@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2119814496393526,
-        "y": 1.9536567197700645
+        "x": 2.685939759036144,
+        "y": 2.0789397590361443
       },
       "isLocked": false,
       "linkedName": "RReturnEnd"
     },
     {
       "anchor": {
-        "x": 1.3219400855920111,
-        "y": 0.9879457917261072
+        "x": 2.9392724679029953,
+        "y": 1.8494578313253012
       },
       "prevControl": {
-        "x": 1.8954698902122813,
-        "y": 1.4398496144640982
+        "x": 2.9263493975903616,
+        "y": 2.1554337349397588
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RBumpShootingPosition"
     }
   ],
   "rotationTargets": [],
@@ -37,7 +37,7 @@
         "y": 4.04
       },
       "rotationOffset": 180.0,
-      "minWaypointRelativePos": 0.19716407832545566,
+      "minWaypointRelativePos": 0.451612903225805,
       "maxWaypointRelativePos": 1.0,
       "name": "Point Towards Zone"
     }
@@ -53,12 +53,12 @@
   },
   "goalEndState": {
     "velocity": 0.25,
-    "rotation": -136.33221985386945
+    "rotation": -130.77316631411168
   },
   "reversed": false,
   "folder": "Right",
   "idealStartingState": {
-    "velocity": 1.0,
+    "velocity": 0.5,
     "rotation": -44.119
   },
   "useDefaultConstraints": false
