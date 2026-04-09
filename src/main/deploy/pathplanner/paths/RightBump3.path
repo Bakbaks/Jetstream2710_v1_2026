@@ -77,13 +77,23 @@
       "name": "FinalMoveVolley",
       "waypointRelativePos": 0.9548387096774145,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "FinalMoveVolley"
+        }
+      }
     },
     {
-      "name": "none",
+      "name": "RetractIntake",
       "waypointRelativePos": 1.332009925558313,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "RetractIntake"
+        }
+      }
     }
   ],
   "globalConstraints": {

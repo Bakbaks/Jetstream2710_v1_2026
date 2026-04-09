@@ -145,7 +145,7 @@ public class RobotContainer {
 
   Command SpinIntake = new SequentialCommandGroup(
     new SpinRollers(intakeRollers)
-  ).withTimeout(4);
+  ).withTimeout(8);
 
 
   Command PreloadVolley = new SequentialCommandGroup(
@@ -180,11 +180,17 @@ public class RobotContainer {
         new DebugExtendIntake(intakeExtendo).withTimeout(0.25),
         new DebugDetractIntake(intakeExtendo).withTimeout(0.35),
         new DebugExtendIntake(intakeExtendo).withTimeout(0.25),
+        new DebugDetractIntake(intakeExtendo).withTimeout(0.35),
+        new DebugExtendIntake(intakeExtendo).withTimeout(0.25),
+        new DebugDetractIntake(intakeExtendo).withTimeout(0.35),
+        new DebugExtendIntake(intakeExtendo).withTimeout(0.25),
+        new DebugDetractIntake(intakeExtendo).withTimeout(0.35),  
+        new DebugExtendIntake(intakeExtendo).withTimeout(0.25),
         new DebugDetractIntake(intakeExtendo).withTimeout(0.35)
       ),
 
       new SequentialCommandGroup(
-        new SpinRollers(intakeRollers).withTimeout(1.25)
+        new SpinRollers(intakeRollers).withTimeout(3)
       )
     ).withTimeout(3)
   );
