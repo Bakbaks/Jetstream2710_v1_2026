@@ -40,13 +40,13 @@ import frc.robot.commands.intake.ExtendIntake;
 import frc.robot.commands.intake.DetractIntake;
 
 
-//temp commands
 import frc.robot.commands.intake.SpinRollers;
 import frc.robot.commands.intake.ReverseRollers;
 import frc.robot.commands.shoot.Volley;
 import frc.robot.commands.shoot.Volley2;
 import frc.robot.commands.shoot.TempVolley;
 import frc.robot.commands.intake.SpinFloor;
+import frc.robot.commands.UnJam;
 
 
 import frc.robot.subsystems.Flywheel;
@@ -145,7 +145,7 @@ public class RobotContainer {
 
   Command SpinIntake = new SequentialCommandGroup(
     new SpinRollers(intakeRollers)
-  ).withTimeout(2);
+  ).withTimeout(4);
 
 
   Command PreloadVolley = new SequentialCommandGroup(
@@ -158,7 +158,7 @@ public class RobotContainer {
     new ParallelCommandGroup(
       new DebugExtendIntake(intakeExtendo)
       //new SpinRollers(intakeRollers)
-    ).withTimeout(2)
+    ).withTimeout(1)
   );
 
   Command UnJamKickBar = new SequentialCommandGroup(
@@ -188,6 +188,22 @@ public class RobotContainer {
       )
     ).withTimeout(3)
   );
+
+  Command none = new SequentialCommandGroup(
+    
+  );
+
+  Command BackMoveVolley = new SequentialCommandGroup(
+    new ParallelCommandGroup(
+      new Volley2(flywheel, hopper, drivetrain::getPose, drivetrain::getFieldRelativeSpeeds, () -> ConstSpeed)
+    ).withTimeout(4.2)
+  );
+
+  Command FinalMoveVolley = new SequentialCommandGroup(
+    new ParallelCommandGroup(
+      new Volley2(flywheel, hopper, drivetrain::getPose, drivetrain::getFieldRelativeSpeeds, () -> ConstSpeed)
+    ).withTimeout(8)
+  );
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -205,6 +221,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("RetractIntake", RetractIntake);
     NamedCommands.registerCommand("SpinIntake", SpinIntake);
     NamedCommands.registerCommand("UnJamKickBar", UnJamKickBar);
+    NamedCommands.registerCommand("BackMoveVolley", BackMoveVolley);
+    NamedCommands.registerCommand("FinalMoveVolley", FinalMoveVolley);
+    NamedCommands.registerCommand("none", none);
     autoChooser = AutoBuilder.buildAutoChooser("Taxi");
         SmartDashboard.putData("Auto Chooser", autoChooser);
         
@@ -260,7 +279,7 @@ public class RobotContainer {
     ));
 
     driveLeftBumper.whileTrue(new ParallelCommandGroup(
-      new OutTake(flywheel, hopper, intakeRollers)
+      new UnJam(flywheel, hopper)
     ));
     
     //just run the flywheel
@@ -279,6 +298,10 @@ public class RobotContainer {
 
     auxLeftBumper.whileTrue(new ParallelCommandGroup(
       new SpinRollers(intakeRollers)
+    ));
+
+    auxRightBumper.whileTrue(new ParallelCommandGroup(
+      new OutTake(flywheel, hopper, intakeRollers)
     ));
 
     auxB.onTrue(

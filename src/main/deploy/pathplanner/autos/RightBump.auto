@@ -51,36 +51,6 @@
           "data": {
             "pathName": "Right6"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right7"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right8"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right9"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right10"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right11"
-          }
         }
       ]
     }

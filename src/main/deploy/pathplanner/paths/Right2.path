@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.980530120481928,
-        "y": 2.1335783132530115
+        "x": 7.051944444444445,
+        "y": 2.0666222222222213
       },
       "isLocked": false,
       "linkedName": "RBumpEnd"
     },
     {
       "anchor": {
-        "x": 7.526915662650602,
-        "y": 2.1554337349397588
+        "x": 7.665844444444444,
+        "y": 2.095855555555554
       },
       "prevControl": {
-        "x": 7.166301204819277,
-        "y": 1.8057469879518067
+        "x": 7.412488888888889,
+        "y": 1.5014444444444437
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   "reversed": false,
   "folder": "Right",
   "idealStartingState": {
-    "velocity": 0.5,
+    "velocity": 1.5,
     "rotation": -14.562864325402384
   },
   "useDefaultConstraints": true

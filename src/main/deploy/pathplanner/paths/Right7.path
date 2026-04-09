@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9392724679029953,
-        "y": 1.8494578313253012
+        "x": 2.47,
+        "y": 2.3899999999999997
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.188614457831325,
-        "y": 2.8001686746987957
+        "x": 2.71934198992833,
+        "y": 3.340710843373494
       },
       "isLocked": false,
       "linkedName": "RBumpShootingPosition"
@@ -53,7 +53,7 @@
   "folder": "Right",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -130.77316631411168
+    "rotation": -140.28720688214688
   },
   "useDefaultConstraints": true
 }

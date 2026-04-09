@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.526915662650602,
-        "y": 2.1554337349397588
+        "x": 7.665844444444444,
+        "y": 2.095855555555554
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.71268674698795,
-        "y": 2.438805957066496
+        "x": 7.8315,
+        "y": 2.300488888888889
       },
       "isLocked": false,
       "linkedName": "RSweapStart"
     },
     {
       "anchor": {
-        "x": 7.623067047075606,
-        "y": 3.316904422253923
+        "x": 7.909455555555555,
+        "y": 3.693944444444444
       },
       "prevControl": {
-        "x": 7.876602409638554,
-        "y": 3.193566265060241
+        "x": 8.279744444444445,
+        "y": 3.6159888888888894
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.2732502396931934,
+      "waypointRelativePos": 0.38091286307053684,
       "rotationDegrees": 90.48185378279652
     }
   ],
@@ -47,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0.5,
-    "rotation": 86.3477772196936
+    "rotation": 91.36392753160278
   },
   "reversed": false,
   "folder": "Right",

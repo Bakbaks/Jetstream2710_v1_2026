@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2597590361445783,
-        "y": 3.5432530120481935
+        "x": 1.9848333333333334,
+        "y": 3.3333999999999993
       },
       "isLocked": false,
       "linkedName": "CenterShootingPosition2"
     },
     {
       "anchor": {
-        "x": 1.3527590361445787,
-        "y": 5.9473493975903615
+        "x": 1.254,
+        "y": 5.954655555555555
       },
       "prevControl": {
-        "x": 2.6422289156626504,
-        "y": 5.914566265060241
+        "x": 2.355122222222222,
+        "y": 5.9351666666666665
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,7 +39,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

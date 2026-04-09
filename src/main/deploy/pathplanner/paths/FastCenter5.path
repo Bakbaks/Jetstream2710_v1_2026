@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3527590361445787,
-        "y": 5.9473493975903615
+        "x": 1.254,
+        "y": 5.954655555555555
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.992144578313253,
-        "y": 5.958277108433736
+        "x": 0.8933855421686743,
+        "y": 5.965583266398929
       },
       "isLocked": false,
       "linkedName": "CenterDepotPosition"
     },
     {
       "anchor": {
-        "x": 0.6096746987951804,
-        "y": 5.9473493975903615
+        "x": 0.5524,
+        "y": 5.954655555555555
       },
       "prevControl": {
-        "x": 0.8937951807228917,
-        "y": 5.969204819277109
+        "x": 0.8365204819277112,
+        "y": 5.976510977242302
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -178.49256424122495
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "FastCenter",

@@ -8,32 +8,48 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0674042356353688,
-        "y": 0.9699662095004769
+        "x": 0.8133839869322841,
+        "y": 0.8017744122019952
       },
       "isLocked": false,
       "linkedName": "CenterOutpostPosition"
     },
     {
       "anchor": {
-        "x": 2.6416833095577745,
-        "y": 2.320627674750357
+        "x": 1.205,
+        "y": 1.131
       },
       "prevControl": {
-        "x": 1.7568741319868657,
-        "y": 1.5941191565497939
+        "x": 0.9672764953444373,
+        "y": 0.9034113719489074
+      },
+      "nextControl": {
+        "x": 1.529313018654022,
+        "y": 1.4414865675000055
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.47,
+        "y": 2.39
+      },
+      "prevControl": {
+        "x": 2.228444444438578,
+        "y": 2.1543222222217584
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CenterShootingPosition2"
+      "linkedName": "RBumpShootingPosition"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.3622828784119089,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0.97,
+      "maxWaypointRelativePos": 2.0,
       "constraints": {
         "maxVelocity": 0.5,
         "maxAcceleration": 2.0,
@@ -51,12 +67,25 @@
         "y": 4.04
       },
       "rotationOffset": 180.0,
-      "minWaypointRelativePos": 0.45161290322580644,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0.97,
+      "maxWaypointRelativePos": 2.0,
       "name": "Point Towards Zone"
     }
   ],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "FinalMoveVolley",
+      "waypointRelativePos": 0.9548387096774145,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "none",
+      "waypointRelativePos": 1.332009925558313,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 2.0,
@@ -67,13 +96,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -138.12213046211573
+    "rotation": -140.28720688214688
   },
   "reversed": false,
-  "folder": "FastCenter",
+  "folder": "RightBump",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
