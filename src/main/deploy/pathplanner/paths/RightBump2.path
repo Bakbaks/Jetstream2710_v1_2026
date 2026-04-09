@@ -75,7 +75,7 @@
   "eventMarkers": [
     {
       "name": "RetractIntake",
-      "waypointRelativePos": 0.7483870967741932,
+      "waypointRelativePos": 0.4506203473945384,
       "endWaypointRelativePos": 1.25,
       "command": {
         "type": "named",
