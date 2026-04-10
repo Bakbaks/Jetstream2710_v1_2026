@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9848333333333334,
-        "y": 3.3333999999999993
+        "x": 2.904493975903614,
+        "y": 2.6034698795180726
       },
       "isLocked": false,
       "linkedName": "CenterShootingPosition2"
@@ -36,7 +36,19 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ExtendIntake",
+      "waypointRelativePos": 0.5,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ExtendIntake"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 2.0,
@@ -52,7 +64,7 @@
   "reversed": false,
   "folder": "FastCenter",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 1.0,
     "rotation": -138.12213046211573
   },
   "useDefaultConstraints": false

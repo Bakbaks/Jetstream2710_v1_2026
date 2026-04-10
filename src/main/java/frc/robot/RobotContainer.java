@@ -58,6 +58,8 @@ import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.TunerConstants;
 import frc.robot.subsystems.vision.Vision;
 
+import frc.robot.subsystems.LEDSubsystem;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -81,7 +83,7 @@ public class RobotContainer {
   
 
   public final Vision vision = new Vision(drivetrain::addVisionMeasurement);
-
+  public final LEDSubsystem leds = new LEDSubsystem();
 
   // private final CommandXboxController m_driverController = new CommandXboxController(
   //           OIConstants.kDriverControllerPort);

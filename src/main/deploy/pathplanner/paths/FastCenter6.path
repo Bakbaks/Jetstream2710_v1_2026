@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.642,
-        "y": 5.679
+        "x": 2.4127469879518073,
+        "y": 5.63044578313253
       },
       "prevControl": {
-        "x": 1.5713132530120486,
-        "y": 6.034771084337349
+        "x": 1.342060240963856,
+        "y": 5.986216867469879
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 138.12200000000004
+    "rotation": 143.39292518739254
   },
   "reversed": false,
   "folder": "FastCenter",

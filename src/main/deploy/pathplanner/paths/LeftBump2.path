@@ -3,37 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5913777777777778,
-        "y": 0.6439333333333332
+        "x": 2.3690361445783132,
+        "y": 5.390036144578313
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0674042356353688,
-        "y": 0.9699662095004769
+        "x": 1.8445060240963858,
+        "y": 5.674156626506024
       },
       "isLocked": false,
-      "linkedName": "CenterOutpostPosition"
+      "linkedName": "LBumpShootingPosition"
     },
     {
       "anchor": {
-        "x": 2.6416833095577745,
-        "y": 2.320627674750357
+        "x": 1.1888433734939758,
+        "y": 5.980132530120482
       },
       "prevControl": {
-        "x": 1.7568741319868657,
-        "y": 1.5941191565497939
+        "x": 1.593168674698795,
+        "y": 5.805289156626507
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CenterShootingPosition2"
+      "linkedName": "LeftBumpDepotStart"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.2,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.88,
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 2.0,
@@ -47,20 +47,20 @@
   "pointTowardsZones": [
     {
       "fieldPosition": {
-        "x": 4.62,
-        "y": 4.04
+        "x": 4.63,
+        "y": 4.03
       },
       "rotationOffset": 180.0,
-      "minWaypointRelativePos": 0.2,
-      "maxWaypointRelativePos": 1.0,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.88,
       "name": "Point Towards Zone"
     }
   ],
   "eventMarkers": [
     {
       "name": "BackMoveVolley",
-      "waypointRelativePos": 0.2,
-      "endWaypointRelativePos": null,
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 0.8784119106699693,
       "command": {
         "type": "named",
         "data": {
@@ -70,8 +70,8 @@
     },
     {
       "name": "RetractIntake",
-      "waypointRelativePos": 0.49727047146402126,
-      "endWaypointRelativePos": null,
+      "waypointRelativePos": 0.3106699751861055,
+      "endWaypointRelativePos": 0.8803970223325032,
       "command": {
         "type": "named",
         "data": {
@@ -89,14 +89,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": -138.12213046211573
-  },
-  "reversed": false,
-  "folder": "FastCenter",
-  "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": false
+  "reversed": false,
+  "folder": "LeftBump",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 149.8586144479246
+  },
+  "useDefaultConstraints": true
 }

@@ -19,12 +19,6 @@
                 "data": {
                   "name": "ExtendIntake"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "UnJamKickBar"
-                }
               }
             ]
           }
@@ -39,25 +33,6 @@
           "type": "path",
           "data": {
             "pathName": "FastCenter3"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ExtraVolley"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RetractIntake"
-                }
-              }
-            ]
           }
         },
         {
@@ -81,12 +56,6 @@
                 "data": {
                   "name": "SpinIntake"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ExtendIntake"
-                }
               }
             ]
           }
@@ -104,7 +73,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ExtraVolley"
+                  "name": "FinalMoveVolley"
                 }
               },
               {
