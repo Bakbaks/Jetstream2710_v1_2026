@@ -71,11 +71,22 @@
     {
       "name": "RetractIntake",
       "waypointRelativePos": 0.3106699751861055,
-      "endWaypointRelativePos": 0.8803970223325032,
+      "endWaypointRelativePos": 0.88,
       "command": {
         "type": "named",
         "data": {
           "name": "RetractIntake"
+        }
+      }
+    },
+    {
+      "name": "ExtendIntake",
+      "waypointRelativePos": 0.88,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ExtendIntake"
         }
       }
     }

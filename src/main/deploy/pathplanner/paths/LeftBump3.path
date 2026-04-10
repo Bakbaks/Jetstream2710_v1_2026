@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LeftBumpDepotEnd"
     }
   ],
   "rotationTargets": [],
@@ -61,7 +61,30 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "SpinIntake",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "SpinIntake"
+        }
+      }
+    },
+    {
+      "name": "ExtendIntake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 0.3513647642680402,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ExtendIntake"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 2.0,
