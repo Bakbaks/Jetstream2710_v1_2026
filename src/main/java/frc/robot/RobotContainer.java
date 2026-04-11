@@ -212,6 +212,12 @@ public class RobotContainer {
       new Volley2(flywheel, hopper, drivetrain::getPose, drivetrain::getFieldRelativeSpeeds, () -> ConstSpeed)
     ).withTimeout(8)
   );
+
+  Command QuickVolley = new ParallelCommandGroup(
+    new Volley2(flywheel, hopper, drivetrain::getPose, drivetrain::getFieldRelativeSpeeds, () -> ConstSpeed).withTimeout(3),
+    new ScoreOrientation2(drivetrain, () -> 0.0, () -> 0.0, () -> 0.0).withTimeout(3)
+  );
+
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -232,6 +238,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("BackMoveVolley", BackMoveVolley);
     NamedCommands.registerCommand("FinalMoveVolley", FinalMoveVolley);
     NamedCommands.registerCommand("none", none);
+    NamedCommands.registerCommand("QuickVolley", QuickVolley);
+
     autoChooser = AutoBuilder.buildAutoChooser("Taxi");
         SmartDashboard.putData("Auto Chooser", autoChooser);
         
@@ -306,7 +314,8 @@ public class RobotContainer {
 
     auxLeftBumper.whileTrue(new ParallelCommandGroup(
       new SpinRollers(intakeRollers)
-    ));
+    )
+    );
 
     auxRightBumper.whileTrue(new ParallelCommandGroup(
       new OutTake(flywheel, hopper, intakeRollers)

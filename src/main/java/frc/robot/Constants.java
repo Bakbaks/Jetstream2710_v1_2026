@@ -101,15 +101,15 @@ public final class Constants {
     }
 
     public static class HopperConstants {
-      public static final double kFloorPercent = 0.6;
-      public static final double kFeederPercent = 0.7;
+      public static final double kFloorPercent = 0.8;
+      public static final double kFeederPercent = 0.8;
 
       //no current limits cuz sped
       public static final int kHopperStatorCurrentLimit = 100;
       public static final int kHopperSupplyCurrentLimit = 100;
     
       
-      public static final double kFloorRPM = 1500;
+      public static final double kFloorRPM = 2000;
       public static final double kFeederRPM = 5000;
       public static final double KHopperP = 2;
       public static final double KHopperI = 0;

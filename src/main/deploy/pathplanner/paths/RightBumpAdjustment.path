@@ -1,0 +1,88 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.47,
+        "y": 2.39
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.117698795180723,
+        "y": 2.1226506024096388
+      },
+      "isLocked": false,
+      "linkedName": "RBumpShootingPosition"
+    },
+    {
+      "anchor": {
+        "x": 1.8117228915662649,
+        "y": 1.860385542168674
+      },
+      "prevControl": {
+        "x": 2.010312349810563,
+        "y": 2.0122480690613744
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "RBumpShootingPosition2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.63,
+        "y": 4.03
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 1.0,
+      "name": "Point Towards Zone"
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "RetractIntake",
+      "waypointRelativePos": 0.09826302729527943,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "RetractIntake"
+        }
+      }
+    },
+    {
+      "name": "BackMoveVolley",
+      "waypointRelativePos": 0.10024813895781774,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "BackMoveVolley"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 0.35,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": -140.3893117599736
+  },
+  "reversed": false,
+  "folder": "RightBump",
+  "idealStartingState": {
+    "velocity": 0.5,
+    "rotation": -140.55065176567277
+  },
+  "useDefaultConstraints": false
+}
