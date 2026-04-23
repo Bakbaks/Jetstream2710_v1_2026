@@ -11,9 +11,47 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "QuickVolley"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RetractIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "FixedLeftBumpReturn"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "QuickVolley"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RetractIntake"
+                }
+              }
+            ]
           }
         }
       ]

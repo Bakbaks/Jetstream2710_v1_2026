@@ -70,7 +70,7 @@
     },
     {
       "name": "RetractIntake",
-      "waypointRelativePos": 0.49727047146402126,
+      "waypointRelativePos": 0.35831265508684884,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

@@ -58,7 +58,7 @@ import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.TunerConstants;
 import frc.robot.subsystems.vision.Vision;
 
-import frc.robot.subsystems.LEDSubsystem;
+//import frc.robot.subsystems.LEDSubsystem;
 
 
 /**
@@ -83,7 +83,7 @@ public class RobotContainer {
   
 
   public final Vision vision = new Vision(drivetrain::addVisionMeasurement);
-  public final LEDSubsystem leds = new LEDSubsystem();
+  //public final LEDSubsystem leds = new LEDSubsystem();
 
   // private final CommandXboxController m_driverController = new CommandXboxController(
   //           OIConstants.kDriverControllerPort);
@@ -210,6 +210,7 @@ public class RobotContainer {
   Command FinalMoveVolley = new SequentialCommandGroup(
     new ParallelCommandGroup(
       new Volley2(flywheel, hopper, drivetrain::getPose, drivetrain::getFieldRelativeSpeeds, () -> ConstSpeed)
+      //new ScoreOrientation2(drivetrain, () -> 0.0, () -> 0.0, () -> 0.0).withTimeout(8)
     ).withTimeout(8)
   );
 
@@ -319,6 +320,10 @@ public class RobotContainer {
 
     auxRightBumper.whileTrue(new ParallelCommandGroup(
       new OutTake(flywheel, hopper, intakeRollers)
+    ));
+
+    auxX.whileTrue(new ParallelCommandGroup(
+       drivetrain.applyRequest(() -> brake)
     ));
 
     auxB.onTrue(
