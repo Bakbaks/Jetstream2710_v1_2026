@@ -87,7 +87,8 @@ public final class Constants {
       public static final double KFlywheelI = 2;
       public static final double KFlywheelD = 0;
 
-      public static final double kDefaultRPM = 1350;
+      public static final double kDefaultRPM = 1300
+      ;
 
       public static final double kFlywheelReverseRPM = -900;
     }
@@ -131,7 +132,7 @@ public final class Constants {
       // every pi inches moved is 3 rotations.
 
       public static final double kExtendoPercent = 0.1;
-      public static final double kRollerPercent = 0.70;
+      public static final double kRollerPercent = 0.90;
       
       public static final int kExtendoStatorCurrentLimit = 60;
       public static final int kExtendoSupplyCurrentLimit = 20;
