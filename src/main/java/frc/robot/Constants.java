@@ -77,42 +77,37 @@ public final class Constants {
     }
 
     public static class FlywheelConstants {
-      public static final int FlywheelStatorCurrentLimit = 120;
-      public static final int FlywheelSupplyCurrentLimit = 90;
+      public static final int FlywheelStatorCurrentLimit = 80;
+      public static final int FlywheelSupplyCurrentLimit = 80;
       
       
       public static final double kMinTargetRPM = 100; 
-      public static final double kVelocityTolerance = 800;
-      public static final double KFlywheelP = 0.5;
-      public static final double KFlywheelI = 2;
+      public static final double kVelocityTolerance = 400;
+      public static final double KFlywheelP = 0.05; //voltage is more stable
+      public static final double KFlywheelI = 0;
       public static final double KFlywheelD = 0;
 
-      public static final double kDefaultRPM = 1300
-      ;
+      public static final double kDefaultRPM = 1300;
 
       public static final double kFlywheelReverseRPM = -900;
+
+      //Temp
+      public static final double kFlywheelTestRPM = 100;
     }
 
-    public static class ElevatorConstants {
-      public static final double kElevatorPercent = 0.8;
-      public static final int kElevatorCurrentLimit = 90;
-      
-      public static final double kElevatorMinOutput = -1;
-      public static final double kElevatorMaxOutput = 1;
-    }
 
     public static class HopperConstants {
       public static final double kFloorPercent = 0.8;
       public static final double kFeederPercent = 0.8;
-
+      
       //no current limits cuz sped
-      public static final int kHopperStatorCurrentLimit = 100;
-      public static final int kHopperSupplyCurrentLimit = 100;
+      public static final int kHopperStatorCurrentLimit = 60;
+      public static final int kHopperSupplyCurrentLimit = 60;
     
       
-      public static final double kFloorRPM = 2000;
-      public static final double kFeederRPM = 5000;
-      public static final double KHopperP = 2;
+      public static final double kFloorRPM = 0;
+      public static final double kFeederRPM = 0;
+      public static final double KHopperP = 0.05; //might need to icnrease
       public static final double KHopperI = 0;
       public static final double KHopperD = 0;
 
@@ -132,7 +127,7 @@ public final class Constants {
       // every pi inches moved is 3 rotations.
 
       public static final double kExtendoPercent = 0.1;
-      public static final double kRollerPercent = 0.90;
+      public static final double kRollerPercent = 0.75;
       
       public static final int kExtendoStatorCurrentLimit = 60;
       public static final int kExtendoSupplyCurrentLimit = 20;

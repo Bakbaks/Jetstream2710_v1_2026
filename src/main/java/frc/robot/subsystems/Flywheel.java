@@ -36,7 +36,7 @@ public class Flywheel extends SubsystemBase {
     /** Minimum target RPM to consider shooter "ready" - avoids false positive when target is 0. */
     private static final double kMinTargetRPM = FlywheelConstants.kMinTargetRPM;
 
-    private final TalonFX FrontLeftMotor, BackLeftMotor, FrontRightMotor, BackRightMotor;
+    private final TalonFX TopLeftMotor, BottomLeftMotor, TopRightMotor, BottomRightMotor;
     private final List<TalonFX> motors;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
@@ -45,17 +45,18 @@ public class Flywheel extends SubsystemBase {
 
   /** Creates a new subsystem. */
     public Flywheel() {
-        FrontLeftMotor = new TalonFX(Ports.kFrontLeftShooter, Ports.kRoboRioCANBus);
-        BackLeftMotor = new TalonFX(Ports.kBackLeftShooter, Ports.kRoboRioCANBus);
-        FrontRightMotor = new TalonFX(Ports.kFrontRightShooter, Ports.kRoboRioCANBus);
-        BackRightMotor = new TalonFX(Ports.kBackRightShooter, Ports.kRoboRioCANBus);
-        motors = List.of(FrontLeftMotor, BackLeftMotor, FrontRightMotor, BackRightMotor);
+        TopLeftMotor = new TalonFX(Ports.kTopLeftShooter, Ports.kRoboRioCANBus);
+        BottomLeftMotor = new TalonFX(Ports.kBottomLeftShooter, Ports.kRoboRioCANBus);
+        TopRightMotor = new TalonFX(Ports.kTopRightShooter, Ports.kRoboRioCANBus);
+        BottomRightMotor = new TalonFX(Ports.kBottomRightShooter, Ports.kRoboRioCANBus);
+        motors = List.of(TopLeftMotor, BottomLeftMotor, TopRightMotor, BottomRightMotor);
 
-        configureMotor(FrontLeftMotor, InvertedValue.CounterClockwise_Positive);
-        configureMotor(BackLeftMotor, InvertedValue.Clockwise_Positive);
-
-        configureMotor(FrontRightMotor, InvertedValue.Clockwise_Positive);
-        configureMotor(BackRightMotor, InvertedValue.CounterClockwise_Positive);
+        configureMotor(TopLeftMotor, InvertedValue.Clockwise_Positive);
+        configureMotor(TopRightMotor, InvertedValue.CounterClockwise_Positive);
+        
+        
+        configureMotor(BottomLeftMotor, InvertedValue.Clockwise_Positive);
+        configureMotor(BottomRightMotor, InvertedValue.CounterClockwise_Positive);
   
     }
 
@@ -156,8 +157,8 @@ public class Flywheel extends SubsystemBase {
 
     /** Returns average flywheel velocity in RPM (average of left and right sides). */
     public double getFlywheelRPM() {
-        double leftRPM = (FrontLeftMotor.getVelocity().getValue().in(RPM) + BackLeftMotor.getVelocity().getValue().in(RPM)) / 2.0;
-        double rightRPM = (FrontRightMotor.getVelocity().getValue().in(RPM) + BackRightMotor.getVelocity().getValue().in(RPM)) / 2.0;
+        double leftRPM = (TopLeftMotor.getVelocity().getValue().in(RPM) + BottomLeftMotor.getVelocity().getValue().in(RPM)) / 2.0;
+        double rightRPM = (TopRightMotor.getVelocity().getValue().in(RPM) + BottomRightMotor.getVelocity().getValue().in(RPM)) / 2.0;
         return (leftRPM + rightRPM) / 2.0;
     }
 
@@ -182,8 +183,8 @@ public class Flywheel extends SubsystemBase {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        initSendable(builder, FrontLeftMotor, "FrontLeft");
-        initSendable(builder, BackLeftMotor, "BackLeft");
+        initSendable(builder, TopLeftMotor, "FrontLeft");
+        initSendable(builder, BottomLeftMotor, "BackLeft");
         builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
         builder.addDoubleProperty("Target RPM", () -> velocityRequest.getVelocityMeasure().in(RPM), null);
     }

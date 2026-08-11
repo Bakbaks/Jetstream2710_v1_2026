@@ -33,8 +33,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Hopper extends SubsystemBase {
 
-	private final TalonFX FloorMotor;
-	private final TalonFX FeederMotor;
+	private final TalonFX FloorMotorL;
+	private final TalonFX FeederMotorL;
+	private final TalonFX FloorMotorR;
+	private final TalonFX FeederMotorR;
 	private final VoltageOut voltageRequest = new VoltageOut(0);
 	private final VelocityVoltage FloorvelocityRequest = new VelocityVoltage(0).withSlot(0);
 	private final VelocityVoltage FeedervelocityRequest = new VelocityVoltage(0).withSlot(0);
@@ -48,19 +50,24 @@ public class Hopper extends SubsystemBase {
 	private double dashboardFeederTargetRPM = HopperConstants.kFeederRPM;
 
 	public Hopper() {
-		FloorMotor = new TalonFX(Ports.kFloor, Ports.kRoboRioCANBus);
-		FeederMotor = new TalonFX(Ports.kFeeder, Ports.kRoboRioCANBus);
+		FloorMotorL = new TalonFX(Ports.kFloorL, Ports.kRoboRioCANBus);
+		FeederMotorL = new TalonFX(Ports.kFeederL, Ports.kRoboRioCANBus);
 
-		configureMotor(FloorMotor, InvertedValue.Clockwise_Positive);
-		configureMotor(FeederMotor, InvertedValue.Clockwise_Positive);
+		FloorMotorR = new TalonFX(Ports.kFloorR, Ports.kRoboRioCANBus);
+		FeederMotorR = new TalonFX(Ports.kFeederR, Ports.kRoboRioCANBus);
+
+		configureMotor(FloorMotorL, InvertedValue.Clockwise_Positive);
+		configureMotor(FeederMotorL, InvertedValue.CounterClockwise_Positive);
+		configureMotor(FloorMotorR, InvertedValue.CounterClockwise_Positive);
+		configureMotor(FeederMotorR, InvertedValue.Clockwise_Positive);
 	}
 
 	private void configureMotor(TalonFX motor, InvertedValue invertDirection) {
 		final TalonFXConfiguration config = new TalonFXConfiguration()
 				.withMotorOutput(new MotorOutputConfigs().withInverted(invertDirection).withNeutralMode(NeutralModeValue.Coast))
 				.withVoltage(new VoltageConfigs().withPeakReverseVoltage(Volts.of(-12)))
-				// .withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(Amps.of(HopperConstants.kHopperStatorCurrentLimit)).withStatorCurrentLimitEnable(true))
-				// .withCurrentLimits(new CurrentLimitsConfigs().withSupplyCurrentLimit(Amps.of(HopperConstants.kHopperSupplyCurrentLimit)).withSupplyCurrentLimitEnable(true))
+				.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(Amps.of(HopperConstants.kHopperStatorCurrentLimit)).withStatorCurrentLimitEnable(true))
+				.withCurrentLimits(new CurrentLimitsConfigs().withSupplyCurrentLimit(Amps.of(HopperConstants.kHopperSupplyCurrentLimit)).withSupplyCurrentLimitEnable(true))
 				.withSlot0(
 				new Slot0Configs()
 					.withKP(HopperConstants.KHopperP)
@@ -73,8 +80,10 @@ public class Hopper extends SubsystemBase {
 
 	/** Set percent outputs for both motors (range -1.0 .. 1.0). */
 	public void setPercentOutputs(double floorPercent, double feederPercent) {
-		FloorMotor.setControl(voltageRequest.withOutput(Volts.of(floorPercent * 12.0)));
-		FeederMotor.setControl(voltageRequest.withOutput(Volts.of(feederPercent * 12.0)));
+		FloorMotorL.setControl(voltageRequest.withOutput(Volts.of(floorPercent * 12.0)));
+		FeederMotorL.setControl(voltageRequest.withOutput(Volts.of(feederPercent * 12.0)));
+		FloorMotorR.setControl(voltageRequest.withOutput(Volts.of(floorPercent * 12.0)));
+		FeederMotorR.setControl(voltageRequest.withOutput(Volts.of(feederPercent * 12.0)));
 	}
 
 	/** Stop both motors. */
@@ -84,46 +93,58 @@ public class Hopper extends SubsystemBase {
 
 
 	public void setFeederRPM() {
-        FeederMotor.setControl(
+        FeederMotorL.setControl(
+            FeedervelocityRequest.withVelocity(RPM.of(dashboardFeederTargetRPM))
+        );
+		FeederMotorR.setControl(
             FeedervelocityRequest.withVelocity(RPM.of(dashboardFeederTargetRPM))
         );
     }
 
 	public void setFeederRPM(double rpm) {
-        FeederMotor.setControl(
+        FeederMotorL.setControl(
+            FeedervelocityRequest.withVelocity(RPM.of(rpm))
+        );
+		FeederMotorR.setControl(
             FeedervelocityRequest.withVelocity(RPM.of(rpm))
         );
     }
 
 	public void setFloorRPM() {
-		FloorMotor.setControl(
+		FloorMotorL.setControl(
+			FloorvelocityRequest.withVelocity(RPM.of(dashboardFloorTargetRPM))
+		);
+		FloorMotorR.setControl(
 			FloorvelocityRequest.withVelocity(RPM.of(dashboardFloorTargetRPM))
 		);
 	}
 
 	public void setFloorRPM(double rpm) {
-        FloorMotor.setControl(
+        FloorMotorL.setControl(
+            FloorvelocityRequest.withVelocity(RPM.of(rpm))
+        );
+		FloorMotorR.setControl(
             FloorvelocityRequest.withVelocity(RPM.of(rpm))
         );
     }
 
-	public Command floorSiftRPMCommand() {
-		return Commands.run(() -> {
-			double t = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
+	// public Command floorSiftRPMCommand() {
+	// 	return Commands.run(() -> {
+	// 		double t = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 
-			double frequencyHz = HopperConstants.kFloorSiftFrequencyHz;
-			double ampRPM = HopperConstants.kFloorSiftAmplitudeRPM;
-			double biasRPM = HopperConstants.kFloorSiftBiasRPM;
+	// 		double frequencyHz = HopperConstants.kFloorSiftFrequencyHz;
+	// 		double ampRPM = HopperConstants.kFloorSiftAmplitudeRPM;
+	// 		double biasRPM = HopperConstants.kFloorSiftBiasRPM;
 
-			double oscillation = Math.sin(2.0 * Math.PI * frequencyHz * t);
-			double targetRPM = biasRPM + ampRPM * oscillation;
+	// 		double oscillation = Math.sin(2.0 * Math.PI * frequencyHz * t);
+	// 		double targetRPM = biasRPM + ampRPM * oscillation;
 
-			FloorMotor.setControl(FloorvelocityRequest.withVelocity(RPM.of(targetRPM)));
+	// 		FloorMotor.setControl(FloorvelocityRequest.withVelocity(RPM.of(targetRPM)));
 
-			// feeder stays off
-			FeederMotor.setControl(voltageRequest.withOutput(Volts.of(0.0)));
-		}, this).finallyDo(() -> stop());
-	}
+	// 		// feeder stays off
+	// 		FeederMotor.setControl(voltageRequest.withOutput(Volts.of(0.0)));
+	// 	}, this).finallyDo(() -> stop());
+	// }
 
 	private void initSendable(SendableBuilder builder, TalonFX motor, String name) {
         builder.addDoubleProperty(name + " RPM", () -> motor.getVelocity().getValue().in(RPM), null);
@@ -134,15 +155,15 @@ public class Hopper extends SubsystemBase {
 	@Override
 	public void initSendable(SendableBuilder builder) {
 
-		initSendable(builder, FeederMotor, "feederMotor");
-        initSendable(builder, FloorMotor, "floorMotor");
+		// initSendable(builder, FeederMotor, "feederMotor");
+        // initSendable(builder, FloorMotor, "floorMotor");
 
-		builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-		builder.addDoubleProperty("Floor Dashboard RPM", () -> dashboardFloorTargetRPM, v -> dashboardFloorTargetRPM = v);
-		builder.addDoubleProperty("Feeder Dashboard RPM", () -> dashboardFeederTargetRPM, v -> dashboardFeederTargetRPM = v);
+		// builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
+		// builder.addDoubleProperty("Floor Dashboard RPM", () -> dashboardFloorTargetRPM, v -> dashboardFloorTargetRPM = v);
+		// builder.addDoubleProperty("Feeder Dashboard RPM", () -> dashboardFeederTargetRPM, v -> dashboardFeederTargetRPM = v);
 
-		builder.addDoubleProperty("Floor Target RPM", () -> FloorvelocityRequest.getVelocityMeasure().in(RPM), null);
-		builder.addDoubleProperty("Feeder Target RPM", () -> FeedervelocityRequest.getVelocityMeasure().in(RPM), null);
+		// builder.addDoubleProperty("Floor Target RPM", () -> FloorvelocityRequest.getVelocityMeasure().in(RPM), null);
+		// builder.addDoubleProperty("Feeder Target RPM", () -> FeedervelocityRequest.getVelocityMeasure().in(RPM), null);
 
 
 		// builder.addDoubleProperty("Floor Percent", () -> dashboardFloorPercent, v -> dashboardFloorPercent = v);

@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Shoots notes with flywheel speed interpolated from PhotonVision distance to tag 10. */
-public class TempVolley extends Command {
+public class NeutralVolley extends Command {
   private final Flywheel m_flywheel;
   private final Hopper m_hopper;
   //private final IntakeRollers m_intakeRollers;
@@ -33,7 +33,7 @@ public class TempVolley extends Command {
    * @param rollers Shooter subsystem
    * @param vision Vision for PhotonVision distance to tag 10
    */
-  public TempVolley(Flywheel flywheel, Hopper hopper, Supplier<Pose2d> robotPoseSupplier, double RPM) {
+  public NeutralVolley(Flywheel flywheel, Hopper hopper, Supplier<Pose2d> robotPoseSupplier, double RPM) {
     m_flywheel = flywheel;
     m_hopper = hopper;
     //m_intakeRollers = intakeRollers;
@@ -86,8 +86,8 @@ public class TempVolley extends Command {
 
     // if (m_flywheel.isVelocityWithinTolerance()) {
     if (m_flywheel.isVelocityWithinTolerance()){
-        m_hopper.setFloorRPM(5000);
-        m_hopper.setFeederRPM(5800);
+        // m_hopper.setFloorRPM(5000);
+        // m_hopper.setFeederRPM(5800);
       //m_hopper.setPercentOutputs(1,1);
     }
     

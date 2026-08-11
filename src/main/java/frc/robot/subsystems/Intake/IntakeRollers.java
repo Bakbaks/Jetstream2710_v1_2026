@@ -13,6 +13,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -30,7 +31,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.KrakenX60;
 import frc.robot.commands.OutTake;
 import frc.robot.Ports;
-
+import frc.robot.Constants.HopperConstants;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeRollers extends SubsystemBase {
@@ -53,22 +54,26 @@ public class IntakeRollers extends SubsystemBase {
     
 
     private final TalonFX rollerMotor;
+    private final TalonFX rollerMotor2;
 
     private final VoltageOut rollerVoltageRequest = new VoltageOut(0);
+    private final VoltageOut rollerVoltageRequest2 = new VoltageOut(0);
 
     //private boolean isHomed = false;
 
     public IntakeRollers() {
         rollerMotor = new TalonFX(Ports.kIntakeRollers);
-        configureRollerMotor();
+        rollerMotor2 = new TalonFX(Ports.kIntakeRollers2);
+        configureRollerMotor(rollerMotor, InvertedValue.CounterClockwise_Positive);
+        configureRollerMotor(rollerMotor2, InvertedValue.Clockwise_Positive);
         //SmartDashboard.putData(this);
     }
 
-    private void configureRollerMotor() {
+    private void configureRollerMotor(TalonFX motor, InvertedValue invertDirection) {
         final TalonFXConfiguration config = new TalonFXConfiguration()
             .withMotorOutput(
                 new MotorOutputConfigs()
-                    .withInverted(InvertedValue.CounterClockwise_Positive)
+                    .withInverted(invertDirection)
                     .withNeutralMode(NeutralModeValue.Brake)
             )
             .withCurrentLimits(
@@ -78,12 +83,17 @@ public class IntakeRollers extends SubsystemBase {
                     .withSupplyCurrentLimit(Amps.of(IntakeConstants.kRollerSupplyCurrentLimit))
                     .withSupplyCurrentLimitEnable(true)
             );
-        rollerMotor.getConfigurator().apply(config);
+        motor.getConfigurator().apply(config);
+	
     }
 
     public void setIntakeSpeed(Speed speed) {
         rollerMotor.setControl(
             rollerVoltageRequest
+                .withOutput(speed.voltage())
+        );
+        rollerMotor2.setControl(
+            rollerVoltageRequest2
                 .withOutput(speed.voltage())
         );
     }
@@ -92,6 +102,10 @@ public class IntakeRollers extends SubsystemBase {
     public void setRollerPercentOutput(double percentOutput) {
         rollerMotor.setControl(
             rollerVoltageRequest
+                .withOutput(Volts.of(percentOutput * 12.0))
+        );
+        rollerMotor2.setControl(
+            rollerVoltageRequest2
                 .withOutput(Volts.of(percentOutput * 12.0))
         );
     }

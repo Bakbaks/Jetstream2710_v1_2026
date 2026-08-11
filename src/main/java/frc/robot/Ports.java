@@ -8,19 +8,20 @@ public final class Ports {
     public static final CANBus kCANivoreCANBus = new CANBus("main");
 
     // Talon FX IDs
-    public static final int kFloor = 5;
-    public static final int kFeeder = 51;
-    public static final int kHanger = 18;
+    public static final int kFloorL = 30;
+    public static final int kFloorR = 62; 
+    public static final int kFeederL = 52; 
+    public static final int kFeederR = 51; 
 
+    public static final int kBottomRightShooter = 15; 
+    public static final int kBottomLeftShooter = 14; 
     
-    public static final int kBackRightShooter = 14;
-    public static final int kBackLeftShooter = 15;
-    
-    public static final int kFrontRightShooter = 16;
-    public static final int kFrontLeftShooter = 17;
+    public static final int kTopRightShooter = 17; 
+    public static final int kTopLeftShooter = 16; 
 
     public static final int kIntakeExtendo = 12;
     public static final int kIntakeRollers = 13;
+    public static final int kIntakeRollers2 = 20;
     
 
 }

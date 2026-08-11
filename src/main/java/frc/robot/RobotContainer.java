@@ -45,6 +45,7 @@ import frc.robot.commands.intake.ReverseRollers;
 import frc.robot.commands.shoot.Volley;
 import frc.robot.commands.shoot.Volley2;
 import frc.robot.commands.shoot.TempVolley;
+import frc.robot.commands.shoot.NeutralVolley;
 import frc.robot.commands.intake.SpinFloor;
 import frc.robot.commands.UnJam;
 
@@ -281,57 +282,70 @@ public class RobotContainer {
     DoubleSupplier rotV =
         () -> -MathProfiles.exponentialDrive(m_driverController.getRightX(), 2) * MaxAngularRate;
 
-    //Drive buttons
+    // //Drive buttons
+    // driveRightTrigger.whileTrue(new ParallelCommandGroup(
+    //   // new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
+    //   new Volley2(flywheel, hopper, drivetrain::getPose, drivetrain::getFieldRelativeSpeeds, () -> ConstSpeed)
+    // ));
+
     driveRightTrigger.whileTrue(new ParallelCommandGroup(
-      // new Volley(flywheel, hopper, drivetrain::getPose, ConstSpeed)
-      new Volley2(flywheel, hopper, drivetrain::getPose, drivetrain::getFieldRelativeSpeeds, () -> ConstSpeed)
+      new TempVolley(flywheel, hopper, drivetrain::getPose, 1800)
+
     ));
 
-    driveRightBumper.whileTrue(new ParallelCommandGroup(
-      new ScoreOrientation2(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
-    )); 
+    driveA.onTrue(
+      new NeutralVolley(flywheel, hopper, drivetrain::getPose, 1200)
+    );
+
+    driveB.onTrue(
+      new NeutralVolley(flywheel, hopper, drivetrain::getPose, 0)
+    );
+
+    // driveRightBumper.whileTrue(new ParallelCommandGroup(
+    //   new ScoreOrientation2(drivetrain, aimVX, aimVY, rotV)  // Timeout after 5 seconds to prevent hanging
+    // )); 
 
     driveLeftTrigger.whileTrue(new ParallelCommandGroup( // can on true if u want
       new SpinRollers(intakeRollers)
     ));
 
-    driveLeftBumper.whileTrue(new ParallelCommandGroup(
-      new UnJam(flywheel, hopper)
-    ));
+    // driveLeftBumper.whileTrue(new ParallelCommandGroup(
+    //   new UnJam(flywheel, hopper)
+    // ));
     
-    //just run the flywheel
-    //driveRightTrigger.whileTrue(Commands.runOnce(() -> {flywheel.setRPM(1500);}));
-    //auxA.whileTrue(Commands.runOnce(() -> {hopper.setFloorRPM(); hopper.setFeederRPM();}));
+    // //just run the flywheel
+    // //driveRightTrigger.whileTrue(Commands.runOnce(() -> {flywheel.setRPM(1500);}));
+    // //auxA.whileTrue(Commands.runOnce(() -> {hopper.setFloorRPM(); hopper.setFeederRPM();}));
 
     
-    //Aux Buttons
+    // //Aux Buttons
     auxRightTrigger.whileTrue(new ParallelCommandGroup(
-      new DebugDetractIntake(intakeExtendo)
-    ));
-
-    auxLeftTrigger.whileTrue(new ParallelCommandGroup(
       new DebugExtendIntake(intakeExtendo)
     ));
 
-    auxLeftBumper.whileTrue(new ParallelCommandGroup(
-      new SpinRollers(intakeRollers)
-    )
-    );
-
-    auxRightBumper.whileTrue(new ParallelCommandGroup(
-      new OutTake(flywheel, hopper, intakeRollers)
+    auxLeftTrigger.whileTrue(new ParallelCommandGroup(
+      new DebugDetractIntake(intakeExtendo)
     ));
 
-    auxX.whileTrue(new ParallelCommandGroup(
-       drivetrain.applyRequest(() -> brake)
-    ));
+    // auxLeftBumper.whileTrue(new ParallelCommandGroup(
+    //   new SpinRollers(intakeRollers)
+    // )
+    // );
 
-    auxB.onTrue(
-      Commands.runOnce(() -> {
-        ConstSpeed = !ConstSpeed;
-        SmartDashboard.putBoolean("ConstSpeed", ConstSpeed);
-      })
-    );
+    // auxRightBumper.whileTrue(new ParallelCommandGroup(
+    //   new OutTake(flywheel, hopper, intakeRollers)
+    // ));
+
+    // auxX.whileTrue(new ParallelCommandGroup(
+    //    drivetrain.applyRequest(() -> brake)
+    // ));
+
+    // auxB.onTrue(
+    //   Commands.runOnce(() -> {
+    //     ConstSpeed = !ConstSpeed;
+    //     SmartDashboard.putBoolean("ConstSpeed", ConstSpeed);
+    //   })
+    // );
       
 
   }
